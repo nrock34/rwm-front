@@ -223,9 +223,9 @@
                     </div>
                     
                     <div class="flex flex-col lg:w-1/2">
-                        <div class="flex flex-row gap-2">
+                        <div class="flex flex-row gap-3">
                             {#each article.tags as tag}
-                                <span>
+                                <span class="text-sm px-1.5 py-0.5 bg-muted rounded-(--radius)">
                                     #{tag}
                                 </span>
                             {/each}
@@ -234,11 +234,11 @@
                             <h1 class="text-3xl font-semibold text-primary mt-[1.25rem]">
                                 {article.title}
                             </h1>
-                            <p class="text-md font-thin mt-[1rem]">
+                            <p class="text-md text-foreground font-light mt-[1rem]">
                                 {article.summary}
                             </p>
                         </div>
-                        <div class="flex lg:flex-col flex-row lg:space-y-[0.2rem] text-sm text-muted-foreground mt-[2rem]">
+                        <div class="flex lg:flex-col flex-row lg:space-y-[0.2rem] text-sm text-secondary-foreground mt-[2rem]">
                             <p class="lg:w-full w-1/2 flex flex-row space-x-6">
                                 <span class="flex flex-row space-x-2 items-center">
                                     <User size='22'/>

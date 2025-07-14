@@ -36,3 +36,22 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+
+
+to-do
+
+- add isLikedByUser state to like buttons on posts and maybe articles
+- implement commenting on posts
+- figure out why class= is being ignored by some lucide react components
+- add post type icon next to post type
+- review link handling in sveltekit
+- change all key props to be indexed for certified uniqueness among like-mapped elements
+- implement newsletter logic
+- implement state logic to deactivate filter by clicking again
+- add school indicator next profiles
+- add carousel to news and updates
+- implement filters on schoalrship section and study abroad section in community components
+- fix grid resizing in news and updates component for community page
+- redesign emergency contact card
+- (news view all page) add trending sort / change popular calc to be done backend / minimize data request
