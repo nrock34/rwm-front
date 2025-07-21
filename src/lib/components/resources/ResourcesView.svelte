@@ -2,12 +2,13 @@
     import ChevronRight from "@lucide/svelte/icons/chevron-right";
     import * as Card from "../ui/card";
     import * as ToggleGroup from "../ui/toggle-group";
-    import { Book, BookOpen, Award, Heart, Users, FileText, Map, Video, LinkIcon, TypeIcon, Star, Download, Eye } from "lucide-svelte";
+    import { Book, BookOpen, Award, Heart, Users, FileText, Map, Video, LinkIcon, TypeIcon, Star, Download, Eye, Plus } from "lucide-svelte";
     import { resourcesByCategory } from "./test";
     import Badge from "../ui/badge/badge.svelte";
     import Button from "../ui/button/button.svelte";
     import PopUpView from "./single-views/PopUpView.svelte";
     import PopUpViewVideo from "./single-views/PopUpViewVideo.svelte";
+    
     
     
     const resourceTypes = [
@@ -89,14 +90,25 @@
 
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-foreground mb-2">
-            Resources
-        </h1>
-        <p class="text-muted-foreground">
-            Comprehensive guides, tips, and tools for your study abroad journey.
-        </p>
+    <div class="flex justify-between items-center w-full mb-12">
+        <div class="mb-0">
+            <h1 class="text-3xl font-bold text-foreground mb-2">
+                Resources
+            </h1>
+            <p class="text-muted-foreground">
+                Comprehensive guides, tips, and tools for your study abroad journey.
+            </p>
+        </div>
+
+        <Card.Root class="gap-0 p-2 bg-ring/10 ring-ring/80 ring-1 hover:ring-2 hover:bg-ring/20 transition-colors">
+            <Button variant="ghost" class="hover:bg-transparent hover:text-foreground hover:cursor-pointer">
+                <BookOpen class="w-5 h-5"/>
+                <span class="text-md font-light">Contribute to Our Resources</span>
+                <Plus />
+            </Button>
+        </Card.Root>
     </div>
+    
 
     <div class="grid lg:grid-cols-4 gap-8">
 
@@ -286,6 +298,8 @@
                     </p>
                 </div>
             {/if}
+
+
 
         </div>
     </div>
