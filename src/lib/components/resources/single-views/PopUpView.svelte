@@ -34,6 +34,7 @@
                     <iframe title="file preview" src="https://research.google.com/pubs/archive/44678.pdf"
                             class="w-full h-full ring-primary/40 ring-3 rounded">
                     </iframe>
+                    
                 </div>
 
                 <div class="text-center">

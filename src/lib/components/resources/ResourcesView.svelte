@@ -7,6 +7,7 @@
     import Badge from "../ui/badge/badge.svelte";
     import Button from "../ui/button/button.svelte";
     import PopUpView from "./single-views/PopUpView.svelte";
+    import PopUpViewVideo from "./single-views/PopUpViewVideo.svelte";
     
     
     const resourceTypes = [
@@ -265,7 +266,7 @@
                                         <Button variant="secondary" class="border border-ring text-xs py-6 px-8">
                                             {resource.type === 'link' ? 'Visit' : resource.type === 'video' ? 'Watch' : 'Download'}
                                         </Button>
-                                        <PopUpView resource={resource}/>
+                                        <PopUpViewVideo resource={resource}/>
                                     </div>
                                 </div>
                             </div>
