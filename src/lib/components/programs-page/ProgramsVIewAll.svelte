@@ -12,6 +12,10 @@
     import ToggleGroup from "../ui/toggle-group/toggle-group.svelte";
     import Toggle from "../ui/toggle/toggle.svelte";
     import ToggleGroupItem from "../ui/toggle-group/toggle-group-item.svelte";
+    import { programs } from "./test";
+    import GridView from "./views-types/GridView.svelte";
+    import ListView from "./views-types/ListView.svelte";
+    import MapView from "./views-types/MapView.svelte";
 
     const countries = [
         { id: 'all', name: 'All Countries' },
@@ -50,6 +54,34 @@
 
     let selectedRegionContent = $derived(countries.find((country) => country.id === filters.country)?.name || 'uh oh')
     let selectedDurationContent = $derived(durations.find((duration) => duration.id === filters.duration)?.name || 'uh oh')
+
+    const filteredPrograms = $derived(programs.filter(program => {
+        const matchesCountry = filters.country === 'all' || program.country === filters.country;
+        const matchesDuration = filters.duration === 'all' || program.duration === filters.duration;
+        const matchesCost = filters.cost === 'all' || program.cost === filters.cost;
+        const matchesField = filters.field === 'all' || program.field === filters.field;
+        const matchesLang = filters.language === 'all' || program.language === filters.language;
+        const matchesSearch = searchQuery === '' ||
+            program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            program.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            program.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            program.description.toLowerCase().includes(searchQuery.toLowerCase());
+        
+        return matchesCountry && matchesCost && matchesDuration && 
+            matchesField && matchesLang && matchesSearch;
+    }))
+
+    const sortedPrograms = $derived([...filteredPrograms].sort((a, b) => {
+
+        switch (sortBy) {
+            case 'rating':
+                return b.rating - a.rating
+            case 'cost':
+                return parseInt(a.cost.replace(/[^0-9]/g, '')) - parseInt(b.cost.replace(/[^0-9]/g, ''))
+        }
+
+    }))
+
 
 </script>
 
@@ -178,8 +210,54 @@
                 </div>
             </div>
         </div>
-
-
     </Card.Root>
-    
+
+    <!-- compare -->
+    {#if compareList.length > 0}
+        <Card.Root class="p-4 mb-6 bg-primary/5 border-primary/20">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <span class="font-medium text-foreground">
+                        Comparing {compareList.length} programs
+                    </span>
+                    <div class="flex space-x-2">
+                        {#each compareList as id}
+                            {@const program = programs.find(p => p.id === id)}
+                            <span class="text-xs">
+                                {program?.title}
+                            </span>
+                        {/each}
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <Button disabled class="text-sm">
+                        Compare Programs
+                    </Button>
+                    <Button
+                        onclick={() => compareList.clear()}
+                        class="text-sm"
+                        variant="secondary"
+                    >
+                        Clear All
+                    </Button>
+                </div>
+            </div>
+        </Card.Root>
+    {/if}
+
+
+    <!-- Display programs -->
+    {#if viewMode === 'grid'}
+        <GridView 
+            bind:savedPrograms 
+            bind:compareList />
+    {:else if viewMode === 'list'}
+        <ListView 
+            bind:savedPrograms 
+            bind:compareList />
+    {:else if viewMode === 'map'}
+        <MapView />
+    {/if}
+
+
 </div>
