@@ -1,11 +1,12 @@
 <script>
-    import Button from "$lib/components/ui/button/button.svelte";
+    import Badge from "$lib/components/ui/badge/badge.svelte";
+import Button from "$lib/components/ui/button/button.svelte";
     import * as Card from "$lib/components/ui/card";
     import Toggle from "$lib/components/ui/toggle/toggle.svelte";
-    import { Bookmark, Calendar, Link, MapPin, Star } from "lucide-svelte";
+    import { Bookmark, Calendar, DollarSign, Link, MapPin, Star, Users } from "lucide-svelte";
 
 
-    let { savedPrograms = $bindable(), compareList = $bindable() } = $props()
+    let { savedPrograms = $bindable(), compareList = $bindable(), sortedPrograms } = $props()
 
     const updateSavedPrograms = (id) => {
         if(!savedPrograms.delete(id)) {
@@ -24,14 +25,14 @@
 
 
 
-<div class="space-y-2">
+<div class="space-y-4">
 
     {#each sortedPrograms as program}
         
-        {@const isSaved = savedPrograms.includes(program.id)}
-        {@const isComparing = compareList.includes(program.id)}
+        {@const isSaved = savedPrograms.has(program.id)}
+        {@const isComparing = compareList.has(program.id)}
 
-        <div key={program.id} class="">
+        <div key={program.id} class="bg-background p-6 border-muted-foreground/30 border-1 rounded-xl">
             <div class="flex items-start space-x-4">
                 <img
                     src={program.image}
@@ -50,12 +51,12 @@
                                     {program.title}
                                 </a>
                                 {#if program.featured}
-                                    <span class="text-xs">Featured</span>
+                                    <Badge class="text-xs ml-1">Featured</Badge>
                                 {/if}
                             </div>
-                            <p class="text-sm text-muted-foreground">{program.provider}</p>
+                            <p class="text-sm text-secondary-foreground">{program.provider}</p>
                             <div class="flex items-center space-x-1 mt-1">
-                                <MapPin />
+                                <MapPin class="h-4 w-4"/>
                                 <span class="text-sm text-muted-foreground">{program.location}</span>
                             </div>
                         </div>
@@ -71,21 +72,21 @@
                         </div>
                     </div>
 
-                    <p class="text-sm text-muted-foreground mb-3">
+                    <p class="text-sm text-secondary-foreground mb-3">
                         {program.description}
                     </p>
 
-                    <div class="flex items-center space-x-5 text-sm text-muted-foreground mb-3">
+                    <div class="flex items-center space-x-5 text-sm text-secondary-foreground mb-3">
                         <div class="flex items-center space-x-1">
-                            <Calendar class="h-3 w-3"/>
+                            <Calendar class="h-3 w-3 text-secondary-foreground"/>
                             <span class="capitalize">{program.duration}</span>
                         </div>
                         <div class="flex items-center space-x-1">
-                            <Calendar class="h-3 w-3"/>
+                            <DollarSign class="h-3 w-3 text-secondary-foreground"/>
                             <span class="font-medium">{program.cost}</span>
                         </div>
                         <div class="flex items-center space-x-1">
-                            <Calendar class="h-3 w-3"/>
+                            <Users class="h-3 w-3 text-secondary-foreground"/>
                             <span>{program.participants} students</span>
                         </div>
                     </div>
@@ -93,7 +94,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex flex-wrap gap-2">
                             {#each program.highlights.slice(0, 4) as highlight, idx}
-                                <span key={idx} class="text-xs bg-muted-foreground">
+                                <span key={idx} class="text-xs bg-muted px-2 py-0.5 rounded-xl border border-border/30">
                                     {highlight}
                                 </span>
                             {/each}

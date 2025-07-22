@@ -2,20 +2,19 @@
 <script>
 
     import { SvelteSet } from "svelte/reactivity";
-    import * as Card from "../ui/card/card.svelte";
-    import { Grid, List, Map, Search } from "lucide-svelte";
-    import Input from "../ui/input/input.svelte";
+    import * as Card from "../ui/card";
+    import { Globe, Grid, List, Map, Search } from "lucide-svelte";
+    import {Input} from "../ui/input";
     import * as Select from "../ui/select";
-    import SelectLabel from "../ui/select/select-label.svelte";
-    import SelectItem from "../ui/select/select-item.svelte";
     import Button from "../ui/button/button.svelte";
-    import ToggleGroup from "../ui/toggle-group/toggle-group.svelte";
-    import Toggle from "../ui/toggle/toggle.svelte";
-    import ToggleGroupItem from "../ui/toggle-group/toggle-group-item.svelte";
+    import * as ToggleGroup from "../ui/toggle-group";
+    import {Toggle} from "../ui/toggle";
     import { programs } from "./test";
     import GridView from "./views-types/GridView.svelte";
     import ListView from "./views-types/ListView.svelte";
     import MapView from "./views-types/MapView.svelte";
+    import { capitalize } from "$lib/helper-funcs/funcs";
+    
 
     const countries = [
         { id: 'all', name: 'All Countries' },
@@ -54,6 +53,7 @@
 
     let selectedRegionContent = $derived(countries.find((country) => country.id === filters.country)?.name || 'uh oh')
     let selectedDurationContent = $derived(durations.find((duration) => duration.id === filters.duration)?.name || 'uh oh')
+    let sortByTriggerContent = $derived(capitalize(sortBy))
 
     const filteredPrograms = $derived(programs.filter(program => {
         const matchesCountry = filters.country === 'all' || program.country === filters.country;
@@ -73,11 +73,19 @@
 
     const sortedPrograms = $derived([...filteredPrograms].sort((a, b) => {
 
+        console.log(filters.duration)
+
         switch (sortBy) {
             case 'rating':
                 return b.rating - a.rating
             case 'cost':
                 return parseInt(a.cost.replace(/[^0-9]/g, '')) - parseInt(b.cost.replace(/[^0-9]/g, ''))
+            case 'participants':
+                return b.participants - a.participants
+            case 'alphabetical':
+                return a.title.localeCompare(b.title)
+            default:
+                return 0;
         }
 
     }))
@@ -95,20 +103,20 @@
     </div>
 
     <!-- filters -->
-    <Card.Root>
+    <Card.Root class="p-6 gap-1 mb-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            <div>
-                <label class="block text-sm font-medium text-foregorund mb-2">
+            <div class="mt-2">
+                <label class="block text-sm font-medium text-foregorund mb-1.25">
                     Search
                 </label>
                 <div class="relative">
-                    <Search class="absolute left-3 top-1/2 h-4 w-4 text-muted-foreground"/>
+                    <Search class="absolute left-3 top-3/10 h-4 w-4 text-muted-foreground"/>
                     <Input 
                         type='text'
                         placeholder='Search for programs...'
                         value={searchQuery}
                         oninput={(e) => searchQuery = e.target.value}
-                        class="pl-10 w-full">
+                        class="pl-10 h-12 w-full">
                     </Input>
                 </div>
             </div>
@@ -116,60 +124,64 @@
             <!--  country/region filter  -->
             <div>
                 <!-- <label class="block text-sm font-medium text-foreground mb-2">Region</label> -->
-                <Select.Root class="w-full" bind:value={filters.country}>
-                    <Select.Label class="text-sm font-medium text-foreground mb-2">
+                <Select.Root type='single' bind:value={filters.country}>
+                    <Select.Label class="text-sm font-medium text-foreground">
                         Region
                     </Select.Label>
-                    <Select.Content>
+                    <Select.Trigger class="min-h-12 w-full">
                         {selectedRegionContent}
+                    </Select.Trigger>
+                    <Select.Content>
+                        {#each countries as country, idx}
+                            <Select.Item label={country.name} value={country.id}>
+                                {country.name}
+                            </Select.Item>
+                        {/each}
                     </Select.Content>
-                    {#each countries as country}
-                        <Select.Item key={country.id} value={country.id}>
-                            {country.name}
-                        </Select.Item>
-                    {/each}
+                    
                 </Select.Root>
             </div>
 
-
+            <!-- duration filter -->
             <div>
-                <Select.Root class="w-full" bind:value={filters.duration}>
-                    <Select.Label class="text-sm font-medium text-foreground mb-2">
+                <Select.Root class="w-full" type='single' bind:value={filters.duration}>
+                    <Select.Label class="text-sm font-medium text-foreground">
                         Duration
                     </Select.Label>
-                    <Select.Content>
+                    <Select.Trigger class="min-h-12 w-full">
                         {selectedDurationContent}
+                    </Select.Trigger>
+                    <Select.Content>
+                        {#each durations as duration, idx}
+                            <Select.Item value={duration.id} label={duration.name}>
+                                {duration.name}
+                            </Select.Item>
+                        {/each}
                     </Select.Content>
-                    {#each durations as duration}
-                        <Select.Item value={duration.id} key={duration.id}>
-                            {duration.name}
-                        </Select.Item>
-                    {/each}
+                    
                 </Select.Root>
             </div>
         </div>
 
+
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <!-- sort by -->
             <div class="flex items-center space-x-4">
                 <div class="flex items-center space-x-2">
-                    <Select.Root>
+                    <Select.Root type="single" bind:value={sortBy}>
                         <Select.Label class="text-sm font-medium text-foreground">
                             Sort By:
                         </Select.Label>
+                        <Select.Trigger>
+                            {sortByTriggerContent}
+                        </Select.Trigger>
                         <Select.Content>
+                            <Select.Item label={"Rating"} value={'rating'}/>
+                            <Select.Item label={"Cost"} value={'cost'}/>
+                            <Select.Item label={"Participants"} value={'participants'}/>
+                            <Select.Item label={"A-z"} value={'alphabetical'}/>
                         </Select.Content>
-                        <Select.Item value={'rating'}>
-                            Rating
-                        </Select.Item>
-                        <Select.Item value={'cost'}>
-                            Cost
-                        </Select.Item>
-                        <Select.Item value={'participants'}>
-                            Popularity
-                        </Select.Item>
-                        <Select.Item value={'alphabetical'}>
-                            A-Z
-                        </Select.Item>
+                        
                     </Select.Root>
                 </div>
 
@@ -181,12 +193,12 @@
             <!-- view select -->
             <div class="flex items-center space-x-2">
                 <span class="text-sm font-medium text-foreground">View:</span>
-                <div class="flex rounded border border-border">
-                    <ToggleGroup type="single" bind:value={viewMode}>
+                <div class="flex">
+                    <ToggleGroup.Root variant="outline" type="single" bind:value={viewMode}>
                         <ToggleGroup.Item
                             class={`${viewMode === 'grid' ? 
                             'bg-primary text-primary-foreground' : 
-                            'bg-backround text-foreground hover:bg-muted-foreground'}`}
+                            'bg-backround text-foreground hover:bg-muted-foreground/30'}`}
                             value="grid"
                         >
                             <Grid class="h-4 w-4"/>
@@ -194,25 +206,25 @@
                         <ToggleGroup.Item
                             class={`${viewMode === 'list' ? 
                             'bg-primary text-primary-foreground' : 
-                            'bg-backround text-foreground hover:bg-muted-foreground'}`}
+                            'bg-backround text-foreground hover:bg-muted-foreground/30'}`}
                             value="list"
                         >
                             <List class="h-4 w-4"/>
                         </ToggleGroup.Item>
                         <ToggleGroup.Item class={`${viewMode === 'map' ? 
                             'bg-primary text-primary-foreground' : 
-                            'bg-backround text-foreground hover:bg-muted-foreground'}`} 
+                            'bg-backround text-foreground hover:bg-muted-foreground/30'}`} 
                             value="map"
                         >
                             <Map class="h-4 w-4"/>
                         </ToggleGroup.Item>
-                    </ToggleGroup>
+                    </ToggleGroup.Root>
                 </div>
             </div>
         </div>
     </Card.Root>
 
-    <!-- compare -->
+    <!-- compare bar -->
     {#if compareList.length > 0}
         <Card.Root class="p-4 mb-6 bg-primary/5 border-primary/20">
             <div class="flex items-center justify-between">
@@ -249,14 +261,26 @@
     <!-- Display programs -->
     {#if viewMode === 'grid'}
         <GridView 
-            bind:savedPrograms 
-            bind:compareList />
+            bind:savedPrograms = {savedPrograms} 
+            bind:compareList = {compareList}
+            {sortedPrograms}/>
     {:else if viewMode === 'list'}
         <ListView 
-            bind:savedPrograms 
-            bind:compareList />
+            bind:savedPrograms = {savedPrograms} 
+            bind:compareList = {compareList}
+            {sortedPrograms}/>
     {:else if viewMode === 'map'}
         <MapView />
+    {/if}
+
+    {#if sortedPrograms.length === 0}
+
+        <div class="text-center py-12">
+            <Globe class="h-12 w-12 text-muted-foreground mx-auto mb-4"/>
+            <h3 class="text-lg font-medium text-foreground mb-2">No Programs Found</h3>
+            <p class="text-muted-foreground">Try adjusting your filters or search terms</p>
+        </div>
+        
     {/if}
 
 

@@ -5,10 +5,11 @@
     import {Button} from '$lib/components/ui/button';
     import {Toggle} from '$lib/components/ui/toggle';
     import { Book, Bookmark, Calendar, DollarSign, Globe, MapPin, Star, Users } from 'lucide-svelte';
+    import X from '@lucide/svelte/icons/x';
 
 
 
-    let { savedPrograms = $bindable(), compareList = $bindable()} = $props()
+    let { savedPrograms = $bindable(), compareList = $bindable(), sortedPrograms } = $props()
 
     const updateSavedPrograms = (id) => {
         if(!savedPrograms.delete(id)) {
@@ -25,25 +26,20 @@
 </script>
 
 
-<div class="grid lg-grid-cols-3 gap-4">
+<div class="grid lg:grid-cols-3 gap-4">
 
     {#each sortedPrograms as program}
 
-        {@const isSaved = savedPrograms.includes(program.id)}
-        {@const isComparing = compareList.includes(program.id)}
+        {@const isSaved = savedPrograms.has(program.id)}
+        {@const isComparing = compareList.has(program.id)}
 
-
-        <div key={program.id} class="">
-
-        </div>
-
-       <Card.Root key={program.id} class="">
+       <Card.Root key={program.id} class="m-0 gap-0 col-span-1 overflow-hidden py-0">
             
             <div class="relative">
                 <img
                     src={program.image}
                     alt={program.title}
-                    class="w-full object-cover" 
+                    class="w-full h-48 object-cover" 
                 />
                 {#if program.featured}
                     <div class="absolute top-3 left-3">
@@ -52,7 +48,7 @@
                         </Badge>
                     </div>
                 {/if}
-                <div>
+                <div class="absolute top-3 right-3 flex space-x-2">
                     <Toggle
                         
                         class={`rounded-full ${isSaved ? 
@@ -65,7 +61,8 @@
             </div>
 
 
-            <div class="p-6">
+            <div class="p-6 h-full flex-col flex justify-between">
+                <div>
                 <div class="flex items-start justify-between mb-3">
                     <div class="flex-1">
                         <a
@@ -74,7 +71,7 @@
                         >
                             {program.title}
                         </a>
-                        <p class="text-sm text-muted-foreground">
+                        <p class="text-sm text-secondary-foreground">
                             {program.provider}
                         </p>
                         <div class="flex items-center space-x-1 mt-1">
@@ -87,12 +84,14 @@
                         <span class="font-medium">{program.rating}</span>
                     </div>
                 </div>
-
-                <p class="text-sm text-muted-foreground mb-4">{program.description}</p>
-
+                <p class="rounded-l-xs border-l-3 border-secondary-foreground pl-2.5 text-sm text-secondary-foreground mb-5">{program.description}</p>
+                </div>
+                
+                <div>
+                
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="flex items-center space-x-2">
-                        <Calendar />
+                        <Calendar class="h-4 w-4 text-secondary-foreground" />
                         <span class="text-sm capitalize">{program.duration}</span>
                     </div>
                     <div class="flex items-center space-x-2">
@@ -104,28 +103,33 @@
                         <span class="text-sm">{program.participants} students</span>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <Globe />
-                        <span class="text-sm-capitalize">{program.language}</span>
+                        <Globe class="h-4 w-4 text-secondary-foreground"/>
+                        <span class="text-sm capitalize">{program.language}</span>
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-2 mb-4">
+                <div class="flex flex-wrap items-center gap-x-2 gap-y-2 mb-4">
                     {#each program.highlights.slice(0, 3) as highlight, idx}
-                        <span key={idx}>
+                        <span key={idx} class="text-xs bg-muted/90 border-muted-foreground/20 border-1 rounded py-0.25 p-1 px-2">
                             {highlight}
                         </span>
                     {/each}
                     {#if program.highlights.length > 3}
-                        <span class="">
+                        <span class="text-xs bg-muted/90 border-muted-foreground/20 border-1 rounded py-0.25 p-1 px-2">
                             +{program.highlights.length - 3} more
                         </span>
                     {/if}
                 </div>
 
-                <div class="flex items-center jusitfy-between">
+                <div class="flex items-center justify-between mt-6">
                     <!-- add compare here -->
-                    <Button class="hidden">
-                        {isComparing ? 'Remove From Compare' : 'Add To Compare'}
+                    <Button variant="ghost" class={`text-foreground/70 pl-3 cursor-pointer hover:bg-transparent hover:underline hover:text-accent-foreground/60 ${compareList.has(program.id) ? 'text-accent-foreground/90' : ''}`}
+                        onclick={() => {
+                            if (!compareList.delete(program.id)) {
+                                compareList.add(program.id)
+                            }
+                        }}>
+                        {isComparing ? 'Remove From Compare' : 'Add To Compare'} {#if isComparing} <X class="h-5"/> {/if}
                     </Button>
                     <Button
                         href={`/programs/${program.id}`}
@@ -133,6 +137,7 @@
                     >
                         View Details
                     </Button>
+                </div>
                 </div>
             </div>
         </Card.Root>
