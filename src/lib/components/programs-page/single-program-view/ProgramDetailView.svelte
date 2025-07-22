@@ -141,7 +141,7 @@
 
 
             <!-- Photo gallery -->
-            <Card.Root class="p-6">
+            <Card.Root class="gap-1 p-6">
                 <h2 class="text-xl font-semibold text-foreground mb-4 flex items-center">
                     <Camera class="h-5 w-5 mr-2"/>
                     Photo Gallery
@@ -184,7 +184,7 @@
         <div class="space-y-6">
 
             <!-- quick actions -->
-            <Card.Root>
+            <Card.Root class="gap-2 p-6">
                 <h3 class="font-semibold text-foreground mb-4">Quick Actions</h3>
                 <div class="space-y-3">
                     <Button class="w-full">
@@ -198,7 +198,7 @@
 
 
             <!-- contact info -->
-            <Card.Root class="p-6">
+            <Card.Root class="gap-2 p-6">
                 <h3 class="font-semibold text-foreground mb-4">Contact Information</h3>
                 <div class="space-y-3 text-sm">
                     <div>
