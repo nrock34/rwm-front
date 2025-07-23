@@ -161,9 +161,9 @@
 
             <Card.Root class="py-6 overflow-hidden">
                 <Tabs.Root value="overview" class="gap-0 w-full">
-                    <Tabs.List class="bg-accent-foreground/20 space-x-4 px-2 mx-8">
+                    <Tabs.List class="bg-accent-foreground/20 space-x-4 py-2 px-2 mx-8">
                         {#each tabs as tab}
-                            <Tabs.Trigger value={tab.id}>{tab.name}</Tabs.Trigger>
+                            <Tabs.Trigger class="py-3" value={tab.id}>{tab.name}</Tabs.Trigger>
                         {/each}
                     </Tabs.List>
                     <!-- <Separator class="mt-4"/> -->
