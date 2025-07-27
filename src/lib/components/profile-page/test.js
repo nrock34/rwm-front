@@ -1,5 +1,5 @@
 export const userProfile = {
-    id: userId,
+    id: 1,
     name: 'Marco Benedetti',
     avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop',
     badge: 'Local Expert',
@@ -95,3 +95,109 @@ export const userProfile = {
       }
     ]
   };
+
+
+  export const profileData = { 
+      name: 'Sarah Johnson',
+      email: 'sarah.johnson@email.com',
+      phone: '+1 (555) 123-4567',
+      location: 'Rome, Italy',
+      university: 'University of California, Berkeley',
+      major: 'Art History',
+      bio: 'Passionate about Renaissance art and Italian culture. Currently studying abroad in Rome and loving every moment of this incredible journey.',
+      avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop'
+  }
+
+  export const savedItems = [
+    {
+      id: 1,
+      type: 'scholarship',
+      title: 'Fulbright Student Program',
+      provider: 'U.S. Department of State',
+      amount: '$25,000 - $50,000',
+      deadline: '2024-03-15',
+      dateSaved: '2024-01-10'
+    },
+    {
+      id: 2,
+      type: 'program',
+      title: 'Semester in Florence',
+      provider: 'Florence University of the Arts',
+      cost: '$18,000',
+      duration: 'Semester',
+      dateSaved: '2024-01-08'
+    },
+    {
+      id: 3,
+      type: 'resource',
+      title: 'Complete Guide to Student Visa Application',
+      author: 'RomeWithMe Team',
+      downloads: 2847,
+      dateSaved: '2024-01-05'
+    }
+  ];
+
+  export const applications = [
+    {
+      id: 1,
+      title: 'Fulbright Student Program',
+      type: 'scholarship',
+      status: 'submitted',
+      deadline: '2024-03-15',
+      submitted: '2024-01-20',
+      progress: 75
+    },
+    {
+      id: 2,
+      title: 'DAAD Study Scholarship',
+      type: 'scholarship',
+      status: 'in-progress',
+      deadline: '2024-05-15',
+      submitted: null,
+      progress: 40
+    },
+    {
+      id: 3,
+      title: 'Barcelona Architecture Program',
+      type: 'program',
+      status: 'accepted',
+      deadline: '2024-02-01',
+      submitted: '2024-01-15',
+      progress: 100
+    }
+  ];
+
+  export const recentActivity = [
+    {
+      id: 1,
+      type: 'post',
+      action: 'liked',
+      target: 'Amazing sunset from the Spanish Steps tonight!',
+      user: 'Marco Benedetti',
+      timestamp: '2 hours ago'
+    },
+    {
+      id: 2,
+      type: 'comment',
+      action: 'commented on',
+      target: 'Professor Rossi\'s Art History course discussion',
+      user: 'Emma Chen',
+      timestamp: '4 hours ago'
+    },
+    {
+      id: 3,
+      type: 'save',
+      action: 'saved',
+      target: 'Rome Transportation Master Guide',
+      user: null,
+      timestamp: '1 day ago'
+    },
+    {
+      id: 4,
+      type: 'application',
+      action: 'submitted application for',
+      target: 'Fulbright Student Program',
+      user: null,
+      timestamp: '3 days ago'
+    }
+  ];

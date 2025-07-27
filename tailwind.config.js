@@ -6,6 +6,8 @@ export default {
                 sans: ['"DM Sans"', 'sans-serif'],
             }
         }
-    }
+    },
+
+    plugins: [require('@tailwindcss/line-clamp')],
 
 }

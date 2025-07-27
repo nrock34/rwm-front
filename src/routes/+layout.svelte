@@ -40,7 +40,10 @@
 		</NavigationMenuRoot>
 	</header>
 
-	{@render children()}
+	<main class="overflow-auto">
+		{@render children()}
+	</main>
+	
 
 </div>
 
