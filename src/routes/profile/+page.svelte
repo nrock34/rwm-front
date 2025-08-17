@@ -8,7 +8,6 @@
 </script>
 
 
-
 <div>
     <ProfileSelf { data } />
 </div>

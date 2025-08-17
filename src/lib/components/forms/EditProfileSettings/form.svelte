@@ -8,7 +8,7 @@
     import { Checkbox } from '$lib/components/ui/checkbox';
     
     //form supervalidated
-    let { data } = $props();
+    let { data, actionName } = $props();
     
     const form = superForm( data.editProfileSettingsForm, {
         dataType: 'json',
@@ -29,7 +29,7 @@
 
 
 
-<form class="space-y-10 " method="POST" use:enhance>
+<form class="space-y-10" action={`?/${actionName}`} method="POST" use:enhance>
     <Form.Field class="text-left" {form} name="profileVisibility">
         <Form.Control>
             {#snippet children({ props })}

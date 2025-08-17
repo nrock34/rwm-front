@@ -5,12 +5,16 @@
     import { Progress } from "$lib/components/ui/progress";
     import { applications } from "../test";
 
+
+    let { applicationsData } = $props()
 </script>
+
+
 <div class="space-y-4">
     <h3 class="text-lg font-semibold text-foreground">
         My Tracked Applications
     </h3>
-    {#each applications as app}
+    {#each applicationsData as app}
         <Card.Root key={app.id} class="gap-2 p-5">
             <div class="flex items-center justify-between mb-3">
                 <h4 class="font-medium text-foreground">{app.title}</h4>

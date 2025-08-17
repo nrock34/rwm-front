@@ -5,13 +5,15 @@
     import { X } from "lucide-svelte";
     import { savedItems } from "../test";
 
+    let { savedItemData } = $props()
+
 </script>
 
 
 <div class="space-y-4">
 
     <h3 class="text-lg font-semibold text-foreground">Saved Items</h3>
-    {#each savedItems as item}
+    {#each savedItemData as item}
         <Card.Root key={item.id} class="p-4 gap-0">
             <div class="flex items-start justify-between">
                 <div class="flex-1">

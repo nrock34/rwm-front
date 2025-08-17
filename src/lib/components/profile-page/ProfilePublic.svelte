@@ -1,11 +1,14 @@
 <script>
     import { Award, Calendar, Eye, MapPin, MessageSquare, Star, User } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { userProfile } from "./test";
+    //import { userProfile } from "./test";
     import { Badge } from "../ui/badge";
     import {Button} from "../ui/button";
 
     let isFollowing = $state(false);
+    let { profileData } = $props()
+
+    let userProfile = profileData
 
 </script>
 
@@ -123,7 +126,9 @@
         </div>
 
         <!-- main content -->
+        
         <div class="lg: col-span-2 space-y-8">
+            {#if userProfile.contributions}
             <Card.Root class="p-6 gap-1">
                 <h2 class="text-xl font-semibold text-foreground mb-4">
                     Contributions
@@ -150,6 +155,7 @@
                     {/each}
                 </div>
             </Card.Root>
+            {/if}
 
             <!-- recent posts -->
             <Card.Root class="gap-2 p-8">
@@ -171,10 +177,10 @@
                                             {userProfile.badge}
                                         </Badge>
                                         <span class="text-sm text-muted-foreground">•</span>
-                                        <span class="text-sm text-muted-foreground">{post.timestamp}</span>
+                                        <span class="text-sm text-muted-foreground">{post.data.updated_at}</span>
                                     </div>
 
-                                    <p class="text-foreground mb-3">{post.content}</p>
+                                    <p class="text-foreground mb-3">{post.data.content}</p>
 
                                     {#if post.image}
                                         <div class="rounded overflow-hidden mb-3">

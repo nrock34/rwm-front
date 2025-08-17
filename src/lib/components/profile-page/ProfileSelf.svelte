@@ -95,7 +95,7 @@
         </div>
 
         <div class="lg:col-span-3">
-            <ActiveTabComponent { data } />
+            <ActiveTabComponent { data }/>
         </div>
 
     </div>
