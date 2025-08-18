@@ -3,12 +3,13 @@
     import { getActivityIcon } from "../helper-funcs";
     import { recentActivity } from "../test";
 
+    let { activityData } = $props()
 </script>
 
 
 <div class="space-y-4">
     <h3 class="text-lg font-semibold text-foreground">Your Activity History</h3>
-    {#each recentActivity as activity}
+    {#each activityData as activity}
         {@const ActivityIcon = getActivityIcon(activity.type)}
         <Card.Root class="gap-0 p-4">
             <div class="flex items-start space-x-3">

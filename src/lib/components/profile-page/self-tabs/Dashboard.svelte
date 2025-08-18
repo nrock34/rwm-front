@@ -3,9 +3,14 @@
     import * as Card from "$lib/components/ui/card";
     import { Progress } from "$lib/components/ui/progress";
     import { getActivityIcon } from "../helper-funcs";
-    import { applications, recentActivity, savedItems } from "../test";
+    import {  recentActivity, savedItems } from "../test";
+
+
+    let { applicationsData, activityData } = $props()
 
 </script>
+
+
 <div class="space-y-6">
 
     <!-- quick stats -->
@@ -15,7 +20,7 @@
             <div class="text-sm text-muted-foreground">Saved Items</div>
         </Card.Root>
         <Card.Root class="gap-0 p-3">
-            <div class="text-2xl font-bold text-primary">{applications.length}</div>
+            <div class="text-2xl font-bold text-primary">{applicationsData.length}</div>
             <div class="text-sm text-muted-foreground">Applications</div>
         </Card.Root>
         <Card.Root class="gap-0 p-3">
@@ -34,7 +39,7 @@
             Application Tracker
         </h3>
         <div class="space-y-4">
-            {#each applications.slice(0, 4) as app, idx}
+            {#each applicationsData.slice(0, 4) as app, idx}
                 <div key={idx} class="border border-border rounded p-4">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="font-medium text-md text-foreground">{app.title}</h4>
@@ -60,7 +65,7 @@
     <Card.Root class="gap-1 p-8">
         <h3 class="text-lg font-semibold text-foreground mb-4">Recent Activity</h3>
         <div class="space-y-4">
-            {#each recentActivity.slice(0, 5) as activity, idx}
+            {#each activityData.slice(0, 5) as activity, idx}
                 {@const ActivityIcon = getActivityIcon(activity.type)}
                 <div key={idx} class="flex items-start space-x-3">
                     <div class="flex-shrink-0">
@@ -70,7 +75,7 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-sm text-foreground">
-                            You {activity.action} <span class="font-medium">"{activity.target}"</span>
+                            You {activity.action.replace('-', ' ')} <span class="font-medium">"{activity.target}"</span>
                             {#if activity.user}
                                 <span> by {activity.user}</span>
                             {/if}
