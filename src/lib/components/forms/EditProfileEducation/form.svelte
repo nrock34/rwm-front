@@ -19,6 +19,7 @@
     import SelectItem from '$lib/components/ui/select/select-item.svelte';
  
     let value = $state()
+    let updated = $state(false)
 
     //form supervalidated
     let { data, actionName } = $props();
@@ -28,18 +29,18 @@
         validators: yupClient(profileEducationSchema),
     })
 
-    const { form: formData, enhance } = form;
+    const { form: formData, enhance, errors, valid } = form;
 
     let currentYear = today(getLocalTimeZone()).year
     let yearOptions = range(currentYear-20, currentYear+8)
     $formData.gradYear = currentYear
     // select trigger content
                 
-    console.log($formData.emailNotifications)
+    
 </script>
 
 <div>
-    <form method="POST" action={`?/${actionName}`} use:enhance>
+    <form method="POST" action={actionName} use:enhance>
 
         <div class="grid grid-cols-2 gap-4">
 
@@ -47,10 +48,14 @@
                 <Form.Control>
                     {#snippet children({ props })}
                         <Form.Label>Your University</Form.Label>
-                        <UniversitySelect className="h-10" bind:value={$formData.university} fieldProps={props}/>
+                        <UniversitySelect 
+                            {data} className="h-10" 
+                            bind:value={$formData.university}
+                            onchange={() => {updated = true}}
+                            fieldProps={props}/>
                     {/snippet}
                 </Form.Control>
-                <span>{$formData.university}</span>
+                <!-- <span>{$formData.university}</span> -->
             </Form.Field>
 
             
@@ -62,6 +67,7 @@
                             {...props}
                             class="w-full h-10" 
                             placeholder="Enter your major"
+                            oninput={() => {updated = true}}
                             bind:value={$formData.major}
                         />
                     {/snippet}
@@ -72,9 +78,9 @@
                 <Form.Control>
                     {#snippet children({ props })}
                         <Form.Label>Graduation Year</Form.Label>
-                        <Select.Root type='single' bind:value={$formData.gradYear}>
+                        <Select.Root type='single' bind:value={$formData.grad_year}>
                             <Select.Trigger class="min-h-10 w-full" {...props}>
-                                {$formData.gradYear}
+                                {$formData.grad_year}
                             </Select.Trigger>
                             <Select.Content class="max-h-68 px-2.5">
                                 {#each yearOptions as year, idx}
@@ -90,13 +96,12 @@
             </Form.Field>
 
             <div class="flex w-full col-span-2 flex-col items-end mt-6">
-                <Form.Button>
+                <Form.Button disabled={!updated}>
                     Save Changes
                 </Form.Button>
             </div>
         </div>
 
-        
-
+    
     </form>
 </div>

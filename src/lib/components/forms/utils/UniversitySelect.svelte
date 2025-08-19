@@ -5,19 +5,19 @@
     import * as Popover from "$lib/components/ui/popover";
     import { Check, ChevronsUpDown } from "lucide-svelte";
 
-    let { value = $bindable(), className , formProps, } = $props()
+    let { value = $bindable(), className , formProps, data, onchange } = $props()
     let searchValue = $state('')
+    let open = $state(false)
+    
 
-    const universities = [
-        {value: 'sju', label: 'St. John\'s University'},
-        {value: 'sjp', label: 'St. Joesph\'s University'},
-        {value: 'nyu', label: 'New York University'}
-    ]
+    let universities = data.universityList.map((uni) => {
+        return {value: uni.id.toString(), label: uni.name}
+    })
 
 </script>
 
 <div class={className + " flex"}>
-    <Popover.Root>
+    <Popover.Root bind:open>
         <Popover.Trigger>
             {#snippet child({ props })}
                 <Button
@@ -41,14 +41,17 @@
                     bind:value={searchValue} 
                     placeholder="Search"/>
                 <Command.Empty>No university found.</Command.Empty>
-                <Command.Group>
+                <Command.Group class="h-50 overflow-y-scroll">
                     {#each universities as uni}
                         <Command.Item
                             class="flex w-full justify-between"
                             key={uni.value}
-                            value={uni.value}
+                            value={uni.label}
                             onSelect={
-                                () => {value = uni.value}
+                                () => {
+                                    value = uni.value
+                                    onchange()
+                                }
                             }
                         >
                             <span>{uni.label}</span>

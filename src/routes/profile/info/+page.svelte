@@ -3,7 +3,10 @@
 
     let { data } = $props()
 
+    const profileInfoAction = "/profile/info?/info";
 </script>
 
 
-<ProfileInfo {data}/>
+<ProfileInfo infoActionName="?/info" {data}/>
+
+
