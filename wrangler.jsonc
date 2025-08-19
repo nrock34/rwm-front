@@ -1,0 +1,16 @@
+{
+    "name": "rwm-front-worker",
+    "main": "./svelte-kit/cloudflare/_worker.js",
+    "compatibility_date": "2025-08-01",
+    "assets": {
+        "binding": "ASSETS",
+        "directory": ".svelte-kit/cloudflare"
+    },
+    "r2_buckets": [
+        {
+            "binding": "PFP_BUCKET",
+            "bucket_name": "rwm-pfp",
+            "preview_bucket_name": "pfprwm"
+        },
+    ]
+}
