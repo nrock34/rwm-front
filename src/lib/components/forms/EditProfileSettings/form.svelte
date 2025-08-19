@@ -10,6 +10,8 @@
     //form supervalidated
     let { data, actionName } = $props();
     
+    let updated = $state(false);
+
     const form = superForm( data.editProfileSettingsForm, {
         dataType: 'json',
         validators: yupClient(profileSettingsSchema),
@@ -34,7 +36,10 @@
         <Form.Control>
             {#snippet children({ props })}
                 <Form.Label>Profile Visibility</Form.Label>
-                <Select.Root type='single' bind:value={$formData.profileVisibility}>
+                <Select.Root 
+                    type='single'
+                    onValueChange={() => {updated = true}}
+                    bind:value={$formData.profileVisibility}>
                     <Select.Trigger class="w-xs" {...props}>
                         {profileVisibilityTriggerContent}
                     </Select.Trigger>
@@ -66,6 +71,7 @@
                     <div class="flex items-center space-x-2">
                         <Checkbox
                             {...props}
+                            onCheckedChange={() => {updated = true}}
                             bind:checked={$formData.emailNotifications[option.id]}
                             value={option.id}
                             />
@@ -77,7 +83,7 @@
             </Form.Control>
         {/each}
     </Form.Fieldset>
-    <Form.Button>
+    <Form.Button disabled={!updated}>
         Save Changes
     </Form.Button>
 </form>

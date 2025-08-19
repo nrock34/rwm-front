@@ -1,5 +1,5 @@
 <script>
-    import { Bookmark, Calendar, Mail, MessageSquare, Phone, Settings2, MapPin, User } from "lucide-svelte";
+    import { Bookmark, Calendar, Mail, MessageSquare, Phone, Settings2, MapPin, User, IdCard } from "lucide-svelte";
     import { Button } from "$lib/components/ui/button";
     import * as Card from "$lib/components/ui/card";
     import Activity from "$lib/components/profile-page/self-tabs/Activity.svelte";
@@ -7,11 +7,14 @@
     import Bookmarked from "$lib/components/profile-page/self-tabs/Bookmarked.svelte";
     import Dashboard from "$lib/components/profile-page/self-tabs/Dashboard.svelte";
     import Settings from "$lib/components/profile-page/self-tabs/Settings.svelte";
-    import { profileData } from "$lib/components/profile-page/test";
+    // import { profileData } from "$lib/components/profile-page/test";
+    import Info from "$lib/components/profile-page/self-tabs/Info.svelte";
 
     let activeTab = $state('settings');
 
     let { data, children } = $props();
+
+    let { profileData } = data
 
     const tabs = [
         { id: 'activity', name: 'Activity', component: () => Activity, icon: MessageSquare },
@@ -19,6 +22,7 @@
         { id: 'bookmarks', name: 'Bookmared Items', component: () => Bookmarked, icon: Bookmark },
         { id: 'dashboard', name: 'Dashboard', component: () => Dashboard, icon: User },
         { id: 'settings', name: 'Account Settings', component: () => Settings, icon: Settings2 },
+        { id: 'info', name: 'Account Info', component: () => Info, icon: IdCard}
     ]
 
     const pickTabComponent = (id) => {
@@ -81,6 +85,7 @@
                     {@const IconComponent = tab.icon}
                     <Button
                         href={`${tab.id}`}
+                        data-sveltekit-noscroll
                         data-sveltekit-preload-data="hover"
                         key={tab.id}
                         onclick={() => activeTab = tab.id}

@@ -8,7 +8,6 @@ import * as EditProfileEducationSchema from '$lib/components/forms/EditProfileEd
 
 import { today, getLocalTimeZone } from "@internationalized/date"
 import { scholarship } from "$lib/components/scholarship-single-page/testdata";
-import { getLocalTimeZone } from "@internationalized/date";
 
 export const load = async () => {
 

@@ -18,9 +18,9 @@ export const load = async ({ fetch }) => {
         let data = await fetchProfileDataResp.json()
         let { name, profile, username, location, major, phone_num, university } = data
 
-        console.log(data)
+        //console.log(data)
 
-        const profileData = { 
+        profileData = { 
             name: name,
             email: 'sarah.johnson@email.com',
             phone: '+1 (555) 123-4567',
@@ -30,6 +30,10 @@ export const load = async ({ fetch }) => {
             bio: profile.bio,
             avatar: profile.avatar
         }
+    }
+
+    return {
+        profileData
     }
 
 }

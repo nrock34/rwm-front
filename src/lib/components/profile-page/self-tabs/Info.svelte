@@ -5,7 +5,7 @@
     import EditProfileInfoForm from '$lib/components/forms/EditProfileInfo/form.svelte';
 
     
-    let { data } = $props()
+    let { data, infoActionName, eduActionName } = $props()
 
 </script>
 
@@ -18,7 +18,7 @@
                 <p class="leading-tight text-sm font-light text-secondary-foreground">Edit your account's profile information</p>
             </div>
             <div class="">
-                <EditProfileInfoForm actionName="profileInfo" {data}/>
+                <EditProfileInfoForm actionName={infoActionName} {data}/>
             </div>
         </div>
     </Card.Root>
@@ -30,7 +30,7 @@
                 <p class="leading-tight text-sm font-light text-secondary-foreground">Info about your current education</p>
             </div>
             <div class="pl-5 w-full">
-                <EditProfileEducationForm actionName="profileEducation" {data}/>
+                <EditProfileEducationForm actionName={eduActionName} {data}/>
             </div>
         </div>
     </Card.Root>

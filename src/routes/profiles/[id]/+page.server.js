@@ -10,8 +10,6 @@ export const load = async ({ fetch, params }) => {
     let profileData;
     let recentPostsData;
     
-
-
     const fetchRecentPostsIdsResponse = await fetch(`${API_URL}authors/${profileUserId}/posts`, {
         headers: {
             'Content-Type': 'application/json',
