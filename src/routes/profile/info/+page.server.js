@@ -9,7 +9,7 @@ import * as EditProfileEducationSchema from '$lib/components/forms/EditProfileEd
 import { ACS_TKN, API_URL } from "$env/static/private";
 import { env } from "$env/dynamic/private";
 
-export const load = async ({ fetch, data, parent }) => {
+export const load = async ({ fetch, data }) => {
 
     let universityList
     const universityListResp = await fetch(`${API_URL}universities/selectlist`)
