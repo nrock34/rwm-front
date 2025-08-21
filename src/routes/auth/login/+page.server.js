@@ -1,8 +1,9 @@
 import { fileFieldProxy, message, superValidate } from "sveltekit-superforms"
 import { yup } from "sveltekit-superforms/adapters"
 import { schema } from "$lib/components/forms/auth/login-schema.js"
-import { API_URL } from "$env/static/private"
+import { API_URL, COOKIE_SECRET } from "$env/static/private"
 import { error } from "@sveltejs/kit"
+import { sign } from "$lib/server/cookies.js"
 
 export const load = async ({ fetch }) => {
     console.log(schema)
@@ -59,7 +60,7 @@ export const actions = {
             const { acs_tkn, rfh_tkn, rfh_age } = loginData
 
             cookies.set(
-                'rfh_tkn', rfh_tkn, {
+                'rfh_tkn', sign(rfh_tkn), {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'strict',
@@ -67,6 +68,16 @@ export const actions = {
                     maxAge: rfh_age
                 }
             )
+
+            cookies.set(
+                'acs_tkn', sign(acs_tkn), {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'strict',
+                    path: '/'
+                }
+            )
+            
 
             return message(form, acs_tkn)
         }

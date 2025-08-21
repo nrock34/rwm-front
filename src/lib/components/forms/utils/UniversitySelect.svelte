@@ -5,7 +5,7 @@
     import * as Popover from "$lib/components/ui/popover";
     import { Check, ChevronsUpDown } from "lucide-svelte";
 
-    let { value = $bindable(), className , formProps, data, onchange } = $props()
+    let { value = $bindable(), className , formProps, data, onchange = () => {} } = $props()
     let searchValue = $state('')
     let open = $state(false)
     
@@ -38,6 +38,7 @@
         <Popover.Content class="p-0">
             <Command.Root>
                 <Command.Input
+                    name="university"
                     bind:value={searchValue} 
                     placeholder="Search"/>
                 <Command.Empty>No university found.</Command.Empty>
