@@ -39,9 +39,18 @@
     const form = superForm(data.editProfileInfoForm, {
         dataType: 'json',
         validators: yupClient(profileInfoSchema),
+        onSubmit: ({ jsonData }) => {
+            const taintedData = Object.fromEntries(
+                Object.entries($formData).filter(([key]) => {
+                    return form.isTainted(key)
+                })
+            )
+            console.log(taintedData)
+            jsonData(taintedData)
+        }
     })
 
-    const { form: formData, enhance } = form;
+    const { form: formData, enhance, isTainted } = form;
 
     const pfpFile = fileProxy(form, 'avatar')
 

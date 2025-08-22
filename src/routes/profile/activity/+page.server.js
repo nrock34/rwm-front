@@ -3,7 +3,9 @@ import { error } from '@sveltejs/kit'
 import { getActivityData } from '../utils.js'
 
 
-export const load = async ({ fetch, data }) => {
+export const load = async ({ locals, fetch, data }) => {
+
+    let ACS_TKN = locals.token
 
     let activityData = await getActivityData(API_URL, ACS_TKN, fetch, error)
 

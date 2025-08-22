@@ -84,7 +84,7 @@
                 {#each tabs as tab}
                     {@const IconComponent = tab.icon}
                     <Button
-                        href={`${tab.id}`}
+                        href={`/profile/${tab.id}`}
                         data-sveltekit-noscroll
                         data-sveltekit-preload-data="hover"
                         key={tab.id}

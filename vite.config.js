@@ -12,5 +12,8 @@ export default defineConfig({
 			gzipSize: true,
 			brotliSize: true,
 		})
-	]
+	],
+	optimizeDeps: {
+		exclude: ['svelte-sonner']
+	}
 });

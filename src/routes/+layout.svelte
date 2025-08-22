@@ -2,8 +2,13 @@
 	import '../app.css';
 	import { NavigationMenuRoot, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '$lib/components/ui/navigation-menu/';
     import { navigationMenuTriggerStyle } from '$lib/components/ui/navigation-menu/navigation-menu-trigger.svelte';
+	import { Toaster } from "$lib/components/ui/sonner"
+
 	let { children } = $props();
 </script>
+
+<Toaster position="top-right" />
+
 <div class="visisi">
 	<header id="navbar" class="">
 		<NavigationMenuRoot viewport={false}>

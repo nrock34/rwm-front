@@ -9,7 +9,9 @@ import * as EditProfileEducationSchema from '$lib/components/forms/EditProfileEd
 import { ACS_TKN, API_URL } from "$env/static/private";
 import { env } from "$env/dynamic/private";
 
-export const load = async ({ fetch, data }) => {
+export const load = async ({ locals, fetch, data }) => {
+
+    let ACS_TKN = locals.token
 
     let universityList
     const universityListResp = await fetch(`${API_URL}universities/selectlist`)
@@ -59,7 +61,8 @@ export const load = async ({ fetch, data }) => {
 
     const editProfileInfoForm = await superValidate(
         {
-            ...profileInfoData
+            ...profileInfoData,
+            avatar: undefined
             //prefill form slots
         },
         yup(EditProfileInfoSchema.profileInfoSchema)
@@ -83,12 +86,17 @@ export const load = async ({ fetch, data }) => {
 
 
 export const actions = {
-    info: async ({ request, platform }) => {
+    
+    info: async ({ locals, request, platform }) => {
+        let ACS_TKN = locals.token
+
         console.log(platform)
         console.log(2133)
         const profileInfoForm = await superValidate(request,
             yup(EditProfileInfoSchema.profileInfoSchema)
         );
+
+        if (!profileInfoForm.valid) return fail(400, { profileInfoForm });
 
         const pfpfile = profileInfoForm.data.avatar || null
         let imgUrl
@@ -103,10 +111,24 @@ export const actions = {
             console.log(imgUrl)
         } else {
             imgUrl = null
+            delete profileInfoForm.data.avatar
         }
 
 
-        if (!profileInfoForm.valid) return fail(400, { profileInfoForm });
+        
+        const infoUpdateResp = await fetch(`${API_URL}users/me/settings/profile`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${ACS_TKN}`
+            },
+            body: JSON.stringify({
+                ...profileInfoForm.data,
+            })
+
+        })
+
+        console.log(await infoUpdateResp.json())
 
         return message(profileInfoForm, "form submitted");
 

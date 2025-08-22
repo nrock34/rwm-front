@@ -1,9 +1,11 @@
-import { API_URL, ACS_TKN } from "$env/static/private";
+import { API_URL } from "$env/static/private";
 import { error } from "@sveltejs/kit";
 
-export const load = async ({ fetch, data }) => {
+export const load = async ({ fetch, locals, data }) => {
 
     let savedItemData
+
+    let ACS_TKN = locals.token
 
     const fetchSavedItemsResponse = await fetch(
         `${API_URL}users/me/saved-items`,

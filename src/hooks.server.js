@@ -2,7 +2,7 @@ import { verify } from '$lib/server/cookies';
 
 
 const authRoutes = [
-    '/profile',
+    '/profile123',
     '/community'
 ]
 
@@ -13,9 +13,15 @@ const isAuthRoute = (pathName, routes) => {
 }
 
 export const handle = async ({ event, resolve }) => {
+
+    const acsTkn = verify(event.cookies.get('acs_tkn')) ?? null
+    if (acsTkn) {
+        event.locals.token = acsTkn;
+    }
+
 	if (isAuthRoute(event.url.pathname, authRoutes)) {
 
-        if (verify(event.cookies.get('rfh_tkn'))){
+        if (acsTkn){
             return new Response('u got auth response');
         }
 

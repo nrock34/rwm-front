@@ -1,9 +1,12 @@
-import { ACS_TKN, API_URL } from '$env/static/private';
+import { API_URL } from '$env/static/private';
+import { verify } from '$lib/server/cookies.js';
 import { error } from '@sveltejs/kit';
 
-export const load = async ({ fetch }) => {
+export const load = async ({ fetch, locals, cookies }) => {
 
     let profileData;
+
+    let ACS_TKN = locals.token
 
     const fetchProfileDataResp = await fetch(`${API_URL}users/me/profile`, {
         headers: {

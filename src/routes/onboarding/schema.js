@@ -4,7 +4,10 @@ export const academicBackgroundSchema = yup.object({
     studentLevel: yup.string()
         .required(),
     university: yup.string()
-    .min(12)
+        .required(),
+    major: yup.string()
+        .required(),
+    year: yup.number()
         .required()
 })
 
