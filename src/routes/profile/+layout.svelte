@@ -9,6 +9,11 @@
     import Settings from "$lib/components/profile-page/self-tabs/Settings.svelte";
     // import { profileData } from "$lib/components/profile-page/test";
     import Info from "$lib/components/profile-page/self-tabs/Info.svelte";
+    import { getTokenState } from "$lib/stores/jwt.svelte.js";
+    import { onMount } from "svelte";
+
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
 
     let activeTab = $state('settings');
 
@@ -16,14 +21,19 @@
 
     let { profileData } = data
 
+    const tokenState = getTokenState();
+
     const tabs = [
-        { id: 'activity', name: 'Activity', component: () => Activity, icon: MessageSquare },
-        { id: 'applications', name: 'Applications Tracker', component: () => ApplicationTracker, icon: Calendar },
-        { id: 'bookmarks', name: 'Bookmared Items', component: () => Bookmarked, icon: Bookmark },
-        { id: 'dashboard', name: 'Dashboard', component: () => Dashboard, icon: User },
-        { id: 'settings', name: 'Account Settings', component: () => Settings, icon: Settings2 },
-        { id: 'info', name: 'Account Info', component: () => Info, icon: IdCard}
-    ]
+        { pos: 5, id: 'activity', name: 'Activity', component: () => Activity, icon: MessageSquare },
+        { pos: 3, id: 'applications', name: 'Applications Tracker', component: () => ApplicationTracker, icon: Calendar },
+        { pos: 4, id: 'bookmarks', name: 'Bookmared Items', component: () => Bookmarked, icon: Bookmark },
+        { pos: 1, id: 'dashboard', name: 'Dashboard', component: () => Dashboard, icon: User },
+        { pos: 6, id: 'settings', name: 'Account Settings', component: () => Settings, icon: Settings2 },
+        { pos: 2, id: 'info', name: 'Account Info', component: () => Info, icon: IdCard}
+    ].sort((a, b) => a.pos - b.pos)
+
+    let tabsLength = tabs.length
+
 
     const pickTabComponent = (id) => {
         return tabs.find((tab) => tab.id === activeTab).component
@@ -33,15 +43,26 @@
         tabs.find((tab) => tab.id === activeTab)?.component()
     )
     
-    console.log( data )
+    onMount(async () => {
+        if (tokenState.isExpired) await tokenState.refreshAccessToken()
+        console.log(tokenState.token)
+    })
 
+    $effect(() => {
+        const paths = $page.url.pathname.split('/')
+        if (paths.length > 3) {
+            goto('/profile/dashboard')
+        }
+        activeTab = paths[2]
+        console.log(paths)
+    })
 
 </script>
 
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <div class="grid lg:grid-cols-4 gap-8">
+    <div class="grid lg:grid-cols-4 gap-4 lg:gap-8">
 
         <!-- profile sidebar -->
         <div class="lg:col-span-1">
@@ -64,11 +85,11 @@
 
                 <div class="space-y-2.5">
                     <div class="flex items-center space-x-2.5 text-sm">
-                        <Mail class="h-5 w-5 text-secondary-foreground" />
+                        <Mail class="h-4 w-4 text-secondary-foreground" />
                         <span class="text-secondary-foreground">{profileData.email}</span>
                     </div>
                     <div class="flex items-center space-x-2.5 text-sm">
-                        <MapPin class="h-5 w-5 text-secondary-foreground" />
+                        <MapPin class="h-4 w-4 text-secondary-foreground" />
                         <span class="text-secondary-foreground">{profileData.location}</span>
                     </div>
                     <p class="text-sm text-secondary-foreground mt-3.5">
@@ -80,7 +101,7 @@
 
 
             <!-- side navigation -->
-            <nav class="space-y-1.5">
+            <nav class={`space-y-1.5 grid grid-cols-6 gap-x-0 lg:gap-y-1 lg:grid-cols-1`}>
                 {#each tabs as tab}
                     {@const IconComponent = tab.icon}
                     <Button
@@ -89,13 +110,13 @@
                         data-sveltekit-preload-data="hover"
                         key={tab.id}
                         onclick={() => activeTab = tab.id}
-                        class={`w-full items-center space-x-2 px-4 py-6 shadow-none bg-transparent 
+                        class={`sm:w-full h-full w-full items-center lg:!justify-start !justify-center flex flex-col lg:flex-row lg:gap-x-2 gap-0 shadow-none bg-transparent 
                             ${activeTab === tab.id
-                                ? 'bg-primary text-foreground/90' 
-                                : 'text-foreground/70 hover:bg-muted hover:text-foreground'} justify-start
+                                ? 'border-b-4 border-primary rounded-b-xs lg:bg-primary text-foreground/90 hover:bg-primary/15 bg-primary/10' 
+                                : 'text-foreground/70 lg:hover:bg-muted lg:hover:text-foreground hover:bg-transparent hover:border-b-4 hover:border-secondary/80'} rounded-b-xs lg:border-none lg:rounded-(--radius) justify-start transition-none
                         `}>
-                        <IconComponent class=" h-4 w-4" />
-                        <span class="text-sm font-medium">{tab.name}</span>
+                        <IconComponent class="h-4 w-4 m-0 mb-1 lg:mb-0" />
+                        <span class="text-[0.65rem] sm:text-xs lg:text-sm font-medium text-wrap text-center lg:pl-2">{tab.name}</span>
                     </Button>
                 {/each}
             </nav>

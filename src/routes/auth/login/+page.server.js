@@ -4,10 +4,10 @@ import { schema } from "$lib/components/forms/auth/login-schema.js"
 import { API_URL, COOKIE_SECRET } from "$env/static/private"
 import { error } from "@sveltejs/kit"
 import { sign } from "$lib/server/cookies.js"
+import * as psc from "$lib/server/setCookieParse.js"
+import { passRefreshTkn } from "$lib/server/getRefreshTkn.js"
 
 export const load = async ({ fetch }) => {
-    console.log(schema)
-    console.log(3838)
     const loginForm = await superValidate(yup(schema))
 
     return {
@@ -55,29 +55,22 @@ export const actions = {
         } else if (!loginResponse.ok) {
             error(loginResponse.status)
         } else {
+
             loginData = await loginResponse.json()
 
-            const { acs_tkn, rfh_tkn, rfh_age } = loginData
+            const { acs_tkn } = loginData
 
-            cookies.set(
-                'rfh_tkn', sign(rfh_tkn), {
-                    httpOnly: true,
-                    secure: true,
-                    sameSite: 'strict',
-                    path: '/',
-                    maxAge: rfh_age
-                }
-            )
+            passRefreshTkn(cookies, loginResponse.headers)
 
             cookies.set(
                 'acs_tkn', sign(acs_tkn), {
+                    maxAge: 1000 * 60 * 2,
                     httpOnly: true,
                     secure: true,
                     sameSite: 'strict',
                     path: '/'
                 }
             )
-            
 
             return message(form, acs_tkn)
         }

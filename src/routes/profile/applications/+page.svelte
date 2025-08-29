@@ -5,5 +5,7 @@
     let { applicationsData } = data
 </script>
 
+<div class="max-w-svw">
+    <ApplicationTracker {applicationsData} />
+</div>
 
-<ApplicationTracker {applicationsData} />

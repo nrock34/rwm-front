@@ -15,7 +15,7 @@
     import { error } from "@sveltejs/kit";
 
 
-	let { class: className, data, actionName, ...restProps } = $props();
+	let { class: className, data, actionName, onSIgnup, ...restProps } = $props();
     let usernameExist = $state(false);
 
 	const id = $props.id();
@@ -33,13 +33,13 @@
     //     }
     // }
 
-	console.log(schema)
 	const form = superForm(data.signupForm, {
 		dataType: 'json',
 		validators: yupClient(schema),
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
-				sessionStorage.setItem("acsTkn", result.data.form.message)
+                onSignup(result.data.form.message)
+				//sessionStorage.setItem("acsTkn", result.data.form.message)
 			}
 		}
 	} )

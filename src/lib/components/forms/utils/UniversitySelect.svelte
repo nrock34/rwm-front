@@ -26,7 +26,7 @@
                     role="combobox"
                     class="w-full h-full"
                     >
-                    <span class="flex items-center py-5 justify-between w-full">
+                    <span class="flex items-center py-5 justify-between w-full text-xs sm:text-sm">
                         {value ?
                             universities.find((uni) => uni.value === value)?.label
                         : "Select University"}

@@ -33,7 +33,7 @@ export const getActivityData = async ( API_URL, ACS_TKN, fetch, error) => {
             }
         )
         )
-        console.log(activityData)
+        
     }
 
     return activityData
@@ -58,13 +58,12 @@ export const getApplicationsData = async ( API_URL, ACS_TKN, fetch, error) => {
         error(fetchApplicationsResponse.status)
     } else {
         applicationsData = await fetchApplicationsResponse.json()
-
         console.log(applicationsData)
-
         applicationsData = applicationsData.map((application) => {
             return { 
                 id: 1,
                 title: application.application_to.name,
+                provider: application.application_to.provider,
                 type: application.type,
                 status: application.status,
                 deadline: application.app_info.deadline,
@@ -73,7 +72,7 @@ export const getApplicationsData = async ( API_URL, ACS_TKN, fetch, error) => {
             }
         })
 
-        console.log(applicationsData)
+        
 
     }
 

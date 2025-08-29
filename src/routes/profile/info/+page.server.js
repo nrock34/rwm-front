@@ -9,7 +9,9 @@ import * as EditProfileEducationSchema from '$lib/components/forms/EditProfileEd
 import { ACS_TKN, API_URL } from "$env/static/private";
 import { env } from "$env/dynamic/private";
 
-export const load = async ({ locals, fetch, data }) => {
+export const load = async ({ locals, fetch, data, parent }) => {
+
+    await parent()
 
     let ACS_TKN = locals.token
 
@@ -20,7 +22,7 @@ export const load = async ({ locals, fetch, data }) => {
         universityList = await universityListResp.json()
     }
 
-    console.log(universityList)
+    
 
     // GET profile data info 
     const profileInfoDataRespone = await fetch(`${API_URL}users/me/settings/profile`, {
@@ -91,7 +93,7 @@ export const actions = {
         let ACS_TKN = locals.token
 
         console.log(platform)
-        console.log(2133)
+        
         const profileInfoForm = await superValidate(request,
             yup(EditProfileInfoSchema.profileInfoSchema)
         );
@@ -128,7 +130,7 @@ export const actions = {
 
         })
 
-        console.log(await infoUpdateResp.json())
+
 
         return message(profileInfoForm, "form submitted");
 

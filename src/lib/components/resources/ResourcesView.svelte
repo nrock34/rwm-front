@@ -89,7 +89,7 @@
 
 
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="mx-auto w-full">
     <div class="flex justify-between items-center w-full mb-12">
         <div class="mb-0">
             <h1 class="text-3xl font-bold text-foreground mb-2">

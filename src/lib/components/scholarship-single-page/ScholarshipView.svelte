@@ -46,7 +46,7 @@
 
 
 
-<div class="max-w-7xl mx-auto px-6 p-16">
+<div class="mx-auto">
     <div class="grid lg:grid-cols-3 gap-10">
         <div class="lg:col-span-2 space-y-8">
 

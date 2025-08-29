@@ -26,7 +26,7 @@
             profileVisibilityOptions.find(opt => opt.id === $formData.profileVisibility)?.label
         )
                 
-    console.log($formData.emailNotifications)
+    
 </script>
 
 

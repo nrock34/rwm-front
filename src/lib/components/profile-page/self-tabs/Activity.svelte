@@ -25,7 +25,7 @@
                             <span> by {activity.user}</span>
                         {/if}
                     </p>
-                    <p class="text-xs text-secondary-foreground">{activity.timestamp}</p>
+                    <p class="text-xs text-secondary-foreground">{new Date(activity.timestamp).toLocaleString()}</p>
                 </div>
             </div>
         </Card.Root>

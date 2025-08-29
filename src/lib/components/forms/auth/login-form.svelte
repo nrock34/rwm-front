@@ -14,19 +14,18 @@
 	import loadSpinner from "$lib/assets/load-spinner.svg"
 
 
-	let { class: className, data, actionName, ...restProps } = $props();
+	let { class: className, data, actionName, onLogin, ...restProps } = $props();
 
 	const id = $props.id();
 
-	
 
-	console.log(schema)
 	const form = superForm(data.loginForm, {
 		dataType: 'json',
 		validators: yupClient(schema),
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
-				sessionStorage.setItem("acsTkn", result.data.form.message)
+
+				onLogin(result.data.form.message)
 			}
 		}
 	} )

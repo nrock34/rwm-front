@@ -66,7 +66,7 @@
 
     onMount(async () => {
         const academicBackgroundFormData = sessionStorage.getItem('acd_bck_fields')
-        console.log(data.form)
+        
         if (!academicBackgroundFormData) { 
             currentFormId = prevFormId
             let prevForm = data.prevForm

@@ -3,9 +3,10 @@ import { yup } from "sveltekit-superforms/adapters"
 import { schema } from "$lib/components/forms/auth/signup-schema.js"
 import { API_URL } from "$env/static/private"
 import { error } from "@sveltejs/kit"
+import { sign } from "$lib/server/cookies.js"
+import { passRefreshTkn } from "$lib/server/getRefreshTkn.js"
 
 export const load = async ({ fetch }) => {
-    console.log(3838)
     const signupForm = await superValidate(yup(schema))
 
 
@@ -64,13 +65,16 @@ export const actions = {
 
             const { acs_tkn, rfh_tkn, rfh_age } = signupData
 
+            passRefreshTkn(cookies, signupResponse.headers)
+
             cookies.set(
-                'rfh_tkn', rfh_tkn, {
-                    httpOnly: true,
+                'acs_tkn', sign(acs_tkn),
+                {
                     secure: true,
-                    sameSite: 'strict',
+                    httpOnly: true,
                     path: '/',
-                    maxAge: rfh_age * 60
+                    sameSite: 'Strict',
+                    maxAge: new Date().setMinutes(6)
                 }
             )
 

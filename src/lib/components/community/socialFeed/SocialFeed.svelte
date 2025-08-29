@@ -4,6 +4,8 @@
 
     import { Users, BookOpen, Calendar, Award } from 'lucide-svelte';
 
+    let { limit = 6 } = $props()
+
     let searchQuery = $state('');
     let activeContentType = $state('all')
     let activeFilter = $state('all')
@@ -24,7 +26,7 @@
 
 </script>
 
-<div class="space-y-12">
+<div class="space-y-12 ">
     <SocialFeedHeader
         {filters}
         {contentTypes}
@@ -33,6 +35,7 @@
         bind:searchQuery
          />
     <SocialFeedPosts
+        {limit}
         {contentTypes}
         {activeFilter}
         {activeContentType}

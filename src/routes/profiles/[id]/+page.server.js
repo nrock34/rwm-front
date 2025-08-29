@@ -1,8 +1,6 @@
 import { API_URL, ACS_TKN } from '$env/static/private';
 import { error } from '@sveltejs/kit'
 
-console.log(API_URL)
-
 
 export const load = async ({ fetch, params }) => {
     const profileUserId = params.id;
@@ -22,7 +20,6 @@ export const load = async ({ fetch, params }) => {
         error(fetchRecentPostsIdsResponse.status)
     } else {
         let data = await fetchRecentPostsIdsResponse.json()
-        console.log(data)
 
         if (data.posts) {
             const profileRecentPosts = Promise.all((await data.posts.map(
@@ -41,7 +38,6 @@ export const load = async ({ fetch, params }) => {
                 }
             )))
             recentPostsData = await profileRecentPosts;
-            console.log(recentPostsData)
         }
     }
 
@@ -94,13 +90,6 @@ export const load = async ({ fetch, params }) => {
             recentPosts: await recentPostsData,
         }
     }
-
-
-    
-
-    console.log(recentPostsData)
-    //console.log(await publicProfileRecentPosts)
-    console.log(profileUserId)
 
     return await { profileData }
 }

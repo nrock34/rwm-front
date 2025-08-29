@@ -1,8 +1,11 @@
 <script>
 	import LoginForm from "$lib/components/forms/auth/login-form.svelte";
+    import { getTokenState } from "$lib/stores/jwt.svelte.js";
 	import GalleryVerticalEndIcon from "@lucide/svelte/icons/gallery-vertical-end";
 
     let { data } = $props()
+
+    const tokenState = getTokenState()
 </script>
 
 <div class="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
@@ -15,6 +18,12 @@
 			</div>
 			Acme Inc.
 		</a>
-		<LoginForm actionName={"?/login"} { data }/>
+		<LoginForm 
+            actionName={"?/login"} 
+            onLogin={(token=null) => {
+                console.log(tokenState)
+                tokenState.token = token
+            }} 
+            { data }/>
 	</div>
 </div>

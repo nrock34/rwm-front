@@ -3,8 +3,11 @@
 	import GalleryVerticalEndIcon from "@lucide/svelte/icons/gallery-vertical-end";
     import * as Card from "$lib/components/ui/card/";
     import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte";
+    import { getTokenState } from "$lib/stores/jwt.svelte.js";
 
     let { data } = $props()
+
+    const tokenState = getTokenState()
 
     const sleep = (num) => {
         return new Promise(resolve => setTimeout(resolve, num))
@@ -27,7 +30,12 @@
 			Acme Inc.
 		</a>
         <svelte:boundary>
-            <SignupForm actionName={"?/signup"} { data }/>
+            <SignupForm
+                onSignup={(tkn) => {
+                    tokenState.token = tkn
+                }} 
+                actionName={"?/signup"}
+                 { data }/>
             {#snippet pending()}
                 <Card.Root class="w-full h-full p-5">
                     <Skeleton class="w-full h-140 bg-current/10"/>

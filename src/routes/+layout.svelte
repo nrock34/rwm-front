@@ -3,8 +3,19 @@
 	import { NavigationMenuRoot, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '$lib/components/ui/navigation-menu/';
     import { navigationMenuTriggerStyle } from '$lib/components/ui/navigation-menu/navigation-menu-trigger.svelte';
 	import { Toaster } from "$lib/components/ui/sonner"
+    import { setTokenState } from '$lib/stores/jwt.svelte';
+    import { onMount } from 'svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
+
+	
+	const tokenState = setTokenState()
+	onMount(() => {
+		if (!data.acs_tkn) {
+			tokenState.refreshAccessToken()
+		}
+	})
+
 </script>
 
 <Toaster position="top-right" />
@@ -45,7 +56,7 @@
 		</NavigationMenuRoot>
 	</header>
 
-	<main class="overflow-auto">
+	<main class="">
 		{@render children()}
 	</main>
 	

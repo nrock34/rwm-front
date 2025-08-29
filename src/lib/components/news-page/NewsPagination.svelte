@@ -46,7 +46,7 @@
         filteredNewsUp = filteredNews
     })
     
-    console.log(paginatedNews)
+    
 
 </script>
 

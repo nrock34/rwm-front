@@ -4,9 +4,10 @@ import { error } from '@sveltejs/kit'
 
 
 
-export const load = async ({ locals, fetch, data }) => {
+export const load = async ({ locals, fetch, data, parent }) => {
 
-    let ACS_TKN = locals.token
+    const { ...parentData } = await parent()
+    let ACS_TKN = parentData.token
 
     let applicationsData = await getApplicationsData(API_URL, ACS_TKN, fetch, error)
 

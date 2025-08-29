@@ -1,8 +1,11 @@
+import { goto } from '$app/navigation';
 import { verify } from '$lib/server/cookies';
+import { redirect } from '@sveltejs/kit';
+import jwt from "jsonwebtoken"
 
 
 const authRoutes = [
-    '/profile123',
+    '/profile',
     '/community'
 ]
 
@@ -14,20 +17,53 @@ const isAuthRoute = (pathName, routes) => {
 
 export const handle = async ({ event, resolve }) => {
 
-    const acsTkn = verify(event.cookies.get('acs_tkn')) ?? null
-    if (acsTkn) {
-        event.locals.token = acsTkn;
-    }
+    const cookie = event.cookies.get('acs_tkn')
+    const rCookie = event.cookies.get('rfh_tkn')
+
+    const acsTkn = cookie ? verify(cookie) : null
+
+
 
 	if (isAuthRoute(event.url.pathname, authRoutes)) {
 
-        if (acsTkn){
-            return new Response('u got auth response');
+        if (!rCookie){
+            redirect(303, '/auth/login', {invalidateAll: true})
+            return resolve(event)
         }
 
-		return new Response('custom response');
+        if (!acsTkn) {
+            return resolve(event)
+        }
+
+        try {
+            if(jwt.verify(acsTkn, "12345")) {
+                event.locals.token = acsTkn
+            }
+        } catch (err) {
+            console.log(err)
+            if (err instanceof jwt.TokenExpiredError) {console.log('token expired')
+                //return resolve(event)
+            }
+            else if (err instanceof jwt.NotBeforeError || err instanceof jwt.JsonWebTokenError) {
+                console.log(err)
+                delete event.locals.token
+                event.cookies.delete('rfh_tkn', {'path': '/'})
+                event.cookies.delete('acs_tkn', {'path': '/'})
+                redirect(303, '/auth/login', {invalidateAll: true})
+                //return resolve(event)
+            }
+        }
 	}
 
+    console.log(event.url.pathname.startsWith('/community/news/'))
+
+    if ((event.url.pathname.startsWith('/community/news/') || (event.url.pathname === '/community/news')) ||
+        event.url.pathname.startsWith('/community/updates')
+    ) {
+        const restOfRoute = event.url.pathname
+        console.log(86776)
+        await redirect (308, '/community/news-and-updates/')
+    }
 	const response = await resolve(event);
 	return response;
 };

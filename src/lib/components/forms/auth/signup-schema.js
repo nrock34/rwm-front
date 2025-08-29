@@ -40,11 +40,10 @@ export const schema = yup.object({
                     return true
                 }
                 if ((await usernameCheck(value))?.exists) {
-                    console.log(value)
-                    console.log()
+                    
                     return false
                 } else {
-                    console.log(value)
+                   
                     return true
                 }
             }

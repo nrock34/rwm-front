@@ -6,11 +6,8 @@
     import { Button } from "$lib/components/ui/button";
     import { Separator } from "$lib/components/ui/separator/index.js";
 
-    let { activeFilter, activeContentType, searchQuery, contentTypes } = $props();
+    let { activeFilter, activeContentType, searchQuery, contentTypes, limit } = $props();
 
-    console.log(activeFilter)
-    console.log(activeContentType)
-    console.log(searchQuery)
 
     const posts = [
     {
@@ -127,7 +124,7 @@
             item.category.toLowerCase().includes(searchQuery.toLowerCase());
 
         return matchesContentType && matchesFilter && matchesSearch
-    }))
+    }).slice(0, limit))
 
     
 

@@ -7,8 +7,9 @@ import { error } from "@sveltejs/kit";
 import { profileData } from "$lib/components/profile-page/test.js";
 
 
-export const load = async ( { fetch } ) => {
+export const load = async ( { fetch, parent } ) => {
 
+    await parent()
 
     return {
         editProfileSettingsForm: await superValidate(

@@ -6,8 +6,9 @@ import { getActivityData, getApplicationsData } from '../utils.js';
 
 
 
-export const load = async ({ locals, fetch, data }) => {
+export const load = async ({ locals, fetch, data, parent }) => {
     
+    await parent()
     let ACS_TKN = locals.token
 
     let savedItemData

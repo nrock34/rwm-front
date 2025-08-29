@@ -7,7 +7,6 @@
 
     let { resource } = $props();
 
-    console.log(resource)
 </script>
 
 

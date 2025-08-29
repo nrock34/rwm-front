@@ -1,12 +1,36 @@
 import { API_URL } from '$env/static/private';
-import { verify } from '$lib/server/cookies.js';
-import { error } from '@sveltejs/kit';
+import { sign, verify, verifyNotExpired } from '$lib/server/cookies.js';
+import { error, redirect } from '@sveltejs/kit';
 
-export const load = async ({ fetch, locals, cookies }) => {
+
+export const load = async ({ fetch, cookies, locals }) => {
 
     let profileData;
+    let ACS_TKN
 
-    let ACS_TKN = locals.token
+    const tknCookie = await cookies.get('acs_tkn')
+    let acstkn = tknCookie ? verify(tknCookie) : null
+
+    if (!verifyNotExpired(acstkn)) {
+        const resp = await fetch('/auth/refresh', {method: 'POST'})
+        if (!resp.ok) {
+            redirect(303, '/auth/login')
+        } else {
+            const { acs_tkn } = await resp.json()
+            locals.token = acs_tkn
+            ACS_TKN = acs_tkn
+            await cookies.set('acs_tkn', sign(acs_tkn), {
+                secure: true,
+                httpOnly: true,
+                sameSite: 'Strict',
+                maxAge: 8400,
+                path: '/'
+            })
+        }
+    } else {
+        ACS_TKN = acstkn
+        locals.token = acstkn
+    }
 
     const fetchProfileDataResp = await fetch(`${API_URL}users/me/profile`, {
         headers: {
@@ -36,6 +60,7 @@ export const load = async ({ fetch, locals, cookies }) => {
     }
 
     return {
+        token: locals.token,
         profileData
     }
 

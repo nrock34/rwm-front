@@ -1,8 +1,9 @@
 import { API_URL } from "$env/static/private";
 import { error } from "@sveltejs/kit";
 
-export const load = async ({ fetch, locals, data }) => {
+export const load = async ({ fetch, locals, data, parent }) => {
 
+    await parent()
     let savedItemData
 
     let ACS_TKN = locals.token
@@ -44,7 +45,7 @@ export const load = async ({ fetch, locals, data }) => {
 
         for (let i = 0; i < scholarships.length; i++) {
             let scholarship = scholarships[i]
-            console.log(scholarship)
+           
             savedItems.push(
                 {
                     id: 1,
@@ -60,7 +61,7 @@ export const load = async ({ fetch, locals, data }) => {
 
         for (let i = 0; i < resources.length; i++) {
             let resource = resources[i]
-            console.log(resource)
+        
             if (resource.title && resource.author) {
                 savedItems.push(
                 {
