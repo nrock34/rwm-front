@@ -2,6 +2,8 @@ import { updated } from "$app/state"
 import { API_URL } from "$env/static/private"
 
 function postcardDetail(postcard) {
+    console.log(postcard)
+    if (postcard) {
         return {
             id: postcard.id,
             author: {
@@ -29,6 +31,7 @@ function postcardDetail(postcard) {
             updatedAt: postcard.updated_at ?? null,
             commentCount: postcard.comment_count ?? null
         }
+    } 
 }
 
 

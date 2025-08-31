@@ -63,12 +63,14 @@
             {console.log(featPostcard)}
         <div class="absolute inset-0 bg-gradient-to-b from-foreground/80 via-foreground/40 to-foreground/20 backdrop-blur-[3px]"></div>
         <div class="absolute inset-0 mx-4 sm:mx-8 md:mx-14">
+            
             <div class="flex flex-col h-full w-full justify-center py-1 text-primary-foreground max-w-[80rem]  justify-self-center">
                 <h6 class="text-sm tracking-widest">COLLECTION</h6>
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold">Explore Postcards</h2>
                 <p class="text-base md:text-lg pt-2 font-light">
                     Browse curated travel stories from our community. Filter by region or author and collect your favorites.
                 </p>
+                {#if featPostcard}
                 <div hidden class="mt-12 bg-white/70 grid grid-cols-2 p-8 m-2 min-h-60 max-w-140 ring-ring/60 ring-2 rounded-sm">
                     <div class="flex flex-col text-foreground">
                         <span class="text-xs tracking-wide font-light">
@@ -95,6 +97,7 @@
                         </div>
                     </div>
                 </div>
+                {/if}
             </div>
         </div>
     </section>
@@ -164,7 +167,14 @@
 
                 <svelte:boundary>
                     <div class="">
-                        <PostcardsViewAll {results} {searchQuery} {selectedRegion} > </PostcardsViewAll>
+                        {#if results.length}
+                            <PostcardsViewAll {results} {searchQuery} {selectedRegion} > </PostcardsViewAll>
+                        {:else}
+                            <div class="flex flex-col justify-center items-center w-full h-full py-40">
+                                <h1 class="text-2xl text-secondary-foreground font-semibold">No Postcards Found</h1>
+                                <p class="text-muted-foreground">Please adjust you filters or try again later.</p>
+                            </div>
+                        {/if}
                     </div>
                     
 
@@ -217,42 +227,4 @@
             </div>
         </div>
     </section>
-</div>
-
-
-<div hidden class="grid grid-cols-50 max-w-[100vw] overflow-hidden">
-
-    <div class="bg-secondary/20 col-span-11 sm:col-span-50 lg:col-span-10 flex flex-col w-full border-accent-foreground/30">
-
-        <div class="border-border rounded-lg bg-secondary/40 mx-5 mt-6 mb-1 text-left space-y-1.5 p-4 flex flex-col items-start">
-            <h1 class=" text-3xl font-bold trailing-tight">
-                postcards
-            </h1>
-            <p class="ml-0.75 font-medium text-sm trailing-tight">
-                have look through some of the memories/stories/trips shared by others {'<3'}
-            </p>
-        </div>
-
-        
-    </div>
-
-    <div class=" lg:col-span-40 sm:col-span-50 flex flex-col w-full bg-gradient-to-b from-accent-foreground/40 to-accent/30">
-
-        <Separator class="bg-foreground"/>
-
-        <svelte:boundary>
-            <PostcardsViewAll {results} {searchQuery} {selectedRegion} > </PostcardsViewAll>
-
-            {#snippet pending()}
-                <div class="mx-auto my-auto">
-                    <h1>Loading Postcards</h1>
-                </div>
-            {/snippet}
-
-        </svelte:boundary>
-
-        
-        
-    </div>
-
 </div>

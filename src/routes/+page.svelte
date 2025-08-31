@@ -1,42 +1,104 @@
 <script>
-    import { createClassComponent } from "svelte/legacy";
+    import Hero from "$lib/components/landing/hero.svelte";
+    import Stats from "$lib/components/landing/stats.svelte";
+    import Features from "$lib/components/landing/features.svelte";
+    import Activity from "$lib/components/landing/activity.svelte";
+
+    import { Users, Award, BookOpen, Globe, Heart, Calendar } from "lucide-svelte";
+    import Testimonials from "$lib/components/landing/testimonials.svelte";
+    import HIW from "$lib/components/landing/hiw.svelte";
+    
+    const features = [
+        {
+        icon: Users,
+        title: 'Connect with Students',
+        description: 'Join a vibrant community of international students studying in Rome and across Italy.'
+        },
+        {
+        icon: Award,
+        title: 'Find Scholarships',
+        description: 'Discover funding opportunities with our comprehensive scholarship database and application tracking.'
+        },
+        {
+        icon: BookOpen,
+        title: 'Access Resources',
+        description: 'Get guides, tips, and essential information for your study abroad journey.'
+        },
+        {
+        icon: Globe,
+        title: 'Explore Programs',
+        description: 'Browse study abroad programs and find the perfect fit for your academic goals.'
+        }
+    ];
+
+    const testimonials = [
+        {
+        name: 'Sarah Johnson',
+        university: 'UC Berkeley',
+        program: 'Art History in Florence',
+        avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+        quote: 'RomeWithMe made my study abroad experience incredible. The community support and resources were invaluable.',
+        rating: 5
+        },
+        {
+        name: 'Marco Benedetti',
+        university: 'Sapienza University',
+        program: 'Local Student Mentor',
+        avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+        quote: 'As a local student, I love helping international students discover the real Rome. This platform connects us all.',
+        rating: 5
+        },
+        {
+        name: 'Emma Chen',
+        university: 'NYU',
+        program: 'Business Studies in Rome',
+        avatar: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+        quote: 'Found my scholarship through RomeWithMe and connected with amazing people. Highly recommend!',
+        rating: 5
+        }
+    ];
+
+    const stats = [
+        { number: '2,500+', label: 'Active Students' },
+        { number: '150+', label: 'Study Programs' },
+        { number: '89', label: 'Scholarships' },
+        { number: '25+', label: 'Universities' }
+    ];
+
+    const recentActivity = [
+        {
+        type: 'scholarship',
+        title: 'New Fulbright applications open',
+        time: '2 hours ago',
+        icon: Award
+        },
+        {
+        type: 'community',
+        title: 'Sarah shared photos from Florence',
+        time: '4 hours ago',
+        icon: Heart
+        },
+        {
+        type: 'event',
+        title: 'Study group forming for Italian language',
+        time: '6 hours ago',
+        icon: Calendar
+        },
+        {
+        type: 'resource',
+        title: 'New visa guide published',
+        time: '1 day ago',
+        icon: BookOpen
+        }
+    ];
 
 </script>
-<h1>
-    Welcome to SvelteKit
-</h1>
 
-<div id="landing-top" class="bg-primary border-1 flex flex-col">
-
-    <div id="landing-top-content" class="flex flex-row gap-6 mt-20 mb-15 pl-40 pr-20">
-
-        <div id="landing-top-text" class="flex flex-col p-6">
-
-            <h1 class="text-accent font-bold text-3xl md:text-5xl leading-tight max-w-full md:max-w-xs ">
-                Wanting to study abroad? 
-            </h1>
-        
-        </div>
-        <div id="landing-top-images" class="grid grid-cols-2 auto-rows-fr md:max-v-[50vw] gap-6 p-6">
-
-            <div class="image-placeholder row-span-5">
-                <img src="https://picsum.photos/1200" class="w-full h-full"/>
-            </div>
-            
-            <div class="image-placeholder  row-span-2">
-                <img src="https://picsum.photos/1200" class="w-full h-full "/>
-            </div>
-            <div class="image-placeholder  row-span-3">
-                <img src="https://picsum.photos/1200" class="w-full h-full "/>
-            </div>
-            
-            
-
-        </div>
-
-    </div>
-    
+<div class="min-h-screen">
+    <Hero />
+    <Stats {stats}/>
+    <Features {features}/>
+    <Activity {recentActivity}/>
+    <Testimonials {testimonials}/>
+    <HIW />
 </div>
-
-
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
