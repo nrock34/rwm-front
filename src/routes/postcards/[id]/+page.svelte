@@ -11,6 +11,8 @@
     import { Calendar, User, MessageSquare, MessageSquareReply, Share, Share2 } from 'lucide-svelte';
     import * as Dialog from '$lib/components/ui/dialog/index.js';
     import DialogTitle from '$lib/components/ui/dialog/dialog-title.svelte';
+    import { enhance } from '$app/forms';
+    import { fly } from 'svelte/transition';
 
     const extractImageSources = (html) => {
         const parser = new DOMParser();
@@ -27,7 +29,7 @@
         }
     )
 
-    let { data } = $props();
+    let { data, form } = $props();
 
     await new Promise(resolve => setTimeout(resolve, 100))
     
@@ -135,12 +137,28 @@
                     
                 </Card.Header>
                 <Card.Content class="px-0 mt-2">
-                    <div class="flex flex-col gap-4 mt-[0.35rem]">
-                        <Input placeholder="Enter your email."/>
-                        <Button class="w-full mt-2">
+                    <form use:enhance method="POST" action={'?/newsletterSignup'}>
+                        <div class="flex flex-col gap-4 mt-[0.35rem]">
+                            <div>
+                                <Input
+                                    name="email"
+                                    type="email"
+                                    value={form?.email}
+                                    placeholder="Enter your email."
+                                />
+                                {#if form?.error}
+                                    <p in:fly={{y: 10}} class="pt-1 pl-1 capitalize tracking-normal text-destructive text-xs ">Error: {form.error} - {form.description} </p>
+                                {/if}
+                                {#if form?.status === 'success'}
+                                    <p in:fly={{y: 10}} class="pt-1 pl-1 leading-none tracking-normal text-green-600 text-xs ">Success, you're now subscribed to the newsletter. Stay tuned for updates sent to your email!</p>
+                                {/if}
+                            </div>
+                        <Button type="submit" class="w-full mt-1.5">
                             Subscribe!
                         </Button>  
                     </div>
+                    </form>
+                    
                 </Card.Content>
             </Card.Root>
 

@@ -95,6 +95,8 @@
         }
     ];
 
+    let { form } = $props()
+
 </script>
 
 <div class="min-h-screen">
@@ -106,5 +108,5 @@
     <!-- <Testimonials {testimonials}/> -->
     <!-- <HIW /> -->
     <Cta />
-    <Newsletter />
+    <Newsletter form={form} />
 </div>

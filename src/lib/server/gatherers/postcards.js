@@ -1,5 +1,6 @@
 import { updated } from "$app/state"
 import { API_URL } from "$env/static/private"
+import { error } from "@sveltejs/kit"
 
 function postcardDetail(postcard) {
     console.log(postcard)
@@ -77,6 +78,9 @@ export const getPostcardDetail = async (id) => {
     const response = await fetch(api);
 
     if (!response.ok) {
+        if (response.status === 404) {
+            return error(404)
+        }
         return {
             error: await response.statusText
         }

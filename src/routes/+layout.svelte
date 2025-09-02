@@ -20,8 +20,8 @@
 
 <Toaster position="top-right" />
 
-<div class="visisi">
-	<header id="navbar" class="">
+<div class="min-h-screen h-screen flex flex-col">
+	<header id="navbar" class="h-fit">
 		<NavigationMenuRoot viewport={false}>
 			<NavigationMenuList>
 				<NavigationMenuItem>
@@ -56,18 +56,15 @@
 		</NavigationMenuRoot>
 	</header>
 
-	<main class="">
+	<main class="flex-grow">
 		{@render children()}
 	</main>
-	
+		
 
+	<div class="footer shrink-0">
+		<footer class="footer">
+			&copy; 2025 RomeWithMe • All rights reserved
+		</footer>
+	</div>
 </div>
 
-
-
-
-<div class="footer">
-	<footer class="footer">
-		&copy; 2025 RomeWithMe • All rights reserved
-	</footer>
-</div>
