@@ -6,13 +6,13 @@
 
 </script>
 
-<section class="py-20 bg-background">
+<section class="py-20 bg-secondary/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-        <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+        <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-2.5">
             Everything You Need for Study Abroad Success
         </h2>
-        <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+        <p class="text-lg font-light text-secondary-foreground max-w-3xl mx-auto">
             From finding scholarships to connecting with fellow students, RomeWithMe provides all the tools and support you need.
         </p>
     </div>
@@ -27,7 +27,7 @@
                 <h3 class="text-lg font-semibold text-foreground">
                     {feature.title}
                 </h3>
-                <p class="text-muted-foreground">{feature.description}</p>
+                <p class="text-secondary-foreground">{feature.description}</p>
             </Card.Root>
         {/each}
         </div>

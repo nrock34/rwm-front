@@ -7,6 +7,9 @@
     import { Users, Award, BookOpen, Globe, Heart, Calendar } from "lucide-svelte";
     import Testimonials from "$lib/components/landing/testimonials.svelte";
     import HIW from "$lib/components/landing/hiw.svelte";
+    import AboutMe from "$lib/components/landing/about-me.svelte";
+    import Cta from "$lib/components/landing/cta.svelte";
+    import Newsletter from "$lib/components/landing/newsletter.svelte";
     
     const features = [
         {
@@ -96,9 +99,12 @@
 
 <div class="min-h-screen">
     <Hero />
-    <Stats {stats}/>
+    <AboutMe />
     <Features {features}/>
-    <Activity {recentActivity}/>
-    <Testimonials {testimonials}/>
-    <HIW />
+    <!-- <Stats {stats}/> -->
+    <!-- <Activity {recentActivity}/> -->
+    <!-- <Testimonials {testimonials}/> -->
+    <!-- <HIW /> -->
+    <Cta />
+    <Newsletter />
 </div>

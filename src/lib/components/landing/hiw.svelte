@@ -1,11 +1,11 @@
 
-<section class="py-20 bg-secondary/30">
+<section class="py-20 bg-secondary/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-2">
                 How RomeWithMe Works
             </h2>
-            <p class="text-xl text-muted-foreground">
+            <p class="text-xl text-secondary-foreground">
                 Get started in three simple steps
             </p>
         </div>
@@ -16,7 +16,7 @@
                 1
                 </div>
                 <h3 class="text-xl font-semibold text-foreground mb-4">Create Your Profile</h3>
-                <p class="text-muted-foreground">
+                <p class="text-secondary-foreground">
                 Sign up and tell us about your study abroad goals, interests, and academic background.
                 </p>
             </div>
@@ -26,7 +26,7 @@
                 2
                 </div>
                 <h3 class="text-xl font-semibold text-foreground mb-4">Explore & Connect</h3>
-                <p class="text-muted-foreground">
+                <p class="text-secondary-foreground">
                 Browse scholarships, programs, and resources. Connect with students and local experts.
                 </p>
             </div>
@@ -36,7 +36,7 @@
                 3
                 </div>
                 <h3 class="text-xl font-semibold text-foreground mb-4">Succeed Abroad</h3>
-                <p class="text-muted-foreground">
+                <p class="text-secondary-foreground">
                 Use our resources and community support to make the most of your study abroad experience.
                 </p>
             </div>

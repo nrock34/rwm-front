@@ -9,10 +9,10 @@
 <section class="py-20 bg-background">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-        <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+        <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-2">
             Loved by Students Worldwide
         </h2>
-        <p class="text-xl text-muted-foreground">
+        <p class="text-xl text-secondary-foreground/85">
             See what our community members have to say about their experience
         </p>
         </div>
