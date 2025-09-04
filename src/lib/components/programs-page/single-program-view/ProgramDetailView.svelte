@@ -19,7 +19,7 @@
     import * as Dialog from "$lib/components/ui/dialog";
     // import ScrollArea from "$lib/components/ui/scroll-area/scroll-area.svelte";
     
-
+    let { data } = $props()
 
     const tabs = [
         { id: 'overview', name: 'Overview', component: Overview },
@@ -30,8 +30,17 @@
         { id: 'reviews', name: 'Reviews', component: Reviews }
     ]
 
+    const durationLabels = [
+        {id: 'sem', label: 'Semester'},
+        {id: 'yr', label: 'Year'},
+        {id: 'sum', label: 'Summer'},
+        {id: 'brk', label: 'Break'},
+        {id: 'twowks', label: '1-2 Weeks'},
+        {id: 'sxwks', label: '4-6 Weeks'},
+    ]
+
     const relatedPrograms = test.relatedPrograms
-    const program = test.program
+    const program = data
 
     let galleryImageDialogOpen = $state(false)
     let galleryImageData = $state({
@@ -90,7 +99,7 @@
             <div class="max-w-[80rem] mx-auto p-6 space-y-4">
                 <div class="flex items-start justify-between">
                     <div class="flex-1 flex-col flex gap-y-2 lg:gap-y-3 text-primary-foreground">
-                        <span class="text-[0.6rem] sm:text-xs uppercase font-light tracking-widest">Study Abroad · {program.location}</span>
+                        <span class="text-[0.6rem] sm:text-xs uppercase font-light tracking-widest">Study Abroad · {program.location.city + ', ' + program.location.country}</span>
                         <div class={`flex sm:flex-row flex-col space-y-1.5 sm:items-center`}>
                             {#if program.featured}
                                 <Badge class={`!text-[0.600rem] px-1.5 !py-0.25 sm:!py-2 lg:!py-2.5 !rounded-lg !border-ring/60 !bg-primary/30 !shadow-lg !shadow-white ${pillClass}`}>
@@ -98,7 +107,7 @@
                                 </Badge>
                             {/if}
                             <div class="flex flex-col gap-y-0.75 justify-center items-start sm:ml-3.5">
-                                <p class="text-xs tracking-normal sm:tracking-normal sm:text-sm lg:text-base leading-none">{program.provider}</p>
+                                <p class="text-xs tracking-normal sm:tracking-normal sm:text-sm lg:text-base leading-none">{program.provider.name}</p>
                                 <h1 class="text-2xl sm:text-3xl lg:text-4xl font-semibold leading-none">{program.title}</h1>
                             </div>
                         </div>
@@ -110,16 +119,16 @@
                     <div class="flex gap-x-1 sm:gap-x-3">
                         <Badge class={`!text-[0.65rem] sm:!text-xs ${pillClass}`}>
                             <Clock class="inline h-3.5 w-3.5 mr-1"/>
-                            <p class="capitalize">{program.duration}</p>
+                            <p class="capitalize">{durationLabels.find((d) => d.id = program.duration).label}</p>
                         </Badge>
                         <Badge class={`!text-[0.65rem] sm:!text-xs ${pillClass}`}>
-                            <DollarSign class="inline h-3.5 w-3.5 mr-1"/>
-                            <p class="capitalize">{program.cost}</p>
+                            <DollarSign class="inline h-3.5 w-3.5"/>
+                            <p class="capitalize">{`${program.cost.program_fee} - ${program.cost.program_fee + program.cost.accommodation_fee + program.cost.extra_fee}`}</p>
                         </Badge>
 
                         <Badge class={`!text-[0.65rem] sm:!text-xs ${pillClass}`}>
                             <GraduationCap class="inline h-3.5 w-3.5 mr-1"/>
-                            <p class="capitalize">{program.requirements.credits.split(' ')[0]}</p>
+                            <p class="capitalize">{program.requirements.active_credits_needed}</p>
                         </Badge>
 
                         <Badge class={`!text-[0.65rem] sm:!text-xs ${pillClass}`}>
@@ -209,7 +218,7 @@
                         {@const TabComponent = tab.component}
                         <Tabs.Content class="w-full" value={tab.id}>
                             <div class="bg-muted-foreground/10 p-8 rounded-(--radius)">
-                               <TabComponent {program}/> 
+                               <TabComponent program={program}/> 
                             </div> 
                         </Tabs.Content>
                     {/each}
@@ -261,7 +270,7 @@
                         </div>
                         <div>
                             <p class="font-medium text-foreground">Address</p>
-                            <p class="text-secondary-foreground text-xs">{program.contact.address}</p>
+                            <p class="text-secondary-foreground text-xs">{program.contact.address.state}</p>
                         </div>
                     </div>
                 </Card.Root>

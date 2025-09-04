@@ -1,6 +1,6 @@
 <script>
-    import { program } from "../test";
 
+    let { program } = $props();
 </script>
 
 
@@ -13,28 +13,24 @@
             <div class="space-y-3 divide-y-1">
                 <div class="flex justify-between text-sm sm:text-base items-center">
                     <span class="text-foreground">Program Fee</span>
-                    <span class="font-medium text-foreground">{program.costs.tuition}</span>
+                    <span class="font-medium text-foreground">${program.cost.program_fee}</span>
                 </div>
                 <div class="flex justify-between text-sm sm:text-base items-center">
                     <span class="text-foreground">Accomodations</span>
-                    <span class="font-medium text-foreground">{program.costs.housing}</span>
-                </div>
-                <div class="flex justify-between text-sm sm:text-base items-center">
-                    <span class="text-foreground">Meals</span>
-                    <span class="font-medium text-foreground">{program.costs.meals}</span>
+                    <span class="font-medium text-foreground">${program.cost.accommodation_fee}</span>
                 </div>
                 <div class="flex justify-between text-sm sm:text-base items-center">
                     <span class="text-foreground">Extra Fees</span>
-                    <span class="font-medium text-foreground">{program.costs.extra_fees ?? 'N/A'}</span>
+                    <span class="font-medium text-foreground">${program.cost.extra_fee ?? 'N/A'}</span>
                 </div>
             </div>
             <div class="border-t-3 border-secondary-foreground pt-2 mt-2">
                 <div class="flex justify-between items-center">
                     <span class="font-semibold text-sm sm:text-base text-foreground">Total Program Cost:</span>
-                    <span class="font-bold text-primary text-lg">{program.costs.total}</span>
+                    <span class="font-bold text-primary text-lg">${program.cost.program_fee + program.cost.accommodation_fee + program.cost.extra_fee}</span>
                 </div>
             </div>
         </div>
-        <p hidden class="text-sm text-secondary-foreground mt-3">{program.costs.additional}</p>
+        <p class="text-sm text-foreground mt-3">{program.cost.additional}</p>
     </div>
 </div>

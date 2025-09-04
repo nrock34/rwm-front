@@ -1,9 +1,7 @@
 <script>
     import { CheckCircle } from 'lucide-svelte';
 
-    
-    import {program} from '../test'
-
+    let { program } = $props();
 
     const descriptionParagraphs = program.fullDescription.split('\n\n')
 

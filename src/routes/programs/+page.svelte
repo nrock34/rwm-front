@@ -1,6 +1,9 @@
 <script>
     import ProgramsVIewAll from "$lib/components/programs-page/ProgramsVIewAll.svelte";
 
+    let { data } = $props();
+    
+    let { pageCount, pageNum = 1, results } = $derived(data)
 </script>
 
 

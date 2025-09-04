@@ -1,6 +1,8 @@
 <script>
     import { GraduationCap, Plane } from "lucide-svelte";
-    import { program } from "../test";
+    
+    
+    let { program } = $props();
 
 </script>
 

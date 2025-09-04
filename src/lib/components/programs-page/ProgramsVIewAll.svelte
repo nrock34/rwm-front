@@ -72,9 +72,6 @@
     }))
 
     const sortedPrograms = $derived([...filteredPrograms].sort((a, b) => {
-
-
-
         switch (sortBy) {
             case 'rating':
                 return b.rating - a.rating

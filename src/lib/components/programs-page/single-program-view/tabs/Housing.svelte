@@ -1,7 +1,7 @@
 <script>
     import { Home } from "lucide-svelte";
 
-    let { program } = $props()
+    let { program } = $props();
 
 </script>
 
@@ -22,10 +22,10 @@
                         <span class="font-medium text-foreground">Location:</span>
                         <span class="tracking-normal text-secondary-foreground">{program.housing.location}</span>
                     </div>
-                    <div class="space-x-1.5">
+                    <!-- <div class="space-x-1.5">
                         <span class="font-medium text-foreground">Cost:</span>
                         <span class="tracking-normal text-secondary-foreground ">{program.housing.cost}</span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div>

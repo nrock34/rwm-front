@@ -6,8 +6,6 @@ export const load = async ({ event, url, fetch }) => {
     const pageNum = Number(url.searchParams.get('page') ?? 1) ;
     const search = url.searchParams.get('q') ?? ''
 
-    console.log(pageNum , ' page num')
-
     const postcards = await getPostcardsList({
         ...Object.fromEntries(url.searchParams)
     });
