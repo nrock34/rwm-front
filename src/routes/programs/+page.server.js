@@ -4,10 +4,17 @@ export const load = async ({params, url}) => {
     const pageNum = Number(url.searchParams.get('page') ?? 1) ;
     const search = url.searchParams.get('q') ?? '';
 
-    const programs = await getProgramList(params)
+    const programs = await getProgramList({params})
 
-    if (programs.next) data['next'] = postcards.next
-    if (programs.prev) data['prev'] = postcards.prev
+    console.log(programs)
 
-    
+    const data = {
+        ...programs,
+        next: programs.next?.split('cursor=')[1]
+    }
+
+    console.log(data, 222)
+    return {
+        ...data
+    }
 }

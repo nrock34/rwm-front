@@ -14,7 +14,11 @@
     import ListView from "./views-types/ListView.svelte";
     import MapView from "./views-types/MapView.svelte";
     import { capitalize } from "$lib/helper-funcs/funcs";
+    import { onMount } from "svelte";
+
+    import Spinner from '$lib/assets/load-spinner.svg'
     
+    let { results, next, getMoreResults } = $props();
 
     const countries = [
         { id: 'all', name: 'All Countries' },
@@ -37,6 +41,8 @@
 
     let savedPrograms = new SvelteSet();
     let compareList = new SvelteSet();
+
+    let resultsLoading = $state(false)
 
     let filters = $state(
         {
@@ -87,11 +93,44 @@
 
     }))
 
+    $inspect(resultsLoading)
 
+    onMount(() => {
+        const intersectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                console.log("Element is in view:", entry.target);
+
+                console.log(next)
+                resultsLoading = true
+                getMoreResults(next).then(
+                    (data) => {
+                        if (data.next) next = data.next
+                        results = [...results, ...data.results]
+                    }
+                ).result
+
+                setTimeout(() => resultsLoading = false, 2000)
+
+                
+                // Example: load image or trigger animation
+                entry.target.classList.add("visible");
+
+                // Stop observing if you only need it once
+                }
+            });
+        }, {
+            threshold: 0.1
+        })
+
+        const items = document.querySelectorAll('#bottomOfResults')
+        items.forEach(item => intersectionObserver.observe(item))
+        
+    })
 </script>
 
 
-<div class="w-full">
+<div on:scroll={handleScroll} class="w-full">
 
     <!-- header -->
     <div class="mb-8">
@@ -256,19 +295,21 @@
 
 
     <!-- Display programs -->
-    {#if viewMode === 'grid'}
-        <GridView 
-            bind:savedPrograms = {savedPrograms} 
-            bind:compareList = {compareList}
-            {sortedPrograms}/>
-    {:else if viewMode === 'list'}
-        <ListView 
-            bind:savedPrograms = {savedPrograms} 
-            bind:compareList = {compareList}
-            {sortedPrograms}/>
-    {:else if viewMode === 'map'}
-        <MapView />
-    {/if}
+    <div class="scrollerFooter" on:scroll={handleScroll}>
+        {#if viewMode === 'grid'}
+            <GridView 
+                bind:savedPrograms = {savedPrograms} 
+                bind:compareList = {compareList}
+                {sortedPrograms}/>
+        {:else if viewMode === 'list'}
+            <ListView 
+                bind:savedPrograms = {savedPrograms} 
+                bind:compareList = {compareList}
+                {sortedPrograms}/>
+        {:else if viewMode === 'map'}
+            <MapView />
+        {/if}
+    </div>
 
     {#if sortedPrograms.length === 0}
 
@@ -279,6 +320,12 @@
         </div>
         
     {/if}
+
+    <div class="py-10 justify-self-center" id="bottomOfResults">
+        {#if resultsLoading}
+            <img src={Spinner} />
+        {/if}
+    </div>
 
 
 </div>

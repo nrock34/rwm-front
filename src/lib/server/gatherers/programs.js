@@ -60,8 +60,10 @@ export const getProgramDetail = async (id) => {
 }
 
 
-export const getProgramList = async (params) => {
-    const api = new URL(`${API_URL}programs/list`)
+export const getProgramList = async ({params, url}) => {
+    console.log(url + '222rr2')
+    const api = new URL(url ?? `${API_URL}programs/list`)
+    
     for (let key in params) {
         if (params[key]) {
             api.searchParams.set(key, params[key])
@@ -80,9 +82,8 @@ export const getProgramList = async (params) => {
     console.log(data)
 
     return {
-        count: data.count,
         next: data.next,
         prev: data.previous,
-        postcards: data.results
+        results: data.results
     }
 }

@@ -97,9 +97,12 @@
 
     let { form } = $props()
 
+    const handleScroll = () => {
+        console.log(22)
+    }
 </script>
 
-<div class="min-h-screen">
+<div on:scroll={handleScroll} class="min-h-screen">
     <Hero />
     <AboutMe />
     <Features {features}/>

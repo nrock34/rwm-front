@@ -61,7 +61,7 @@
 	</main>
 		
 
-	<div class="footer shrink-0">
+	<div class="scrollerFooter footer shrink-0">
 		<footer class="footer">
 			&copy; 2025 RomeWithMe • All rights reserved
 		</footer>
