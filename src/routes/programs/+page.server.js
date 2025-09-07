@@ -1,20 +1,22 @@
 import { getProgramList } from '$lib/server/gatherers/programs.js'
 
 export const load = async ({params, url}) => {
-    const pageNum = Number(url.searchParams.get('page') ?? 1) ;
     const search = url.searchParams.get('q') ?? '';
+    const sort = url.searchParams.get('sort_by') ?? '';
 
-    const programs = await getProgramList({params})
+    const programs = await getProgramList({
+        params: {...Object.fromEntries(url.searchParams)}
+    })
 
-    console.log(programs)
+    // console.log(JSON.stringify(programs, null, 4))
 
     const data = {
         ...programs,
-        next: programs.next?.split('cursor=')[1]
     }
 
-    console.log(data, 222)
     return {
-        ...data
+        ...data,
+        search,
+        sort
     }
 }

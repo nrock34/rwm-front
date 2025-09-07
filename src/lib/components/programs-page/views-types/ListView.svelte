@@ -25,15 +25,15 @@ import Button from "$lib/components/ui/button/button.svelte";
 
 
 
-<div class="space-y-4">
+<div class="space-y-4 flex-1 flex flex-col w-full">
 
     {#each sortedPrograms as program}
         
         {@const isSaved = savedPrograms.has(program.id)}
         {@const isComparing = compareList.has(program.id)}
 
-        <div key={program.id} class="bg-background p-6 border-muted-foreground/30 border-1 rounded-xl">
-            <div class="flex items-start space-x-4">
+        <div key={program.id} class="bg-background flex-1 max-w-full p-6 border-muted-foreground/30 border-1 rounded-xl">
+            <div class="flex w-full items-start space-x-4">
                 <img
                     src={program.image}
                     alt={program.title}

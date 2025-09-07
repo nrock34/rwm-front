@@ -56,11 +56,11 @@
                 </div>
                 <div>
                     <span class="font-medium text-foreground">Credits:</span>
-                    <span class="text-secondary-foreground ml-2">{program.requirements.credits}</span>
+                    <span class="text-secondary-foreground ml-2">{program.requirements.active_credits_needed}</span>
                 </div>
                 <div>
                     <span class="font-medium text-foreground">Field:</span>
-                    <span class="text-secondary-foreground ml-2">{program.requirements.field}</span>
+                    <span class="text-secondary-foreground ml-2">{program.fields}</span>
                 </div>
                 <div>
                     <span class="font-medium text-foreground">Level:</span>

@@ -18,7 +18,9 @@
 
     import Spinner from '$lib/assets/load-spinner.svg'
     
-    let { results, next, getMoreResults } = $props();
+    let { results, next, getMoreResults,
+        sortBy = $bindable(), searchQuery = $bindable()
+     } = $props();
 
     const countries = [
         { id: 'all', name: 'All Countries' },
@@ -54,69 +56,65 @@
         }
     )
     let viewMode = $state('grid');
-    let sortBy = $state('rating');
-    let searchQuery = $state('');
+    //let sortBy = $state('rating');
+    // let searchQuery = $state('');
 
     let selectedRegionContent = $derived(countries.find((country) => country.id === filters.country)?.name || 'uh oh')
     let selectedDurationContent = $derived(durations.find((duration) => duration.id === filters.duration)?.name || 'uh oh')
     let sortByTriggerContent = $derived(capitalize(sortBy))
 
-    const filteredPrograms = $derived(programs.filter(program => {
-        const matchesCountry = filters.country === 'all' || program.country === filters.country;
-        const matchesDuration = filters.duration === 'all' || program.duration === filters.duration;
-        const matchesCost = filters.cost === 'all' || program.cost === filters.cost;
-        const matchesField = filters.field === 'all' || program.field === filters.field;
-        const matchesLang = filters.language === 'all' || program.language === filters.language;
-        const matchesSearch = searchQuery === '' ||
-            program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            program.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            program.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            program.description.toLowerCase().includes(searchQuery.toLowerCase());
+    // const filteredPrograms = $derived(results.filter(program => {
+    //     const matchesCountry = filters.country === 'all' || program.country === filters.country;
+    //     const matchesDuration = filters.duration === 'all' || program.duration === filters.duration;
+    //     const matchesCost = filters.cost === 'all' || program.cost === filters.cost;
+    //     const matchesField = filters.field === 'all' || program.field === filters.field;
+    //     const matchesLang = filters.language === 'all' || program.language === filters.language;
+    //     const matchesSearch = searchQuery === '' ||
+    //         program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //         program.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //         program.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //         program.description.toLowerCase().includes(searchQuery.toLowerCase());
         
-        return matchesCountry && matchesCost && matchesDuration && 
-            matchesField && matchesLang && matchesSearch;
-    }))
+    //     return matchesCountry && matchesCost && matchesDuration && 
+    //         matchesField && matchesLang && matchesSearch;
+    // }))
 
-    const sortedPrograms = $derived([...filteredPrograms].sort((a, b) => {
-        switch (sortBy) {
-            case 'rating':
-                return b.rating - a.rating
-            case 'cost':
-                return parseInt(a.cost.replace(/[^0-9]/g, '')) - parseInt(b.cost.replace(/[^0-9]/g, ''))
-            case 'participants':
-                return b.participants - a.participants
-            case 'alphabetical':
-                return a.title.localeCompare(b.title)
-            default:
-                return 0;
-        }
+    // const sortedPrograms = $derived([...filteredPrograms].sort((a, b) => {
+    //     switch (sortBy) {
+    //         case 'rating':
+    //             return b.rating - a.rating
+    //         case 'cost':
+    //             return parseInt(a.cost.replace(/[^0-9]/g, '')) - parseInt(b.cost.replace(/[^0-9]/g, ''))
+    //         case 'participants':
+    //             return b.participants - a.participants
+    //         case 'alphabetical':
+    //             return a.title.localeCompare(b.title)
+    //         default:
+    //             return 0;
+    //     }
 
-    }))
-
-    $inspect(resultsLoading)
+    // }))
 
     onMount(() => {
         const intersectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
+                if (entry.isIntersecting && next) {
                 console.log("Element is in view:", entry.target);
 
                 console.log(next)
                 resultsLoading = true
-                getMoreResults(next).then(
-                    (data) => {
-                        if (data.next) next = data.next
-                        results = [...results, ...data.results]
-                    }
-                ).result
-
-                setTimeout(() => resultsLoading = false, 2000)
-
                 
-                // Example: load image or trigger animation
-                entry.target.classList.add("visible");
 
-                // Stop observing if you only need it once
+                setTimeout(() => {
+                    getMoreResults(next).then(
+                        (data) => {
+                            next = data.next
+                            results = [...results, ...data.results]
+                        }
+                    )
+                    resultsLoading = false
+                }
+                , 2000)
                 }
             });
         }, {
@@ -222,7 +220,7 @@
                 </div>
 
                 <div class="text-sm text-muted-foreground">
-                    {sortedPrograms.length} programs found
+                    {results.length} programs found
                 </div>
             </div>
 
@@ -295,23 +293,23 @@
 
 
     <!-- Display programs -->
-    <div class="scrollerFooter" on:scroll={handleScroll}>
+    <div class="flex-1 min-w-0 w-full " on:scroll={handleScroll}>
         {#if viewMode === 'grid'}
             <GridView 
                 bind:savedPrograms = {savedPrograms} 
                 bind:compareList = {compareList}
-                {sortedPrograms}/>
+                sortedPrograms={results}/>
         {:else if viewMode === 'list'}
             <ListView 
                 bind:savedPrograms = {savedPrograms} 
                 bind:compareList = {compareList}
-                {sortedPrograms}/>
+                sortedPrograms={results}/>
         {:else if viewMode === 'map'}
             <MapView />
         {/if}
     </div>
 
-    {#if sortedPrograms.length === 0}
+    {#if results.length === 0}
 
         <div class="text-center py-12">
             <Globe class="h-12 w-12 text-muted-foreground mx-auto mb-4"/>
@@ -321,7 +319,7 @@
         
     {/if}
 
-    <div class="py-10 justify-self-center" id="bottomOfResults">
+    <div class="py-10 mx-auto justify-self-center" id="bottomOfResults">
         {#if resultsLoading}
             <img src={Spinner} />
         {/if}

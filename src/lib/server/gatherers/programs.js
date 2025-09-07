@@ -17,7 +17,7 @@ export const getProgramDetail = async (id) => {
     console.log(data)
 
     const university = data.provider.university ? await getUniDetail(data.provider.university) : undefined
-    
+    console.log(university)
     const programData = {
 
         id: data.id,
@@ -34,6 +34,7 @@ export const getProgramDetail = async (id) => {
         gallery: data.gallery,
         featured: data.featured,
         requirements: data.requirements,
+        fields: data.fields.map(f => f.name),
         academics: {
             courses: data.academics.courses,
             fieldTrips: data.academics.trips,
@@ -61,7 +62,6 @@ export const getProgramDetail = async (id) => {
 
 
 export const getProgramList = async ({params, url}) => {
-    console.log(url + '222rr2')
     const api = new URL(url ?? `${API_URL}programs/list`)
     
     for (let key in params) {
@@ -69,7 +69,6 @@ export const getProgramList = async ({params, url}) => {
             api.searchParams.set(key, params[key])
         }
     }
-
     const response = await fetch(api.href)
 
     if (!response.ok) {
@@ -79,11 +78,33 @@ export const getProgramList = async ({params, url}) => {
     }
 
     const data = await response.json()
-    console.log(data)
 
+    const mappedResults = data.results.map((program) => {
+        return {
+            id: program.id,
+            title: program.title,
+            provider: program.provider.name,
+            location: program.location?.city + ", " + program.location?.country,
+            country: program.location?.country,
+            duration: program.duration,
+            cost: program.cost?.accommodation_fee + program.cost?.program_fee + program.cost?.extra_fee,
+            costRange: 'medium',
+            fields: program.fields.map(f => f.name),
+            language: program.language,
+            rating: program.rating,
+            participants: program.participants,
+            description: program.shortDescription,
+            highlights: program.highlights,
+            image: program.image,
+            featured: program.featured,
+            requirements: program.requirements
+        }
+    })
+    // console.log(data)
+    // console.log(data.next)
     return {
-        next: data.next,
-        prev: data.previous,
-        results: data.results
+        next: data.next?.split('cursor=')[1],
+        prev: data.previous?.split('cursor=')[1],
+        results: mappedResults
     }
 }
