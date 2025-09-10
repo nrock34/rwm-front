@@ -5,6 +5,7 @@
 	import { Toaster } from "$lib/components/ui/sonner"
     import { setTokenState } from '$lib/stores/jwt.svelte';
     import { onMount } from 'svelte';
+    import Footer from '$lib/components/layout/footer.svelte';
 
 	let { children, data } = $props();
 
@@ -61,10 +62,8 @@
 	</main>
 		
 
-	<div class="scrollerFooter footer shrink-0">
-		<footer class="footer">
-			&copy; 2025 RomeWithMe • All rights reserved
-		</footer>
+	<div class="scrollerFooter shrink-0">
+		<Footer />
 	</div>
 </div>
 

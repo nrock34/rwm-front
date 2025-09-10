@@ -1,3 +1,5 @@
+import {sequence} from '@sveltejs/kit/hooks';
+import * as Sentry from '@sentry/sveltekit';
 import { goto } from '$app/navigation';
 import { verify } from '$lib/server/cookies';
 import { redirect } from '@sveltejs/kit';
@@ -15,7 +17,7 @@ const isAuthRoute = (pathName, routes) => {
     )
 }
 
-export const handle = async ({ event, resolve }) => {
+export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
 
     const cookie = event.cookies.get('acs_tkn')
     const rCookie = event.cookies.get('rfh_tkn')
@@ -66,4 +68,7 @@ export const handle = async ({ event, resolve }) => {
     }
 	const response = await resolve(event);
 	return response;
-};
+});
+
+
+export const handleError = Sentry.handleErrorWithSentry();
