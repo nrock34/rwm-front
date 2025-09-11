@@ -20,14 +20,14 @@
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {#each features as feature, idx}
             {@const Icon = feature.icon}
-            <Card.Root key = {idx} class="gap-3.5 p-6 text-center">
+            <Card.Root key = {idx} class="gap-1.5 lg:gap-3 p-6 text-center">
                 <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
                     <Icon class="h-6 w-6 text-primary"/>
                 </div>
                 <h3 class="text-lg font-semibold text-foreground">
                     {feature.title}
                 </h3>
-                <p class="text-secondary-foreground">{feature.description}</p>
+                <p class="text-secondary-foreground text-sm leading-tight">{feature.description}</p>
             </Card.Root>
         {/each}
         </div>

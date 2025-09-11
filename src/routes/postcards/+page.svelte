@@ -11,7 +11,6 @@
     import { Input } from "$lib/components/ui/input";
     import { Button } from "$lib/components/ui/button";
     import { Separator } from "$lib/components/ui/separator";
-    import { getPostcards } from "./data.remote";
     import * as Pagination from "$lib/components/ui/pagination/index.js";
     import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-svelte';
     import { goto } from '$app/navigation';

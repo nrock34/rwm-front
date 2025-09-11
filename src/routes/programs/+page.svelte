@@ -5,6 +5,7 @@
 
     let { data } = $props();
     
+    //console.log(data)
     const urlparams = page.url.searchParams
 
     const getMoreResults = async (next) => {
@@ -17,19 +18,28 @@
         }
     }
 
-    let { next, results, search, sort } = $derived(data)
+    let next = $derived(data.next)
+    let results = $derived(data.results)
+    let search = data.search
+    let sort = data.sort
 
     let sortBy = $state(sort ?? 'rating');
     let searchQuery = $state(search ?? '');
+
+    $inspect(results)
     
     $effect(() => {
         if (sortBy) urlparams.set('sort_by', sortBy)
         if (searchQuery) urlparams.set('q', searchQuery)
 
-        goto(`?${urlparams.toString()}`, {keepFocus: true})
+        goto(`?${urlparams.toString()}`, {keepFocus: true, replaceState: false})
+
+        console.log('after hydration ', results)
     })
 
-    console.log(data)
+    //console.log(data)
+
+    
 </script>
 
 <div class="bg-muted">
@@ -37,5 +47,3 @@
         <ProgramsViewAll bind:sortBy bind:searchQuery {next} {getMoreResults} {results} />
     </div>
 </div>
-
-

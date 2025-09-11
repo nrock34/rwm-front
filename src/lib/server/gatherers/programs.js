@@ -14,10 +14,10 @@ export const getProgramDetail = async (id) => {
     // console.log(await response.json())
 
     const data = await response.json()
-    console.log(data)
+    //console.log(data)
 
     const university = data.provider.university ? await getUniDetail(data.provider.university) : undefined
-    console.log(university)
+   // console.log(university)
     const programData = {
 
         id: data.id,

@@ -6,10 +6,12 @@
     import { setTokenState } from '$lib/stores/jwt.svelte';
     import { onMount } from 'svelte';
     import Footer from '$lib/components/layout/footer.svelte';
+    import { setContext } from 'svelte';
 
 	let { children, data } = $props();
 
-	
+	// setContext('config', data.config);
+
 	const tokenState = setTokenState()
 	onMount(() => {
 		if (!data.acs_tkn) {

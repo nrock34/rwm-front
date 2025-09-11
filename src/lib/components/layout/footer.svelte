@@ -9,9 +9,9 @@
 
 <footer class="bg-gray-900 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="flex flex-col md:flex-row justify-between md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- {/* Brand and Description */} -->
-        <div class="lg:col-span-1">
+        <div class="lg:col-span-1 md:w-[25%]">
             <div class="flex items-center space-x-2 mb-4">
                 <Globe class="h-8 w-8 text-roman-400" />
                 <div>

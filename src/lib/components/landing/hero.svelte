@@ -79,11 +79,11 @@
                         <div class="flex items-center space-x-3">
                             <div class="flex -space-x-2">
                                 <img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop" 
-                                    className="w-8 h-8 rounded-full border-2 border-white" alt="" />
+                                    class="w-8 h-8 rounded-full border-2 border-white" alt="" />
                                 <img src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop" 
-                                    className="w-8 h-8 rounded-full border-2 border-white" alt="" />
+                                    class="w-8 h-8 rounded-full border-2 border-white" alt="" />
                                 <img src="https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop" 
-                                    className="w-8 h-8 rounded-full border-2 border-white" alt="" />
+                                    class="w-8 h-8 rounded-full border-2 border-white" alt="" />
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-foreground">2,500+ Students</p>

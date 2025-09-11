@@ -1,6 +1,6 @@
 import { getProgramList } from '$lib/server/gatherers/programs.js'
 
-export const load = async ({params, url}) => {
+export const load = async ({params, url, data}) => {
     const search = url.searchParams.get('q') ?? '';
     const sort = url.searchParams.get('sort_by') ?? '';
 
@@ -10,12 +10,11 @@ export const load = async ({params, url}) => {
 
     // console.log(JSON.stringify(programs, null, 4))
 
-    const data = {
-        ...programs,
-    }
+    console.log('ran a')
 
     return {
         ...data,
+        ...programs,
         search,
         sort
     }

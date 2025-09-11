@@ -19,7 +19,7 @@ const config = {
 												}
 				}),
 								experimental: {
-								 remoteFunctions: true,
+								 remoteFunctions: false,
 
 								 tracing: {
 									 server: true,

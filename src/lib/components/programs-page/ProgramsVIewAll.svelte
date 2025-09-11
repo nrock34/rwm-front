@@ -220,7 +220,7 @@
                 </div>
 
                 <div class="text-sm text-muted-foreground">
-                    {results.length} programs found
+                    {results?.length ?? 0} programs found
                 </div>
             </div>
 
@@ -309,7 +309,7 @@
         {/if}
     </div>
 
-    {#if results.length === 0}
+    {#if results?.length === 0}
 
         <div class="text-center py-12">
             <Globe class="h-12 w-12 text-muted-foreground mx-auto mb-4"/>
