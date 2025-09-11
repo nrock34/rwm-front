@@ -53,7 +53,7 @@
     const featPostcard = $derived(results?.pop())
 </script>
 
-<div class="">
+<div class="bg-muted/80">
     <section class="relative overflow-hidden">
         <img
             class="w-full h-130 object-cover"
@@ -63,7 +63,7 @@
         <div class="absolute inset-0 bg-gradient-to-b from-foreground/80 via-foreground/40 to-foreground/20 backdrop-blur-[3px]"></div>
         <div class="absolute inset-0 mx-4 sm:mx-8 md:mx-14">
             
-            <div class="flex flex-col h-full w-full justify-center py-1 text-primary-foreground max-w-[80rem]  justify-self-center">
+            <div class="flex flex-col h-full w-full justify-center py-1 text-primary-foreground max-w-[90rem] py-6 px-6 sm:px-8 md:px-6  justify-self-center">
                 <h6 class="text-sm tracking-widest">COLLECTION</h6>
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold">Explore Postcards</h2>
                 <p class="text-base md:text-lg pt-2 font-light">
@@ -101,7 +101,7 @@
         </div>
     </section>
 
-    <section class="w-full max-w-[125rem] justify-self-center py-6 px-6 sm:px-8 md:px-6 bg-muted/80">
+    <section class="w-full max-w-[90rem] py-6 px-6 sm:px-8 md:px-6 justify-self-center ">
         <div class="grid grid-cols-6 gap-0">
             <div class="lg:col-span-1 col-span-6">
                 <div class="sticky top-20 pb-4">
