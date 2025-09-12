@@ -6,12 +6,12 @@ export const load = async ({ data, cookies }) => {
     const cookie = cookies.get('acs_tkn')
     const acs_tkn = cookie ? verify(cookie) : null
 
-    // const properties = newConfig()
-    // await properties.loadConfig()
+    const properties = newConfig()
+    await properties.loadConfig()
 
     return {
         ...data,
-        // config: properties.config,
+        config: properties.config,
         acs_tkn
     }
 

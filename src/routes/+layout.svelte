@@ -10,7 +10,7 @@
 
 	let { children, data } = $props();
 
-	// setContext('config', data.config);
+	setContext('config', data.config);
 
 	const tokenState = setTokenState()
 	onMount(() => {

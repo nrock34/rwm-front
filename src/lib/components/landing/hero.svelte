@@ -3,12 +3,15 @@
     import { Award, CheckCircle, Globe } from "lucide-svelte";
     import TypingText from "../ui/typing-text/TypingText.svelte";
     import Button from "../ui/button/button.svelte";
+    import { getContext } from "svelte";
 
     let wordIndex = 0;
     let charIndex = 1;
     let isLocationTextDeleting = false;
 
     const words = ['Rome', 'Tokyo', 'Barcelona', 'Paris', 'London']
+
+    const siteConfig = getContext('config');
 
     let tempLocation = 'Rome'
     let tempLocationTagline = 'Eternal City'
@@ -71,7 +74,7 @@
 
             <div class="relative">
                 <div class="relative z-10">
-                    <img src="https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
+                    <img src={siteConfig?.heroBackgroundIMG ?? "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"}
                             alt="Students In Rome"
                             class="rounded-2xl shadow-2xl"
                     />

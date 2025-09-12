@@ -20,25 +20,27 @@
     import { page } from '$app/state';
     import { range } from '$lib/utils';
     import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
+    import { getContext } from 'svelte';
  
     
     let { data } = $props()
 
     const perPage = 12
     let { pageCount, pageNum = 1, results } = $derived(data)
-    const urlparams = page.url.searchParams
-    let searchQuery = $state('');
+    const urlparams = $derived(page.url.searchParams)
+    let searchQuery = $state('')
     let selectedRegion = $state('');
     $inspect(pageNum)
     $effect(() => {
         if (searchQuery) {
-            urlparams.set('q', searchQuery)
-            goto(`?${urlparams.toString()}`, { keepFocus: true})
+            goto(`?q=${searchQuery}`, { keepFocus: true})
         } else {
-            urlparams.delete('q')
-            goto(`?${urlparams.toString()}`, { keepFocus: true})
+            goto(`?`, { keepFocus: true})
         }
     })
+
+    const config = getContext('config')
+    console.log(config)
 
     let postcardsResults = $state('')
 
@@ -57,7 +59,8 @@
     <section class="relative overflow-hidden">
         <img
             class="w-full h-130 object-cover"
-            src={"https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d"}
+            alt='Postcards Banner Image'
+            src={`${config?.postcardsBannerIMG ?? 'https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d'}`}
         />
             {console.log(featPostcard)}
         <div class="absolute inset-0 bg-gradient-to-b from-foreground/80 via-foreground/40 to-foreground/20 backdrop-blur-[3px]"></div>
@@ -103,9 +106,9 @@
 
     <section class="w-full max-w-[90rem] py-6 px-6 sm:px-8 md:px-6 justify-self-center ">
         <div class="grid grid-cols-6 gap-0">
-            <div class="lg:col-span-1 col-span-6">
-                <div class="sticky top-20 pb-4">
-                    <div class="px-8 space-y-3 p-2 w-full max-w-[700px] justify-self-center block lg:flex-col  space-x-4 bg-white rounded-lg border-border border-1 ">
+            <div class="col-span-6 px-6 sm:px-8 md:px-10 lg:px-6">
+                <div class="sticky top-20 pb-4 w-full">
+                    <div class="px-8 space-y-3 p-2 w-full justify-self-center block flex space-x-4 bg-white rounded-lg border-border border-1 ">
                         <!-- serach section -->
                         <div class="space-y-1.5 lg:w-full sm:w-[35%]">
                             <h2 class="text-base lg:text-sm font-semibold text-foreground/90 flex items-center gap-1">
@@ -133,10 +136,10 @@
                                 <span>Regions</span>
                             </h2>
                             <ScrollArea orientation='horizontal'>
-                                <div class="space-y-1.5 space-x-1.5 flex lg:flex-col sm:flex-row">
+                                <div class="space-y-1.5 space-x-1.5 flex sm:flex-row">
                                     <Button
                                         onclick={() => {selectedRegion = 'all'}}
-                                        class={`lg:w-full px-3 py-3 transition-colors border-1
+                                        class={` px-3 py-3 transition-colors border-1
                                             ${selectedRegion === 'all' ? 
                                             'bg-primary/90 hover:bg-primary/90 text-primary-foreground' :
                                             'bg-transparent hover:bg-primary/25 shadow-none text-foreground/80'}`}>
@@ -145,7 +148,7 @@
                                     {#each regions as region }
                                         <Button
                                             key={region.id}
-                                            class={`lg:w-full px-3 py-3 transition-colors border-2 cursor-pointer
+                                            class={` px-3 py-3 transition-colors border-2 cursor-pointer
                                                 ${selectedRegion === region.id ? 
                                                 'bg-primary/90 hover:bg-primary/90 text-primary-foreground' :
                                                 'bg-transparent hover:bg-primary/25 shadow-none text-foreground/80'}`}
@@ -162,7 +165,7 @@
                     </div>
                 </div>
             </div>
-            <div class="lg:col-span-5 col-span-6 w-full">
+            <div class="col-span-6 w-full">
 
                 <svelte:boundary>
                     <div class="">

@@ -37,11 +37,12 @@ class TokenStateClass {
         if (res.ok) {
             let { acs_tkn } = await res.json();
             this.token = acs_tkn;
+            await this.scheduleRefresh()
         } else {
             console.log(await res.json())
             this.token = null
         }
-        await this.scheduleRefresh()
+       
     }
 
     scheduleRefresh = async () => {
