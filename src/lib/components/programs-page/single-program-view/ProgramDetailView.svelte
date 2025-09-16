@@ -56,7 +56,7 @@
 </script>
 
 
-<div class="min-w-full space-y-4 bg-ring/5 space-y-8">
+<div class="min-w-full space-y-4 bg-ring/5 space-y-8 pb-20">
 
     <section class="relative overflow-hidden">
         <img 
@@ -155,9 +155,9 @@
     </section>
 
 
-    <div id="main-grid" class="max-w-[80rem] grid lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-10 px-6 justify-self-center">
+    <div id="main-grid" class="w-full max-w-[80rem] grid lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-10 px-6 justify-self-center">
     
-        <div class="lg:col-span-2 flex flex-col space-y-8">
+        <div class="lg:col-span-2 flex flex-col gap-y-8">
             <!-- Photo gallery -->
             <Card.Root class="gap-1 p-6">
                 <h2 class="text-lg sm:text-xl font-semibold text-foreground mb-4 flex items-center">

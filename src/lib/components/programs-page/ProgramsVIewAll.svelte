@@ -18,28 +18,15 @@
 
     import Spinner from '$lib/assets/load-spinner.svg'
     
-    let { results, next, getMoreResults,
-        sortBy = $bindable(), searchQuery = $bindable()
+    let { results, next, getMoreResults, programCountries, durations,
+        sortBy = $bindable(), searchQuery = $bindable(), region = $bindable(), duration = $bindable()
      } = $props();
 
     const countries = [
         { id: 'all', name: 'All Countries' },
-        { id: 'italy', name: 'Italy' },
-        { id: 'spain', name: 'Spain' },
-        { id: 'france', name: 'France' },
-        { id: 'germany', name: 'Germany' },
-        { id: 'uk', name: 'United Kingdom' },
-        { id: 'japan', name: 'Japan' },
-        { id: 'australia', name: 'Australia' }
+        ...programCountries
     ];
 
-    const durations = [
-        { id: 'all', name: 'Any Duration' },
-        { id: 'summer', name: 'Summer (6-8 weeks)' },
-        { id: 'semester', name: 'Semester (4-5 months)' },
-        { id: 'year', name: 'Academic Year (9-10 months)' },
-        { id: 'short', name: 'Short-term (2-4 weeks)' }
-    ];
 
     let savedPrograms = new SvelteSet();
     let compareList = new SvelteSet();
@@ -59,41 +46,9 @@
     //let sortBy = $state('rating');
     // let searchQuery = $state('');
 
-    let selectedRegionContent = $derived(countries.find((country) => country.id === filters.country)?.name || 'uh oh')
-    let selectedDurationContent = $derived(durations.find((duration) => duration.id === filters.duration)?.name || 'uh oh')
+    let selectedRegionContent = $derived(countries.find((country) => country.id === region || country.name === region)?.name || 'uh oh')
+    let selectedDurationContent = $derived(durations.find((d) => d.id === duration)?.name || 'uh oh')
     let sortByTriggerContent = $derived(capitalize(sortBy))
-
-    // const filteredPrograms = $derived(results.filter(program => {
-    //     const matchesCountry = filters.country === 'all' || program.country === filters.country;
-    //     const matchesDuration = filters.duration === 'all' || program.duration === filters.duration;
-    //     const matchesCost = filters.cost === 'all' || program.cost === filters.cost;
-    //     const matchesField = filters.field === 'all' || program.field === filters.field;
-    //     const matchesLang = filters.language === 'all' || program.language === filters.language;
-    //     const matchesSearch = searchQuery === '' ||
-    //         program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //         program.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //         program.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //         program.description.toLowerCase().includes(searchQuery.toLowerCase());
-        
-    //     return matchesCountry && matchesCost && matchesDuration && 
-    //         matchesField && matchesLang && matchesSearch;
-    // }))
-
-    // const sortedPrograms = $derived([...filteredPrograms].sort((a, b) => {
-    //     switch (sortBy) {
-    //         case 'rating':
-    //             return b.rating - a.rating
-    //         case 'cost':
-    //             return parseInt(a.cost.replace(/[^0-9]/g, '')) - parseInt(b.cost.replace(/[^0-9]/g, ''))
-    //         case 'participants':
-    //             return b.participants - a.participants
-    //         case 'alphabetical':
-    //             return a.title.localeCompare(b.title)
-    //         default:
-    //             return 0;
-    //     }
-
-    // }))
 
     onMount(() => {
         const intersectionObserver = new IntersectionObserver((entries) => {
@@ -158,17 +113,18 @@
             <!--  country/region filter  -->
             <div>
                 <!-- <label class="block text-sm font-medium text-foreground mb-2">Region</label> -->
-                <Select.Root type='single' bind:value={filters.country}>
+                <Select.Root type='single' bind:value={region}>
                     <Select.Label class="text-sm font-medium text-foreground">
                         Region
                     </Select.Label>
                     <Select.Trigger class="min-h-12 w-full">
                         {selectedRegionContent}
                     </Select.Trigger>
-                    <Select.Content>
+                    <Select.Content class="!max-h-70 px-1.5 py-1 gap-y-2">
                         {#each countries as country, idx}
-                            <Select.Item label={country.name} value={country.id}>
-                                {country.name}
+                            <Select.Item class="flex justify-between" label={country.name} value={country.id === 'all' ? country.id : country.name}>
+                                <span>{country.name}</span>
+                                <span class="text-xs pr-2 font-light text-secondary-foreground">{country?.count}</span>
                             </Select.Item>
                         {/each}
                     </Select.Content>
@@ -178,7 +134,7 @@
 
             <!-- duration filter -->
             <div>
-                <Select.Root class="w-full" type='single' bind:value={filters.duration}>
+                <Select.Root class="w-full" type='single' bind:value={duration}>
                     <Select.Label class="text-sm font-medium text-foreground">
                         Duration
                     </Select.Label>
@@ -298,9 +254,11 @@
             <GridView 
                 bind:savedPrograms = {savedPrograms} 
                 bind:compareList = {compareList}
+                {durations}
                 sortedPrograms={results}/>
         {:else if viewMode === 'list'}
-            <ListView 
+            <ListView
+                {durations}
                 bind:savedPrograms = {savedPrograms} 
                 bind:compareList = {compareList}
                 sortedPrograms={results}/>

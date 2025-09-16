@@ -9,7 +9,7 @@
 
 
 
-    let { savedPrograms = $bindable(), compareList = $bindable(), sortedPrograms } = $props()
+    let { durations, savedPrograms = $bindable(), compareList = $bindable(), sortedPrograms } = $props()
 
     const updateSavedPrograms = (id) => {
         if(!savedPrograms.delete(id)) {
@@ -26,10 +26,11 @@
 </script>
 
 
-<div class="grid lg:grid-cols-3 gap-4">
+<div class="grid lg:grid-cols-3 gap-6">
 
     {#each sortedPrograms as program}
 
+        {@const programDurationLabel = durations.find((d) => program.duration === d.id)?.name.split('-')[0]}
         {@const isSaved = savedPrograms.has(program.id)}
         {@const isComparing = compareList.has(program.id)}
 
@@ -76,7 +77,7 @@
                         </p>
                         <div class="flex items-center space-x-1 mt-1">
                             <MapPin class="h-3 w-3"/>
-                            <span class="text-sm text-muted-foreground">{program.location}</span>
+                            <span class="text-xs text-muted-foreground">{program.location}</span>
                         </div>
                     </div>
                     <div class="flex items-center space-x-1">
@@ -92,7 +93,7 @@
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="flex items-center space-x-2">
                         <Calendar class="h-4 w-4 text-secondary-foreground" />
-                        <span class="text-sm capitalize">{program.duration}</span>
+                        <span class="text-sm capitalize">{programDurationLabel}</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         <DollarSign class="h-4 w-4 text-muted-foreground"/>
@@ -109,6 +110,9 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-x-2 gap-y-2 mb-4">
+                    <span class="py-4">
+
+                    </span>
                     {#each program.highlights.slice(0, 3) as highlight, idx}
                         <span key={idx} class="text-xs bg-muted/90 border-muted-foreground/20 border-1 rounded py-0.25 p-1 px-2">
                             {highlight}

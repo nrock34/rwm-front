@@ -1,4 +1,4 @@
-import { getProgramList } from '$lib/server/gatherers/programs.js'
+import { getProgramCountries, getProgramList } from '$lib/server/gatherers/programs.js'
 
 export const load = async ({params, url, data}) => {
     const search = url.searchParams.get('q') ?? '';
@@ -8,6 +8,8 @@ export const load = async ({params, url, data}) => {
         params: {...Object.fromEntries(url.searchParams)}
     })
 
+    const programCountries = await getProgramCountries();
+
     // console.log(JSON.stringify(programs, null, 4))
 
     console.log('ran a')
@@ -15,6 +17,7 @@ export const load = async ({params, url, data}) => {
     return {
         ...data,
         ...programs,
+        programCountries,
         search,
         sort
     }

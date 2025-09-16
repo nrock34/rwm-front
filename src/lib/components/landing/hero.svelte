@@ -15,13 +15,15 @@
 
     let tempLocation = 'Rome'
     let tempLocationTagline = 'Eternal City'
+    console.log(siteConfig?.heroBackgroundIMG)
 </script>
 
 
 
 <section class="relative bg-graident-to-br from-primary/5 via-background to-accent/5 overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://images.pexels.com/photos/2064827/pexels-photo-2064827.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')] bg-cover bg-center opacity-20"></div>
-    <div class="relative max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-28">
+    <div class={`absolute inset-0 bg-cover bg-center opacity-20`}
+        style:background-image={`url('${siteConfig?.heroBackgroundIMG ?? 'https://images.pexels.com/photos/2064827/pexels-photo-2064827.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop'}')`}></div>
+    <div class="relative max-w-[75rem] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 py-16 lg:py-28">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
                 <div class="flex items-center space-x-2 mb-6">
@@ -74,7 +76,7 @@
 
             <div class="relative">
                 <div class="relative z-10">
-                    <img src={siteConfig?.heroBackgroundIMG ?? "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"}
+                    <img src={siteConfig?.heroFocusIMG ?? "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"}
                             alt="Students In Rome"
                             class="rounded-2xl shadow-2xl"
                     />

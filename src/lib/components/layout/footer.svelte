@@ -1,8 +1,11 @@
 <script>
 
     import { Globe, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-svelte';
+    import GlobeLogo from '$lib/assets/logos/VX78WS01.svelte';
+    import { Github } from '@lucide/svelte';
 
     const currentYear = new Date().getFullYear();
+
 </script>
 
 
@@ -12,11 +15,11 @@
         <div class="flex flex-col md:flex-row justify-between md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- {/* Brand and Description */} -->
         <div class="lg:col-span-1 md:w-[25%]">
-            <div class="flex items-center space-x-2 mb-4">
-                <Globe class="h-8 w-8 text-roman-400" />
-                <div>
-                <h3 class="text-xl font-bold">RomeWithMe</h3>
-                <p class="text-sm text-gray-400">Study Abroad Community</p>
+            <div class="flex items-center gap-x-1">
+                <GlobeLogo class="max-w-20 max-h-20 min-w-15 min-h-15 stroke-primary fill-accent-foreground"/>
+                <div class="flex flex-col space-y-[-4px]">
+                    <h3 class="font-bold text-2xl">RomeWithMe</h3>
+                    <p class="tracking-tight text-gray-300/85 text-sm">Grow Roots in New Places</p>
                 </div>
             </div>
             <p class="text-gray-300 text-sm mb-6">
@@ -68,28 +71,28 @@
             <div>
             <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
             <div class="space-y-3 text-sm">
-                <div class="flex items-start space-x-2">
-                <MapPin class="h-4 w-4 text-roman-400 mt-0.5 flex-shrink-0" />
-                <div>
-                    <p class="text-gray-300">Via dei Cappuccini, 9</p>
-                    <p class="text-gray-300">00187 Roma RM, Italy</p>
-                </div>
-                </div>
+                <!-- <div class="flex items-start space-x-2">
+                    <MapPin class="h-4 w-4 text-roman-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                        <p class="text-gray-300">Via GUlio Cesare</p>
+                        <p class="text-gray-300">01234, ROMA</p>
+                    </div>
+                </div> -->
+                <!-- <div class="flex items-center space-x-2">
+                    <Phone class="h-4 w-4 text-roman-400 flex-shrink-0" />
+                    <p class="text-gray-300">N/A</p>
+                </div> -->
                 <div class="flex items-center space-x-2">
-                <Phone class="h-4 w-4 text-roman-400 flex-shrink-0" />
-                <p class="text-gray-300">+39 06 1234 5678</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                <Mail class="h-4 w-4 text-roman-400 flex-shrink-0" />
-                <p class="text-gray-300">info@romewithme.com</p>
+                    <Mail class="h-4 w-4 text-roman-400 flex-shrink-0" />
+                    <p class="text-gray-300">info@romewithme.com</p>
                 </div>
             </div>
             
-            <div class="mt-6">
+            <!-- <div class="mt-6">
                 <h5 class="font-medium mb-2">Emergency Hotline</h5>
                 <p class="text-roman-400 font-semibold">+39 06 9876 5432</p>
                 <p class="text-xs text-gray-400">Available 24/7</p>
-            </div>
+            </div> -->
             </div>
         </div>
 
@@ -106,7 +109,7 @@
             </div>
             
             <div class="flex items-center space-x-4 text-sm text-gray-400">
-                <span>Made with ❤️ for students in Rome</span>
+                <span>Built with ❤️ by <a href="https://github.com/nrock34" class="text-secondary hover:text-primary inline-flex items-center gap-x-1">Naeem <Github class="w-4 h-4"/></a></span>
             </div>
             </div>
         </div>

@@ -124,9 +124,9 @@
     
 
     <aside class="col-span-3 md:col-span-1">
-        <div class="sticky top-20 space-y-8">
+        <div class="sticky top-20 flex flex-col-reverse space-y-8">
 
-            <Card.Root class="gap-0 p-6 ring-ring/50 ring-2 bg-secondary">
+            <Card.Root class="gap-0 p-6 ring-ring/50 ring-2 bg-secondary m-2">
                 <Card.Header class="gap-0 px-0">
                     <Card.Title class="text-lg font-bold text-primary/85 leading-none mb-0.75">
                         Subscribe To Our Newsletter

@@ -102,7 +102,7 @@
     }
 </script>
 
-<div on:scroll={handleScroll} class="min-h-screen">
+<div on:scroll={handleScroll} class="min-h-screen mx-auto">
     <Hero />
     <AboutMe />
     <Features {features}/>

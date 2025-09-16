@@ -7,6 +7,7 @@
     import { onMount } from 'svelte';
     import Footer from '$lib/components/layout/footer.svelte';
     import { setContext } from 'svelte';
+    import Navigation from '$lib/components/layout/navigation.svelte';
 
 	let { children, data } = $props();
 
@@ -24,39 +25,8 @@
 <Toaster position="top-right" />
 
 <div class="min-h-screen h-screen flex flex-col">
-	<header id="navbar" class="h-fit">
-		<NavigationMenuRoot viewport={false}>
-			<NavigationMenuList>
-				<NavigationMenuItem>
-					<NavigationMenuLink>
-						{#snippet child()}
-							<a href="/" class={navigationMenuTriggerStyle()}>Home</a>
-						{/snippet}
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<NavigationMenuLink>
-						{#snippet child()}
-							<a href="/" class={navigationMenuTriggerStyle()}>Postcards</a>
-						{/snippet}
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<NavigationMenuLink>
-						{#snippet child()}
-							<a href="/" class={navigationMenuTriggerStyle()}>Resources</a>
-						{/snippet}
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<NavigationMenuLink>
-						{#snippet child()}
-							<a href="/" class={navigationMenuTriggerStyle()}>About</a>
-						{/snippet}
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-			</NavigationMenuList>
-		</NavigationMenuRoot>
+	<header>
+		<Navigation class="bg-muted/60 py-4.5 border-b-3 border-b-accent-foreground"/>
 	</header>
 
 	<main class="flex-grow">

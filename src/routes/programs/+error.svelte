@@ -4,7 +4,7 @@
 
 </script>
 
-<div class="flex w-full items-center justify-center h-full gap-x-8 bg-gradient-to-br from-orange-500 from-0% via-orange-400 via-25% to-orange-200 to-100%">
+<div class="flex w-full items-center min-h-[75svh] justify-center h-full gap-x-8 bg-gradient-to-br from-orange-500 from-0% via-orange-400 via-25% to-orange-200 to-100%">
     <div class="flex flex-col items-center">
         <h1 class="text-7xl font-medium">{page.status}</h1>
         <p class="font-medium text-lg"> {page.error.message}</p>

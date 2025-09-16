@@ -27,6 +27,7 @@ export const getProgramDetail = async (id) => {
         country: data.location.country,
         duration: data.duration,
         cost: data.cost,
+        image: data.image,
         participants: data.participants,
         description: data.shortDescription,
         fullDescription: data.description,
@@ -106,5 +107,19 @@ export const getProgramList = async ({params, url}) => {
         next: data.next?.split('cursor=')[1],
         prev: data.previous?.split('cursor=')[1],
         results: mappedResults
+    }
+}
+
+export const getProgramCountries = async () => {
+    const res = await fetch(`${API_URL}programs/countries`);
+
+    if (!res.ok) {
+        return {
+            error: "couldn't retrieve coutnries"
+        }
+    } else {
+        const data = await res.json();
+        const pc = data.map((c) => ({id: c.country.replaceAll(' ', '_').replace('&', 'and'),  name:c.country, count: c?.count ?? 0}))
+        return pc;
     }
 }
