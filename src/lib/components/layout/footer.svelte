@@ -11,7 +11,7 @@
 
 
 <footer class="bg-gray-900 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
         <div class="flex flex-col md:flex-row justify-between md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- {/* Brand and Description */} -->
         <div class="lg:col-span-1 md:w-[25%]">
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <p class="text-gray-300 text-sm mb-6">
-                Empowering students to make the most of their study abroad experience in Rome through community, resources, and support.
+                Empowering students to make the most of their study abroad experience through community, resources, and support.
             </p>
             <div class="flex space-x-4">
                 <a href="#" class="text-gray-400 hover:text-white transition-colors">
@@ -45,26 +45,27 @@
             <div>
             <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
             <ul class="space-y-2 text-sm">
-                <li><a href="#resources" class="text-gray-300 hover:text-white transition-colors">Resources</a></li>
-                <li><a href="#community" class="text-gray-300 hover:text-white transition-colors">Community</a></li>
-                <li><a href="#events" class="text-gray-300 hover:text-white transition-colors">Events</a></li>
-                <li><a href="#housing" class="text-gray-300 hover:text-white transition-colors">Housing</a></li>
-                <li><a href="#support" class="text-gray-300 hover:text-white transition-colors">Support</a></li>
-                <li><a href="#blog" class="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+                <li><a href="programs" class="text-gray-300 hover:text-white transition-colors">Programs</a></li>
+                <li><a href="postcards" class="text-gray-300 hover:text-white transition-colors">Postcards</a></li>
+                <li><a href="community" class="text-gray-300 hover:text-white transition-colors">Community</a></li>
+                <!-- <li><a href="#housing" class="text-gray-300 hover:text-white transition-colors">Housing</a></li> -->
+                <!-- <li><a href="#support" class="text-gray-300 hover:text-white transition-colors">Support</a></li> -->
+                <!-- <li><a href="#blog" class="text-gray-300 hover:text-white transition-colors">Blog</a></li> -->
             </ul>
             </div>
 
             <!-- {/* Resources */} -->
             <div>
-            <h4 class="text-lg font-semibold mb-4">Resources</h4>
-            <ul class="space-y-2 text-sm">
-                <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Pre-Departure Guide</a></li>
-                <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Visa Information</a></li>
-                <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Academic Resources</a></li>
-                <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Cultural Tips</a></li>
-                <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Language Learning</a></li>
-                <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Health & Safety</a></li>
-            </ul>
+                <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                <ul class="space-y-2 text-sm">
+                    <li class="text-muted-foreground">COMING SOON</li>
+                    <!-- <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Pre-Departure Guide</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Visa Information</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Academic Resources</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Cultural Tips</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Language Learning</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Health & Safety</a></li> -->
+                </ul>
             </div>
 
             <!-- {/* Contact Information */} -->
@@ -103,7 +104,7 @@
                 <p>&copy; {currentYear} RomeWithMe. All rights reserved.</p>
                 <div class="flex space-x-4">
                 <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                <a href="terms-of-service" class="hover:text-white transition-colors">Terms of Service</a>
                 <a href="#" class="hover:text-white transition-colors">Cookie Policy</a>
                 </div>
             </div>

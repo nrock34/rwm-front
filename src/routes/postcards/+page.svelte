@@ -58,7 +58,7 @@
 <div class="bg-muted/80">
     <section class="relative overflow-hidden">
         <img
-            class="w-full h-130 object-cover"
+            class="w-full h-80 sm:h-90 md:h-110 object-cover"
             alt='Postcards Banner Image'
             src={`${config?.postcardsBannerIMG ?? 'https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d'}`}
         />
@@ -108,10 +108,10 @@
         <div class="grid grid-cols-6 gap-0">
             <div class="col-span-6 px-6 sm:px-8 md:px-10 lg:px-6">
                 <div class="sticky top-20 pb-4 w-full">
-                    <div class="px-8 space-y-3 p-2 w-full justify-self-center block flex space-x-4 bg-white rounded-lg border-border border-1 ">
-                        <!-- serach section -->
-                        <div class="space-y-1.5 lg:w-full sm:w-[35%]">
-                            <h2 class="text-base lg:text-sm font-semibold text-foreground/90 flex items-center gap-1">
+                    <div class="px-8 space-y-3 p-2 w-full justify-self-center block flex flex-col lg:flex-row space-x-4 bg-white rounded-lg border-border border-1 ">
+                        <!-- search section -->
+                        <div class="space-y-1.5 w-full">
+                            <h2 class="text-base font-semibold text-foreground/90 flex items-center gap-1">
                                 <Search class="h-5 w-5" />
                                 <span>Search</span>
                             </h2>
@@ -121,7 +121,7 @@
                                     placeholder='type here...'
                                     value={searchQuery}
                                     oninput={(e) => {searchQuery = e.target.value}}
-                                    class="!text-xs !h-fit w-full pr-4 py-1.5 border border-border/40 rounded-lg focus:ring-2 focus:ring-ring/70
+                                    class="!text-sm !h-fit w-full pr-4 py-1.5 border border-border/40 rounded-lg focus:ring-2 focus:ring-ring/70
                                             focus:border-transparent transition-all"
                                 />
 

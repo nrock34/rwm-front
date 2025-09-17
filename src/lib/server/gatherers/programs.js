@@ -49,6 +49,8 @@ export const getProgramDetail = async (id) => {
         testimonials: data.testimonials,
         contact: data.provider.contact,
         appDeadline: data.application_deadline,
+        applicationLink: data.application_link,
+        infoLink: data.info_link
     }
 
     if (university) {

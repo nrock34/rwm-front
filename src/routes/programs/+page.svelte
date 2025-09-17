@@ -52,6 +52,7 @@
     $effect(() => {
         if (sortBy) urlparams.set('sort_by', sortBy)
         if (searchQuery) urlparams.set('q', searchQuery)
+        if (!searchQuery) urlparams.delete('q')
         if (region !== 'all') urlparams.set('country', region)
         if (region === 'all') urlparams.delete('country')
         if (duration !== 'all') urlparams.set('duration', duration)

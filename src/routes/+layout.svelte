@@ -26,7 +26,7 @@
 
 <div class="min-h-screen h-screen flex flex-col">
 	<header>
-		<Navigation class="bg-muted/60 py-4.5 border-b-3 border-b-accent-foreground"/>
+		<Navigation class="bg-secondary/15 py-4.5 border-b-3 border-b-accent-foreground"/>
 	</header>
 
 	<main class="flex-grow">

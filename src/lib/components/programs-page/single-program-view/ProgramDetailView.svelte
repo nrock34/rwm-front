@@ -143,7 +143,7 @@
                     <Button class="tracking-wide !text-[0.65rem] sm:!text-xs lg:text-sm bg-accent-foreground cursor-pointer border-accent-foreground border rounded-xl sm:py-6">
                         Apply Now
                     </Button>
-                    <Button variant="outline" class="tracking-wide !text-[0.65rem] sm:!text-xs lg:text-sm rounded-xl text-primary-foreground backdrop-blur cursor-pointer
+                    <Button href={program.applicationLink} variant="outline" class="tracking-wide !text-[0.65rem] sm:!text-xs lg:text-sm rounded-xl text-primary-foreground backdrop-blur cursor-pointer
                                                     border-primary-foreground/60 bg-primary-foreground/20 sm:py-6">
                         Request Info
                     </Button>
@@ -234,10 +234,10 @@
                 <Card.Root class="gap-2 p-6">
                     <h3 class="font-semibold text-foreground mb-4">Quick Actions</h3>
                     <div class="space-y-3">
-                        <Button class="w-full">
+                        <Button href={program.applicationLink} class="w-full">
                             Apply Now
                         </Button>
-                        <Button varirant="secondary" class="w-full">
+                        <Button href={program.infoLink} varirant="secondary" class="w-full">
                             More Information
                         </Button>
                     </div>
