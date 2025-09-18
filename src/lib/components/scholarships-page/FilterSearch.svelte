@@ -34,8 +34,6 @@
 
     $effect(() => {
         filters.country = selectedCountry
-        console.log(selectedCountry)
-        console.log(paginatedScholarships)
     })
 
 
@@ -44,19 +42,19 @@
 
 
 
-<Card.Root class="p-8 gap-1">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-5">
+<Card.Root class="p-4 px-8 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-1 gap-x-3">
         <div class="flex-1 relative">
             <!-- search -->
             <p class="block text-sm">Search</p>
             <div class="relative">
                 <div class="absolute inset-y-0 left-3 flex items-center">
-                    <Search class='w-5 h-5 text-muted-foreground'/>
+                    <Search class='w-4 h-4 text-muted-foreground'/>
                 </div>
                 <Input
                     type="text"
                     placeholder="Search scholarships..." 
-                    class="h-10 pl-10"
+                    class="h-10 pl-10 !text-xs py-2 h-fit"
                     value={searchQuery}
                     oninput={(e) => {searchQuery = e.target.value}}
                 />
@@ -69,7 +67,7 @@
                 type="single"
                 bind:value={filters.category}
                 >
-                <Select.Trigger class="w-full">
+                <Select.Trigger class="w-full text-xs">
                     {selectedCategoryContent}
                 </Select.Trigger>
                 <Select.Content>
@@ -87,7 +85,7 @@
                 type="single"
                 bind:value={selectedCountry}
             >
-                <Select.Trigger class="w-full">
+                <Select.Trigger class="w-full text-xs">
                     {selectedCountryContent}
                 </Select.Trigger>
                 <Select.Content>
@@ -107,7 +105,7 @@
                 type="single"
                 bind:value={selectedSort}
             >
-                <Select.Trigger class="w-full">
+                <Select.Trigger class="w-full text-xs">
                     {selectedSortContent}
                 </Select.Trigger>
                 <Select.Content>
@@ -120,8 +118,8 @@
     </div>
 
     <div>
-        <p class="prose-sm prose">
-            Showing {paginatedScholarships?.length || 0} of {filteredScholarships?.length || 0} articles
+        <p class="text-sm font-medium">
+            Showing {paginatedScholarships?.length || 0} of {filteredScholarships?.length || 0} scholarships
         </p>
     </div>
 </Card.Root>

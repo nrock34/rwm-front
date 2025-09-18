@@ -67,7 +67,7 @@
         title: 'Benjamin A. Gilman Scholarship',
         provider: 'U.S. Department of State',
         amount: 'Up to $5,000',
-        deadline: '2024-03-01',
+        deadline: '2026-03-01',
         category: 'need',
         country: 'worldwide',
         level: 'undergraduate',
@@ -152,7 +152,7 @@
 </script>
 
 
-<div class="flex flex-col mx-auto max-w-7xl gap-1 p-8 pb-2 bg-accent/50">
+<div class="flex flex-col w-full gap-1">
     
     <div class="mb-8">
         <h1 class="text-4xl font-bold">

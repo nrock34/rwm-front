@@ -5,7 +5,7 @@
     import * as Popover from "$lib/components/ui/popover";
     import { Check, ChevronsUpDown } from "lucide-svelte";
 
-    let { value = $bindable(), className , formProps, data, onchange } = $props()
+    let { value = $bindable(), className , formProps, data, onchange = () => {} } = $props()
     let searchValue = $state('')
     let open = $state(false)
     
@@ -17,7 +17,7 @@
 </script>
 
 <div class={className + " flex"}>
-    <Popover.Root bind:open>
+    <Popover.Root class="w-full" bind:open>
         <Popover.Trigger>
             {#snippet child({ props })}
                 <Button
@@ -26,7 +26,7 @@
                     role="combobox"
                     class="w-full h-full"
                     >
-                    <span class="flex items-center py-5 justify-between w-full">
+                    <span class="flex items-center py-5 justify-between w-full text-xs sm:text-sm">
                         {value ?
                             universities.find((uni) => uni.value === value)?.label
                         : "Select University"}
@@ -35,13 +35,14 @@
                 </Button>
             {/snippet}
         </Popover.Trigger>
-        <Popover.Content class="p-0">
+        <Popover.Content class="p-0 min-w-full">
             <Command.Root>
                 <Command.Input
+                    name="university"
                     bind:value={searchValue} 
                     placeholder="Search"/>
                 <Command.Empty>No university found.</Command.Empty>
-                <Command.Group class="h-50 overflow-y-scroll">
+                <Command.Group class="h-50  overflow-y-scroll">
                     {#each universities as uni}
                         <Command.Item
                             class="flex w-full justify-between"

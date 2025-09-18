@@ -66,6 +66,7 @@
         }
     };
 
+    let { limit=3, cardClass } = $props()
 
     let selectedCategory = $state('');
 
@@ -73,11 +74,11 @@
 
 </script>
 
-<Card.Root>
+<Card.Root class={`h-fit ${cardClass} gap-2`}>
     <Card.Header class="flex items-center justify-between mb-0">
         <div class="flex items-center space-x-2">
-            <Globe class="text-amber-400" />
-            <h2 class="text-lg font-bold text-foreground">
+            <Globe class="text-amber-400 w-5 h-5" />
+            <h2 class="text-sm sm:text-lg font-bold text-foreground">
                 Scholarships
             </h2>
         </div>
@@ -94,7 +95,7 @@
                 <Button
                     key={category.id}
                     variant="outline"
-                    class={selectedCategory === category.id ? 'bg-amber-500 hover:bg-amber-500 hover:text-primary-foreground text-primary-foreground' : 'hover:text-foreground hover:bg-muted-foreground/20'}
+                    class={`h-7 px-2 text-xs lg:text-sm ${selectedCategory === category.id ? 'bg-amber-500 hover:bg-amber-500 hover:text-primary-foreground text-primary-foreground' : 'hover:text-foreground hover:bg-muted-foreground/20'}`}
                     onclick = {() => selectedCategory = category.id}
                 >
                     {category.name}
@@ -104,63 +105,71 @@
 
          <!-- scholarships -->
         <div class="space-y-3">
-            {#each filteredScholarships as scholarship}
+            {#each filteredScholarships.slice(0, limit) as scholarship}
                 <div class={"p-4 rounded-(--radius) hover:shadow-sm border-1 " +
                              (scholarship.featured ? 'border-amber-300 bg-amber-50': 'border-border bg-white')}>
-                    <div class="flex items-start justify-between mb-2">
-                        <div class="flex-1 ">
-                            <div class="flex items-center space-x-1 mb-1">
-                                <h3 class="font-semibold text-foreground text-sm">{scholarship.title}</h3>
+                    <div class="flex flex-col items-start justify-between mb-2">
+                        <div class="flex w-full justify-between items-center">
+                            <div class="flex items-center space-x-1">
+                                <h3 class="font-semibold text-foreground text-[0.85rem] sm:text-sm text-wrap w-fit">{scholarship.title}</h3>
+                            </div>
+                            <div class="flex flex-row flex-wrap justify-end gap-0.5 items-end">
                                 {#if scholarship.featured}
                                     <Badge 
-                                        class="px-1.5 py-0 bg-primary/15 text-accent-foreground/80 text-xs font-medium">
+                                        class="px-1.5 py-0 bg-primary/15 text-accent-foreground/80 text-[0.65rem] sm:text-xs font-medium">
                                         Featured
                                     </Badge>
                                 {/if}
+                                <Badge 
+                                    class={"px-1.5 py-0 text-[0.65rem] sm:text-xs font-medium " + (getStatusColor(scholarship.status))}>
+                                    {scholarship.status.replace('-', ' ').toUpperCase()}
+                                </Badge>
                             </div>
-                            <p class="text-xs text-secondary-foreground mb-1">
+                            
+                        </div>
+                        
+                        <div>
+                            <p class="text-[0.65rem] sm:text-xs text-secondary-foreground mb-1">
                                 {scholarship.provider}
                             </p>
-                            <p class="text-xs text-muted-foreground mb-2">
+                            <p class="text-[0.65rem] sm:text-xs text-muted-foreground mb-2">
                                 {scholarship.description}
                             </p>
                         </div>
-                        <span class={"px-1.5 py-0.5 text-xs font-medium rounded-(--radius) " + (getStatusColor(scholarship.status))}>
-                            {scholarship.status.replace('-', ' ').toUpperCase()}
-                        </span>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2 text-xs text-secondary-foreground mb-5">
                         <div class="flex items-center space-x-1">
                             <DollarSign class="h-3 w-3"/>
-                            <span>{scholarship.amount}</span>
+                            <span class="text-[0.65rem] sm:text-xs">{scholarship.amount}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <MapPin class="h-3 w-3"/>
-                            <span>{scholarship.location}</span>
+                            <span class="text-[0.65rem] sm:text-xs">{scholarship.location}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <Calendar class="h-3 w-3"/>
-                            <span class="font-medium">{new Date(scholarship.deadline).toLocaleDateString()}</span>
+                            <span class="font-medium text-[0.65rem] sm:text-xs">{new Date(scholarship.deadline).toLocaleDateString()}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <Clock class="h-3 w-3"/>
-                            <span>{scholarship.deadline}</span> <!-- implement logic to display days left or Deadline Missed-->
+                            <span class="text-[0.65rem] sm:text-xs">{scholarship.deadline}</span> <!-- implement logic to display days left or Deadline Missed-->
                         </div>
                     </div>
 
                     
 
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between gap-6">
                         <div class="flex flex-wrap items-center gap-1 mb-1">
                             {#each scholarship.qualifications as qualification}
                                 <span key={qualification}
-                                        class="px-1.5 py-0.5 bg-muted border-[1px] text-xs rounded-(--radius)">
+                                        class="px-1.5 py-0.5 bg-muted border-[1px] text-[0.60rem] sm:text-[0.65rem] md:text-xs rounded-(--radius)">
                                     {qualification}
                                 </span>
                             {/each}
                         </div>
-                        <Button>
+                        <Button
+                            class="h-6 sm:h-7 text-[0.70rem] sm:text-xs">
                             Learn More
                         </Button>
                     </div>
@@ -170,7 +179,7 @@
     </Card.Content>
     <div class="mt-3 text-center">
         <Button>
-            Explore All scholarships
+            Explore All Scholarships
         </Button>
     </div>
 </Card.Root>

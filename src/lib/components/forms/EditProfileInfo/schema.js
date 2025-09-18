@@ -9,13 +9,15 @@ export const profileInfoSchema = object({
     username: string().min(3).max(45),
     bio: string().max(250),
     avatar: mixed()
+        .notRequired()
         .test("fileSize", "file size to large", (value) => {
-            console.log(value.type)
+            if (!value) return true
             return value && value?.size <= 10 * 1024 * 1024
         })
         .test("fileType", "unsupported file format", (value) => {
+            if (!value) return true
             return value && ["image/jpeg", "image/png"].includes(value?.type)
-        }).optional(),
+        }),
     birthday: string().optional()
     // mixed().test(
     //     'is-date',

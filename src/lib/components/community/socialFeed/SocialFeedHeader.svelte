@@ -5,6 +5,7 @@
     import { Filter, Plus, Search, Users, BookOpen, Calendar, Award } from 'lucide-svelte';
     import { Input } from '$lib/components/ui/input';
 
+    import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
     
     let {searchQuery = $bindable(), activeFilter = $bindable(''),
         activeContentType = $bindable(), filters, contentTypes } = $props();
@@ -18,16 +19,16 @@
 <div class = "space-y-6">
     <Card.Root>
         <Card.Header>
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-x-6">
                 <div>
-                    <h1 class="text-2xl font-bold text-primary">
+                    <h1 class="md:text-xl lg:text-2xl font-bold text-primary">
                         Social Feed
                     </h1>
-                    <p class="text-muted-foreground">
+                    <p class="text-muted-foreground md:text-sm lg:text-[0.95rem]">
                         Connect, share, and discover with fellow students/alumni.
                     </p>
                 </div>
-                <Button class="flex items-center h-12 has-[>svg]:px-8 space-x-2  ">
+                <Button class="flex items-center text-xs lg:text-sm h-fit has-[>svg]:px-8 space-x-2  ">
                     <Plus size='h-4 w-4'/>
                     <span>
                         Create Post
@@ -49,26 +50,26 @@
                 />
             </div>
 
-            <div class="flex flex-wrap gap-5 mb-4">
+            <div class="flex flex-wrap gap-2 mb-2">
                 <div class="flex items-center space-x-2">
-                    <Filter class="w-4 h-4 text-muted-foreground"/>
-                    <span class="text-md font-[500]">
+                    <Filter class="w-4 h-4 text-secondary-foreground"/>
+                    <span class="text-xs lg:text-sm text-secondary-foreground font-[500]">
                         Topic:
                     </span>
                 </div>
                 {#each filters as filter}
                     <Button onclick={() => {activeFilter = filter.id}}
                             variant={activeFilter === filter.id ? 'secondary' : 'primary'}
-                            class="{activeFilter === filter.id ? 'border border-ring' : 'bg-gray-300 text-foreground hover:text-secondary'}"
+                            class={`text-xs h-fit md:py-1.5 lg:py-2 ${activeFilter === filter.id ? 'border border-ring text-foreground/90' : 'bg-gray-300 text-foreground hover:text-primary/80'}`}
                             >
                         <filter.icon />
                         <span>{filter.name}</span>
                     </Button>
                 {/each}
             </div>
-            <div class="flex items-center gap-5">
+            <div class="flex items-center gap-2">
                 <div class="flex items-center space-x-2">
-                    <span class="text-md font-medium">
+                    <span class="text-xs lg:text-sm text-secondary-foreground font-[500]">
                         Type:
                     </span>
                 </div>
@@ -77,7 +78,7 @@
                             key={contentType.id}
                             onclick={() => {activeContentType = contentType.id}}
                             variant={activeContentType === contentType.id ? 'secondary' : 'primary'}
-                            class="{activeContentType === contentType.id ? 'border border-ring' : 'bg-gray-300 text-foreground hover:text-secondary'}"
+                            class={`text-xs h-fit md:py-1.5 lg:py-2 ${activeContentType === contentType.id ? 'border border-ring text-foreground/90' : 'bg-gray-300 text-foreground hover:text-primary/80'}`}
                             >
                         {contentType.name}
                     </Button>

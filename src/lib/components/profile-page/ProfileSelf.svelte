@@ -29,7 +29,7 @@
         tabs.find((tab) => tab.id === activeTab)?.component()
     )
     
-    console.log( data )
+   
 
 
 </script>

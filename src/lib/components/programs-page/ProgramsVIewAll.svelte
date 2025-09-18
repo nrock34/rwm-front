@@ -14,29 +14,24 @@
     import ListView from "./views-types/ListView.svelte";
     import MapView from "./views-types/MapView.svelte";
     import { capitalize } from "$lib/helper-funcs/funcs";
+    import { onMount } from "svelte";
+
+    import Spinner from '$lib/assets/load-spinner.svg'
     
+    let { results, next, getMoreResults, programCountries, durations,
+        sortBy = $bindable(), searchQuery = $bindable(), region = $bindable(), duration = $bindable()
+     } = $props();
 
     const countries = [
         { id: 'all', name: 'All Countries' },
-        { id: 'italy', name: 'Italy' },
-        { id: 'spain', name: 'Spain' },
-        { id: 'france', name: 'France' },
-        { id: 'germany', name: 'Germany' },
-        { id: 'uk', name: 'United Kingdom' },
-        { id: 'japan', name: 'Japan' },
-        { id: 'australia', name: 'Australia' }
+        ...programCountries
     ];
 
-    const durations = [
-        { id: 'all', name: 'Any Duration' },
-        { id: 'summer', name: 'Summer (6-8 weeks)' },
-        { id: 'semester', name: 'Semester (4-5 months)' },
-        { id: 'year', name: 'Academic Year (9-10 months)' },
-        { id: 'short', name: 'Short-term (2-4 weeks)' }
-    ];
 
     let savedPrograms = new SvelteSet();
     let compareList = new SvelteSet();
+
+    let resultsLoading = $state(false)
 
     let filters = $state(
         {
@@ -48,53 +43,47 @@
         }
     )
     let viewMode = $state('grid');
-    let sortBy = $state('rating');
-    let searchQuery = $state('');
+    //let sortBy = $state('rating');
+    // let searchQuery = $state('');
 
-    let selectedRegionContent = $derived(countries.find((country) => country.id === filters.country)?.name || 'uh oh')
-    let selectedDurationContent = $derived(durations.find((duration) => duration.id === filters.duration)?.name || 'uh oh')
+    let selectedRegionContent = $derived(countries.find((country) => country.id === region || country.name === region)?.name || 'uh oh')
+    let selectedDurationContent = $derived(durations.find((d) => d.id === duration)?.name || 'uh oh')
     let sortByTriggerContent = $derived(capitalize(sortBy))
 
-    const filteredPrograms = $derived(programs.filter(program => {
-        const matchesCountry = filters.country === 'all' || program.country === filters.country;
-        const matchesDuration = filters.duration === 'all' || program.duration === filters.duration;
-        const matchesCost = filters.cost === 'all' || program.cost === filters.cost;
-        const matchesField = filters.field === 'all' || program.field === filters.field;
-        const matchesLang = filters.language === 'all' || program.language === filters.language;
-        const matchesSearch = searchQuery === '' ||
-            program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            program.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            program.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            program.description.toLowerCase().includes(searchQuery.toLowerCase());
+    onMount(() => {
+        const intersectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && next) {
+                console.log("Element is in view:", entry.target);
+
+                console.log(next)
+                resultsLoading = true
+                
+
+                setTimeout(() => {
+                    getMoreResults(next).then(
+                        (data) => {
+                            next = data.next
+                            results = [...results, ...data.results]
+                        }
+                    )
+                    resultsLoading = false
+                }
+                , 2000)
+                }
+            });
+        }, {
+            threshold: 0.1
+        })
+
+        const items = document.querySelectorAll('#bottomOfResults')
+        items.forEach(item => intersectionObserver.observe(item))
         
-        return matchesCountry && matchesCost && matchesDuration && 
-            matchesField && matchesLang && matchesSearch;
-    }))
-
-    const sortedPrograms = $derived([...filteredPrograms].sort((a, b) => {
-
-        console.log(filters.duration)
-
-        switch (sortBy) {
-            case 'rating':
-                return b.rating - a.rating
-            case 'cost':
-                return parseInt(a.cost.replace(/[^0-9]/g, '')) - parseInt(b.cost.replace(/[^0-9]/g, ''))
-            case 'participants':
-                return b.participants - a.participants
-            case 'alphabetical':
-                return a.title.localeCompare(b.title)
-            default:
-                return 0;
-        }
-
-    }))
-
-
+    })
 </script>
 
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg-px-8 py-8">
+<div on:scroll={handleScroll} class="w-full">
 
     <!-- header -->
     <div class="mb-8">
@@ -124,17 +113,18 @@
             <!--  country/region filter  -->
             <div>
                 <!-- <label class="block text-sm font-medium text-foreground mb-2">Region</label> -->
-                <Select.Root type='single' bind:value={filters.country}>
+                <Select.Root type='single' bind:value={region}>
                     <Select.Label class="text-sm font-medium text-foreground">
                         Region
                     </Select.Label>
                     <Select.Trigger class="min-h-12 w-full">
                         {selectedRegionContent}
                     </Select.Trigger>
-                    <Select.Content>
+                    <Select.Content class="!max-h-70 px-1.5 py-1 gap-y-2">
                         {#each countries as country, idx}
-                            <Select.Item label={country.name} value={country.id}>
-                                {country.name}
+                            <Select.Item class="flex justify-between" label={country.name} value={country.id === 'all' ? country.id : country.name}>
+                                <span>{country.name}</span>
+                                <span class="text-xs pr-2 font-light text-secondary-foreground">{country?.count}</span>
                             </Select.Item>
                         {/each}
                     </Select.Content>
@@ -144,7 +134,7 @@
 
             <!-- duration filter -->
             <div>
-                <Select.Root class="w-full" type='single' bind:value={filters.duration}>
+                <Select.Root class="w-full" type='single' bind:value={duration}>
                     <Select.Label class="text-sm font-medium text-foreground">
                         Duration
                     </Select.Label>
@@ -186,7 +176,7 @@
                 </div>
 
                 <div class="text-sm text-muted-foreground">
-                    {sortedPrograms.length} programs found
+                    {results?.length ?? 0} programs found
                 </div>
             </div>
 
@@ -259,21 +249,25 @@
 
 
     <!-- Display programs -->
-    {#if viewMode === 'grid'}
-        <GridView 
-            bind:savedPrograms = {savedPrograms} 
-            bind:compareList = {compareList}
-            {sortedPrograms}/>
-    {:else if viewMode === 'list'}
-        <ListView 
-            bind:savedPrograms = {savedPrograms} 
-            bind:compareList = {compareList}
-            {sortedPrograms}/>
-    {:else if viewMode === 'map'}
-        <MapView />
-    {/if}
+    <div class="flex-1 min-w-0 w-full " on:scroll={handleScroll}>
+        {#if viewMode === 'grid'}
+            <GridView 
+                bind:savedPrograms = {savedPrograms} 
+                bind:compareList = {compareList}
+                {durations}
+                sortedPrograms={results}/>
+        {:else if viewMode === 'list'}
+            <ListView
+                {durations}
+                bind:savedPrograms = {savedPrograms} 
+                bind:compareList = {compareList}
+                sortedPrograms={results}/>
+        {:else if viewMode === 'map'}
+            <MapView />
+        {/if}
+    </div>
 
-    {#if sortedPrograms.length === 0}
+    {#if results?.length === 0}
 
         <div class="text-center py-12">
             <Globe class="h-12 w-12 text-muted-foreground mx-auto mb-4"/>
@@ -282,6 +276,12 @@
         </div>
         
     {/if}
+
+    <div class="py-10 mx-auto justify-self-center" id="bottomOfResults">
+        {#if resultsLoading}
+            <img src={Spinner} />
+        {/if}
+    </div>
 
 
 </div>

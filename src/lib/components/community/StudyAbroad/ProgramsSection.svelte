@@ -64,15 +64,17 @@
     }
   ];
 
-  const filteredPrograms = programs
+    const filteredPrograms = programs
+
+    let { limit, cardClass } = $props()
 
 </script>
 
-<Card.Root>
+<Card.Root class={`gap-2 ${cardClass}`}>
     <Card.Header class="flex items-center justify-between mb-0">
         <div class="flex items-center space-x-2">
-            <Globe class="text-primary" />
-            <h2 class="text-lg font-bold text-foreground">
+            <Globe class="text-primary w-4 h-4 sm:w-6 sm:h-6" />
+            <h2 class="text-sm sm:text-base md:text-lg font-bold text-foreground">
                 Study Abroad Programs
             </h2>
         </div>
@@ -89,7 +91,7 @@
                 <Button
                     key={region.id}
                     variant="outline"
-                    class={selectedRegion === region.id ? 'bg-primary/80 hover:bg-primary/80 hover:text-primary-foreground text-primary-foreground' : 'hover:text-foreground hover:bg-muted-foreground/20'}
+                    class={`h-7 px-2 text-xs lg:text-sm  ${selectedRegion === region.id ? 'bg-primary/80 hover:bg-primary/80 hover:text-primary-foreground text-primary-foreground' : 'hover:text-foreground hover:bg-muted-foreground/20'}`}
                     onclick = {() => selectedRegion = region.id}
                     >
                     {region.name}
@@ -99,30 +101,30 @@
 
          <!-- Programs -->
         <div class="space-y-3">
-            {#each filteredPrograms as program}
+            {#each filteredPrograms.slice(0, limit) as program}
                 <div class={"p-4 rounded-(--radius) hover:shadow-sm border-1 " +
                              (program.featured ? 'border-ring/40 bg-ring/5': 'border-border bg-white')}>
                     <div class="flex items-start justify-between mb-2">
                         <div class="flex-1 ">
                             <div class="flex items-center space-x-1 mb-1">
-                                <h3 class="font-semibold text-foreground text-sm">{program.title}</h3>
+                                <h3 class="font-semibold text-foreground text-[0.85rem] sm:text-sm">{program.title}</h3>
                                 {#if program.featured}
                                     <Badge 
-                                        class="px-1.5 py-0 bg-primary/15 text-accent-foreground/80 text-xs font-medium">
+                                        class="px-1.5 py-0 bg-primary/15 text-accent-foreground/80 text-[0.65rem] sm:text-xs font-medium">
                                         Featured
                                     </Badge>
                                 {/if}
                             </div>
-                            <p class="text-xs text-secondary-foreground mb-1">
+                            <p class="text-[0.65rem] sm:text-xs text-secondary-foreground mb-1">
                                 {program.provider}
                             </p>
                             <div class="flex items-center space-x-1 mb-1">
                                 <MapPin class="h-3 w-3 text-muted-foreground"/>
-                                <span class="text-xs text-muted-foreground">
+                                <span class="text-[0.65rem] sm:text-xs text-muted-foreground">
                                     {program.location}
                                 </span>
                             </div>
-                            <p class="text-xs text-muted-foreground mb-2">
+                            <p class="text-[0.65rem] sm:text-xs  text-muted-foreground mb-2">
                                 {program.description}
                             </p>
                         </div>
@@ -144,28 +146,29 @@
                             <span>{program.participants}</span>
                         </div>
                         <div class="flex items-center space-x-1">
-                            <span class="font-medium">{program.cost}</span>
+                            <span class="text-[0.65rem] sm:text-xs font-medium">{program.cost}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <Calendar class="h-3 w-3"/>
-                            <span>{program.deadline}</span> <!-- implement logic to display days left or Deadline Missed-->
+                            <span class="text-[0.65rem] sm:text-xs">{program.deadline}</span> <!-- implement logic to display days left or Deadline Missed-->
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-1 mb-4">
+                    <div class="flex flex-wrap items-center gap-1 my-3">
                         {#each program.highlights as highlight}
                             <span key={highlight}
-                                    class="px-1.5 py-0.5 bg-muted border-[1px] text-xs rounded-(--radius)">
+                                    class="px-1.5 py-0.25 bg-muted border-[1px] text-[0.65rem] sm:text-xs rounded-(--radius)">
                                 {highlight}
                             </span>
                         {/each}
                     </div>
 
                     <div class="flex items-center justify-between">
-                        <span class="text-xs text-muted-foreground">
+                        <span class="text-[0.65rem] sm:text-xs text-muted-foreground">
                             Deadline: {new Date(program.deadline).toLocaleDateString()}
                         </span>
-                        <Button>
+                        <Button
+                            class="h-6 sm:h-fit text-[0.65rem] sm:text-xs">
                             Learn More
                         </Button>
                     </div>
@@ -174,7 +177,8 @@
         </div>
     </Card.Content>
     <div class="mt-3 text-center">
-        <Button>
+        <Button
+            class="text-[0.80rem] sm:text-[0.90rem]">
             Explore All Programs
         </Button>
     </div>

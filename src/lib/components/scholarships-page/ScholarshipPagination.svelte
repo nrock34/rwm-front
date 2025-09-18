@@ -59,7 +59,7 @@
 </script>
 
 <div class={(" " + passedClass)}>
-{console.log(paginatedScholarships)}
+
 {#if totalPages > 1}
     <Pagination.Root bind:page={currentPage} count={totalPages} perPage={1} siblingCount={1}>
         {#snippet children({ pages, currentPage})}

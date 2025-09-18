@@ -34,14 +34,21 @@
 
     let updated = $state(false)
 
-    console.log(data)
     
     const form = superForm(data.editProfileInfoForm, {
         dataType: 'json',
         validators: yupClient(profileInfoSchema),
+        onSubmit: ({ jsonData }) => {
+            const taintedData = Object.fromEntries(
+                Object.entries($formData).filter(([key]) => {
+                    return form.isTainted(key)
+                })
+            )
+            jsonData(taintedData)
+        }
     })
 
-    const { form: formData, enhance } = form;
+    const { form: formData, enhance, isTainted } = form;
 
     const pfpFile = fileProxy(form, 'avatar')
 
@@ -67,7 +74,7 @@
                                 <Form.Label class="mb-2">First Name</Form.Label>
                                 <Input
                                     {...props}
-                                    class="py-5"
+                                    class="py-5 text-xs sm:text-sm"
                                     placeholder={'First Name'}
                                     oninput={() => {updated = true}}
                                     bind:value={$formData.first_name}
@@ -85,7 +92,7 @@
                                 <Form.Label class="mb-2">Last Name</Form.Label>
                                 <Input
                                     {...props}
-                                    class="py-5"
+                                    class="py-5 text-xs sm:text-sm"
                                     placeholder={'Last Name'}
                                     bind:value={$formData.last_name}
                                     oninput={() => {
@@ -113,12 +120,12 @@
                                                 class={cn(
                                                     buttonVariants({
                                                         variant: "outline",
-                                                        class: "justify-start text-left w-full py-5"
+                                                        class: "justify-start text-left w-full py-5 text-xs sm:text-sm items-center"
                                                     })
                                                 )}
                                             >
                                                 <CalendarIcon class="mr-2 w-4 h-4" />
-                                                {dateValue ? df.format(dateValue.toDate(getLocalTimeZone())) : "Select a date"}
+                                                <span class="mt-0.5">{dateValue ? df.format(dateValue.toDate(getLocalTimeZone())) : "Select a date"}</span>
                                             </Button>
                                         {/snippet}
                                     </Popover.Trigger>
@@ -147,7 +154,7 @@
                                 <Form.Label class="mb-2">Bio</Form.Label>
                                 <Textarea
                                     {...props}
-                                    class="resize-none flex-1 w-full min-h-0"
+                                    class="resize-none flex-1 w-full min-h-0 text-xs sm:text-sm"
                                     placeholder="Your bio..."
                                     oninput={() => updated = true}
                                     bind:value={$formData.bio}
@@ -168,7 +175,7 @@
                                     disabled
                                     {...props}
                                     placeholder="@Username"
-                                    class="py-5"
+                                    class="py-5 text-xs sm:text-sm"
                                     oninput={() => updated = true}
                                     bind:value={$formData.username} 
                                 />
@@ -183,7 +190,7 @@
             
 
         <Form.Field class="flex-1 flex-col flex space-y-8" {form} name="avatar">
-            <Form.Legend>
+            <Form.Legend class="text-center sm:text-left">
                 Profile Picture
             </Form.Legend>
             <Form.Control class="w-full h-full">

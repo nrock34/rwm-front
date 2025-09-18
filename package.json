@@ -1,7 +1,7 @@
 {
 	"name": "rwm-front",
 	"private": true,
-	"version": "0.0.1",
+	"version": "0.1.1",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
@@ -15,27 +15,42 @@
 		"@lucide/svelte": "^0.515.0",
 		"@sveltejs/adapter-auto": "^6.0.0",
 		"@sveltejs/adapter-cloudflare": "^7.2.1",
+<<<<<<< HEAD
+		"@sveltejs/enhanced-img": "^0.8.1",
+		"@sveltejs/kit": "^2.37.0",
+		"@sveltejs/vite-plugin-svelte": "^6.1.3",
+=======
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+>>>>>>> b6d8f878a38fb84e67dc38eec1319f0e7b0b9427
 		"@tailwindcss/line-clamp": "^0.4.4",
+		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.0.0",
 		"autoprefixer": "^10.4.21",
 		"bits-ui": "^2.8.8",
 		"clsx": "^2.1.1",
 		"formsnap": "^2.0.1",
+		"mode-watcher": "^1.1.0",
 		"postcss": "^8.5.4",
 		"rollup-plugin-visualizer": "^6.0.3",
 		"svelte": "^5.0.0",
+		"svelte-sonner": "^1.0.5",
 		"sveltekit-superforms": "^2.27.1",
 		"tailwind-merge": "^3.3.1",
 		"tailwind-variants": "^1.0.0",
 		"tailwindcss": "^4.1.8",
 		"tw-animate-css": "^1.3.4",
+		"vaul-svelte": "^1.0.0-next.7",
 		"vite": "^6.2.6",
 		"wrangler": "^4.30.0"
 	},
 	"dependencies": {
+		"@sentry/sveltekit": "^10.11.0",
+		"@unpic/svelte": "^1.0.0",
+		"jsonwebtoken": "^9.0.2",
+		"jwt-decode": "^4.0.0",
 		"lucide-svelte": "^0.525.0",
-		"yup": "^1.6.1"
+		"yup": "^1.6.1",
+		"yup-password": "^0.4.0"
 	}
 }

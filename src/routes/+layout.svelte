@@ -2,56 +2,40 @@
 	import '../app.css';
 	import { NavigationMenuRoot, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '$lib/components/ui/navigation-menu/';
     import { navigationMenuTriggerStyle } from '$lib/components/ui/navigation-menu/navigation-menu-trigger.svelte';
-	let { children } = $props();
+	import { Toaster } from "$lib/components/ui/sonner"
+    import { setTokenState } from '$lib/stores/jwt.svelte';
+    import { onMount } from 'svelte';
+    import Footer from '$lib/components/layout/footer.svelte';
+    import { setContext } from 'svelte';
+    import Navigation from '$lib/components/layout/navigation.svelte';
+
+	let { children, data } = $props();
+
+	setContext('config', data.config);
+
+	const tokenState = setTokenState()
+	onMount(() => {
+		if (!data.acs_tkn) {
+			tokenState.refreshAccessToken()
+		}
+	})
+
 </script>
-<div class="visisi">
-	<header id="navbar" class="">
-		<NavigationMenuRoot viewport={false}>
-			<NavigationMenuList>
-				<NavigationMenuItem>
-					<NavigationMenuLink>
-						{#snippet child()}
-							<a href="/" class={navigationMenuTriggerStyle()}>Home</a>
-						{/snippet}
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<NavigationMenuLink>
-						{#snippet child()}
-							<a href="/" class={navigationMenuTriggerStyle()}>Postcards</a>
-						{/snippet}
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<NavigationMenuLink>
-						{#snippet child()}
-							<a href="/" class={navigationMenuTriggerStyle()}>Resources</a>
-						{/snippet}
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<NavigationMenuLink>
-						{#snippet child()}
-							<a href="/" class={navigationMenuTriggerStyle()}>About</a>
-						{/snippet}
-					</NavigationMenuLink>
-				</NavigationMenuItem>
-			</NavigationMenuList>
-		</NavigationMenuRoot>
+
+<Toaster position="top-right" />
+
+<div class="min-h-screen flex flex-col">
+	<header class="sticky top-0 w-full backdrop-blur-[4px] z-50">
+		<Navigation class="bg-muted/70 py-2.5 pt-3 border-b-3 border-b-accent-foreground"/>
 	</header>
 
-	<main class="overflow-auto">
+	<main class="flex-grow">
 		{@render children()}
 	</main>
-	
+		
 
+	<div class="scrollerFooter shrink-0">
+		<Footer />
+	</div>
 </div>
 
-
-
-
-<div class="footer">
-	<footer class="footer">
-		&copy; 2025 RomeWithMe • All rights reserved
-	</footer>
-</div>

@@ -25,15 +25,16 @@ import Button from "$lib/components/ui/button/button.svelte";
 
 
 
-<div class="space-y-4">
+<div class="space-y-4 flex-1 flex flex-col w-full">
 
     {#each sortedPrograms as program}
         
+        {@const programDurationLabel = durations.find((d) => program.duration === d.id)?.name.split('-')[0]}
         {@const isSaved = savedPrograms.has(program.id)}
         {@const isComparing = compareList.has(program.id)}
 
-        <div key={program.id} class="bg-background p-6 border-muted-foreground/30 border-1 rounded-xl">
-            <div class="flex items-start space-x-4">
+        <div key={program.id} class="bg-background flex-1 max-w-full p-6 border-muted-foreground/30 border-1 rounded-xl">
+            <div class="flex w-full items-start space-x-4">
                 <img
                     src={program.image}
                     alt={program.title}
@@ -79,7 +80,7 @@ import Button from "$lib/components/ui/button/button.svelte";
                     <div class="flex items-center space-x-5 text-sm text-secondary-foreground mb-3">
                         <div class="flex items-center space-x-1">
                             <Calendar class="h-3 w-3 text-secondary-foreground"/>
-                            <span class="capitalize">{program.duration}</span>
+                            <span class="capitalize">{programDurationLabel}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <DollarSign class="h-3 w-3 text-secondary-foreground"/>
