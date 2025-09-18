@@ -17,7 +17,7 @@ const isAuthRoute = (pathName, routes) => {
     )
 }
 
-export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
+export const handle = sequence(async ({ event, resolve }) => {
 
     const cookie = event.cookies.get('acs_tkn')
     const rCookie = event.cookies.get('rfh_tkn')
