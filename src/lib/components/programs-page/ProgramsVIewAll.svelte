@@ -83,7 +83,7 @@
 </script>
 
 
-<div on:scroll={handleScroll} class="w-full">
+<div class="w-full">
 
     <!-- header -->
     <div class="mb-8">
@@ -249,7 +249,7 @@
 
 
     <!-- Display programs -->
-    <div class="flex-1 min-w-0 w-full " on:scroll={handleScroll}>
+    <div class="flex-1 min-w-0 w-full ">
         {#if viewMode === 'grid'}
             <GridView 
                 bind:savedPrograms = {savedPrograms} 
