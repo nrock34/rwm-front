@@ -7,6 +7,8 @@
     
     let { form } = $props()
 
+    import { enhance } from '$app/forms';
+
 </script>
 
 <form use:enhance method="POST" action={'?/newsletterSignup'} class="flex flex-col sm:flex-row sm:items-start gap-4 max-w-md mx-auto">

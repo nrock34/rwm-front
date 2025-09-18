@@ -35,25 +35,25 @@
         icon: MessageCircle,
         title: 'Discussion Forums',
         description: 'Connect with students from around the world and share experiences',
-        preview: '500+ active discussions'
+        preview: 'Have active discussions'
         },
         {
         icon: Users,
         title: 'Study Groups',
         description: 'Form study groups and collaborate on academic projects',
-        preview: '150+ study groups'
+        preview: 'Make study groups'
         },
         {
         icon: Camera,
         title: 'Photo Sharing',
         description: 'Share your study abroad moments and discover new destinations',
-        preview: '10K+ photos shared'
+        preview: 'Your photos, shared'
         },
         {
         icon: MapPin,
         title: 'Local Meetups',
         description: 'Organize and join local events with fellow students',
-        preview: '200+ monthly events'
+        preview: 'Find monthly events'
         }
     ];
 
@@ -123,9 +123,14 @@
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                <button class="text-lg flex items-center px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-md ">
-                    <Bell class="h-5 w-5 mr-2" />
-                    Join Newsletter Waitlist
+                <button class="text-lg flex items-center px-8 py-4 bg-purple-600 hover:bg-purple-700 justify-center rounded-md ">
+                    {#snippet children()}
+                        <a class="flex items-center" href="#signup">
+                            <Bell class="h-5 w-5 mr-2"/>
+                            Join Newsletter Waitlist
+                        </a>
+                    {/snippet}
+                    {@render children()}
                 </button>
                 <Button href="/" variant="outline" class="hover:!bg-transparent !flex hover:!text-current !text-lg px-8 !py-8">
                     <Search class="h-5 w-5 mr-2"/>
@@ -234,7 +239,7 @@
       
 
 
-      <section class="py-16 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+      <section id="signup" class="py-16 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl font-bold mb-4">Get Beta Access</h2>
             <p class="text-xl opacity-90 mb-8">
@@ -248,8 +253,8 @@
         </div>
       </section>
 
-      <!-- {/* Testimonials */} -->
-      <section class="py-16">
+      
+      <!-- <section class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-foreground mb-4">What Students Are Saying</h2>
@@ -273,6 +278,6 @@
             {/each}
           </div>
         </div>
-      </section>
+      </section> -->
 
 </div>

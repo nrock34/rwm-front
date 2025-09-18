@@ -60,7 +60,7 @@
                         <Tally3 class="transform rotate-90 transition" />
                     </Drawer.Trigger>
                     <Drawer.Content class="max-w-60">
-                        <Drawer.Close class="w-full flex justify-end p-4">
+                        <Drawer.Close class="w-full flex justify-end p-1">
                             <X class="w-6 h-6"/>
                         </Drawer.Close>
                         <div class="flex flex-col pt-2 p-6 gap-y-3">

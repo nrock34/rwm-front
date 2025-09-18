@@ -24,6 +24,10 @@
 
 <Toaster position="top-right" />
 
+<svelte:head>
+	<title>RomeWithMe - Study Abroad Community</title>
+</svelte:head>
+
 <div class="min-h-screen flex flex-col">
 	<header class="sticky top-0 w-full backdrop-blur-[4px] z-50">
 		<Navigation class="bg-muted/70 py-2.5 pt-3 border-b-3 border-b-accent-foreground"/>
