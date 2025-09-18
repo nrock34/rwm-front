@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/sveltekit';
 
-Sentry.init({
+Sentry.initCloudflareSentryHandle({
   dsn: 'https://90bca2435b17c9549a67d488d46b796f@o4509991068106752.ingest.us.sentry.io/4509991069548544',
 
   tracesSampleRate: 1.0,

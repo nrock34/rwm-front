@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken"
 
 const authRoutes = [
     '/profile',
-    '/community'
 ]
 
 const isAuthRoute = (pathName, routes) => {

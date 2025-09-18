@@ -97,12 +97,10 @@
 
     let { form } = $props()
 
-    const handleScroll = () => {
-        console.log(22)
-    }
+    
 </script>
 
-<div on:scroll={handleScroll} class="min-h-screen mx-auto">
+<div class="min-h-screen mx-auto">
     <Hero />
     <AboutMe />
     <Features {features}/>
