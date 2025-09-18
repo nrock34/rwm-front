@@ -52,7 +52,7 @@
         {id: 'sAmerica', label: 'South America'}
     ]
 
-    const featPostcard = $derived(results?.pop())
+    const featPostcard = false
 </script>
 
 <div class="bg-muted/80">
@@ -66,21 +66,21 @@
         <div class="absolute inset-0 bg-gradient-to-b from-foreground/80 via-foreground/40 to-foreground/20 backdrop-blur-[3px]"></div>
         <div class="absolute inset-0 mx-4 sm:mx-8 md:mx-14">
             
-            <div class="flex flex-col h-full w-full justify-center py-1 text-primary-foreground max-w-[90rem] py-6 px-6 sm:px-8 md:px-6  justify-self-center">
-                <h6 class="text-sm tracking-widest">COLLECTION</h6>
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold">Explore Postcards</h2>
-                <p class="text-base md:text-lg pt-2 font-light">
+            <div class="flex flex-col h-full w-full justify-center py-1 text-primary-foreground max-w-6xl py-6 px-6 sm:px-8 md:px-6  justify-self-center">
+                <h6 class="text-xs sm:text-sm tracking-widest mb-1">COLLECTION</h6>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Explore Postcards</h2>
+                <p class="text-sm sm:text-base md:text-lg pt-2 text-muted tracking-wide font-light leading-tight">
                     Browse curated travel stories from our community. Filter by region or author and collect your favorites.
                 </p>
                 {#if featPostcard}
-                <div hidden class="mt-12 bg-white/70 grid grid-cols-2 p-8 m-2 min-h-60 max-w-140 ring-ring/60 ring-2 rounded-sm">
+                <div class="mt-12 bg-white/70 grid grid-cols-2 p-8 m-2 min-h-60 max-w-140 ring-ring/60 ring-2 rounded-sm">
                     <div class="flex flex-col text-foreground">
                         <span class="text-xs tracking-wide font-light">
                             TOP PICK
                         </span>
                         <div>
                             <h3 class="text-lg font-medium">{featPostcard.title}</h3>
-                            <p class="text-sm">{featPostcard.description}</p>
+                            <p class="text-sm t">{featPostcard.description}</p>
                         </div>
                     </div>
                     <div class="relative">
@@ -104,11 +104,11 @@
         </div>
     </section>
 
-    <section class="w-full max-w-[90rem] py-6 px-6 sm:px-8 md:px-6 justify-self-center ">
+    <section class="w-full max-w-7xl py-6 px-6 sm:px-8 md:px-6 justify-self-center ">
         <div class="grid grid-cols-6 gap-0">
             <div class="col-span-6 px-6 sm:px-8 md:px-10 lg:px-6">
-                <div class="sticky top-20 pb-4 w-full">
-                    <div class="px-8 space-y-3 p-2 w-full justify-self-center block flex flex-col lg:flex-row space-x-4 bg-white rounded-lg border-border border-1 ">
+                <div class="sticky top-20 pb-4 w-full mt-6">
+                    <div class="px-8 gap-x-4 space-y-3 p-2 w-full justify-self-center py-4 flex flex-col lg:flex-row space-x-4 bg-white rounded-lg border-border border-1 ">
                         <!-- search section -->
                         <div class="space-y-1.5 w-full">
                             <h2 class="text-base font-semibold text-foreground/90 flex items-center gap-1">
@@ -168,7 +168,7 @@
             <div class="col-span-6 w-full">
 
                 <svelte:boundary>
-                    <div class="">
+                    <div class="mt-6">
                         {#if results.length}
                             <PostcardsViewAll {results} {searchQuery} {selectedRegion} > </PostcardsViewAll>
                         {:else}

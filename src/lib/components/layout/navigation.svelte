@@ -46,7 +46,7 @@
             <NavigationMenu.Item>
                 <NavigationMenu.Link>
                     {#snippet child()}
-                        <a href={link.href} class={`${shrinkText ? 'mx-2' : 'mx-4'} inline-flex justify-center px-1 py-1.5 border-b-[0.75px] hover:border-b-[1.5px] border-b-secondary-foreground ${shrinkText ? 'text-sm' : ''}`}>{link.label}</a>
+                        <a href={link.href} class={`${shrinkText ? 'mx-2' : 'mx-4'} inline-flex justify-center px-1 py-1.5 border-b-[1.75px] hover:border-b-[2.5px] border-b-secondary-foreground font-medium ${shrinkText ? 'text-sm' : ''}`}>{link.label}</a>
                     {/snippet}
                 </NavigationMenu.Link>
                 

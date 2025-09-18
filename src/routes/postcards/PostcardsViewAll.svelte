@@ -78,7 +78,7 @@
                         </div>
                         <div class="h-full flex flex-col justify-between items-end">
                             <div class="divide-y-1 divide-secondary-foreground flex flex-col w-full pt-2 pl-1" >
-                                {#each [1, 2, 3, 4] as line, idx}
+                                {#each [1, 2, 3] as line, idx}
                                     {#if idx === 0}
                                         <p class="inline-flex justify-center w-full text-sm capitalize font-medium tracking-wide font-script">{item.location.city}, </p>
                                     {:else if idx === 1}
