@@ -2,6 +2,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import ProgramsViewAll from "$lib/components/programs-page/ProgramsVIewAll.svelte";
+    import { getContext } from "svelte";
 
     let { data } = $props();
 
@@ -63,13 +64,22 @@
         console.log('after hydration ', results)
     })
 
+    const config = getContext('config')
+
     //console.log(data)
 
-    
 </script>
 
 <div class="bg-muted">
-    <div class="max-w-[95rem] pt-12 py-8 w-full px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24 justify-self-center">
+    <div class="relative">
+        <img class="object-cover sm:h-70 md:h-80 lg:h-100 w-full" src={config.programHeroIMG ?? 'https://images.pexels.com/photos/28838309/pexels-photo-28838309.jpeg'}/>
+        <div class="absolute inset-x-0 top-0 backdrop-blur-[1px] w-full h-full"></div>
+        <div class="absolute inset-x-0 top-0 bg-gradient-to-b from-black to-black/30 w-full h-full opacity-30"></div>
+        <div class="flex ">
+
+        </div>
+    </div>
+    <div class="max-w-[95rem] pt-12 py-8 w-full px-6 sm:px-8 md:px-12 lg:px-18 xl:px-24 justify-self-center">
         <ProgramsViewAll bind:duration bind:sortBy bind:searchQuery bind:region 
         {programCountries} {next} {getMoreResults} {results} {durations}/>
     </div>

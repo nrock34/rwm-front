@@ -86,38 +86,35 @@
 <div class="w-full">
 
     <!-- header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-foreground mb-2">Study Abroad Programs</h1>
-        <p class="text-muted-foreground">Discover study abroad opportunities that fit your preferences</p>
-    </div>
+    
 
     <!-- filters -->
-    <Card.Root class="p-6 gap-1 mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            <div class="mt-2">
-                <label class="block text-sm font-medium text-foregorund mb-1.25">
+    <Card.Root class="p-6 py-4 gap-1 mb-8">
+        <div class="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-3">
+            <div class="col-span-2 mt-2">
+                <label class="pl-2 block text-sm font-medium text-foregorund mb-1.25">
                     Search
                 </label>
                 <div class="relative">
-                    <Search class="absolute left-3 top-3/10 h-4 w-4 text-muted-foreground"/>
+                    <Search class="absolute left-3 top-5/20 h-4 w-4 text-muted-foreground"/>
                     <Input 
                         type='text'
                         placeholder='Search for programs...'
                         value={searchQuery}
                         oninput={(e) => searchQuery = e.target.value}
-                        class="pl-10 h-12 w-full">
+                        class="pl-10 py-1.5 h-fit w-full text-xs ">
                     </Input>
                 </div>
             </div>
 
             <!--  country/region filter  -->
-            <div>
+            <div class="lg:col-span-2">
                 <!-- <label class="block text-sm font-medium text-foreground mb-2">Region</label> -->
                 <Select.Root type='single' bind:value={region}>
                     <Select.Label class="text-sm font-medium text-foreground">
                         Region
                     </Select.Label>
-                    <Select.Trigger class="min-h-12 w-full">
+                    <Select.Trigger class="min-h-fit !text-xs w-full">
                         {selectedRegionContent}
                     </Select.Trigger>
                     <Select.Content class="!max-h-70 px-1.5 py-1 gap-y-2">
@@ -133,12 +130,12 @@
             </div>
 
             <!-- duration filter -->
-            <div>
+            <div class="lg:col-span-2">
                 <Select.Root class="w-full" type='single' bind:value={duration}>
                     <Select.Label class="text-sm font-medium text-foreground">
                         Duration
                     </Select.Label>
-                    <Select.Trigger class="min-h-12 w-full">
+                    <Select.Trigger class="min-h-fit !text-xs w-full">
                         {selectedDurationContent}
                     </Select.Trigger>
                     <Select.Content>
@@ -154,15 +151,15 @@
         </div>
 
 
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex sm:flex-row justify-between items-start sm:items-center gap-4">
             <!-- sort by -->
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2.5">
+                <div class="flex items-center space-x-0.5">
                     <Select.Root type="single" bind:value={sortBy}>
                         <Select.Label class="text-sm font-medium text-foreground">
                             Sort By:
                         </Select.Label>
-                        <Select.Trigger>
+                        <Select.Trigger class="!min-h-fit !text-xs">
                             {sortByTriggerContent}
                         </Select.Trigger>
                         <Select.Content>
