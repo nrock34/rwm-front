@@ -60,7 +60,7 @@
         <img
             class="w-full h-80 sm:h-90 md:h-110 object-cover"
             alt='Postcards Banner Image'
-            src={`${config?.postcardsBannerIMG ?? 'https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d'}`}
+            src={`${config?.postcardsHeroIMG ?? 'https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d'}`}
         />
             {console.log(featPostcard)}
         <div class="absolute inset-0 bg-gradient-to-b from-foreground/80 via-foreground/40 to-foreground/20 backdrop-blur-[3px]"></div>
@@ -107,12 +107,12 @@
     <section class="w-full max-w-7xl py-6 px-6 sm:px-8 md:px-6 justify-self-center ">
         <div class="grid grid-cols-6 gap-0">
             <div class="col-span-6 px-6 sm:px-8 md:px-10 lg:px-6">
-                <div class="sticky top-20 pb-4 w-full mt-6">
+                <div class="sticky top-20 pb-4 w-full mt-2 sm:mt-6">
                     <div class="px-8 gap-x-4 space-y-3 p-2 w-full justify-self-center py-4 flex flex-col lg:flex-row space-x-4 bg-white rounded-lg border-border border-1 ">
                         <!-- search section -->
                         <div class="space-y-1.5 w-full">
-                            <h2 class="text-base font-semibold text-foreground/90 flex items-center gap-1">
-                                <Search class="h-5 w-5" />
+                            <h2 class="text-xs sm:text-sm font-semibold text-foreground/90 flex items-center gap-1">
+                                <Search class="h-3 w-3 sm:h-5 sm:w-5" />
                                 <span>Search</span>
                             </h2>
                             <div class="relative">
@@ -121,7 +121,7 @@
                                     placeholder='type here...'
                                     value={searchQuery}
                                     oninput={(e) => {searchQuery = e.target.value}}
-                                    class="!text-sm !h-fit w-full pr-4 py-1.5 border border-border/40 rounded-lg focus:ring-2 focus:ring-ring/70
+                                    class="!text-xs sm:!text-sm !h-fit w-full pr-4 py-0.75 sm:!py-1.25 border border-border/40 rounded-lg focus:ring-2 focus:ring-ring/70
                                             focus:border-transparent transition-all"
                                 />
 
@@ -131,15 +131,15 @@
                         <!-- country category -->
 
                         <div class="space-y-1.5">
-                            <h2 class="text-base lg:text-sm font-semibold text-foreground/90 flex items-center gap-1">
-                                <Filter class="h-5 w-5"/>
+                            <h2 class="text-xs sm:text-sm font-semibold text-foreground/90 flex items-center gap-1">
+                                <Filter class="h-3 w-3 sm:h-5 sm:w-5"/>
                                 <span>Regions</span>
                             </h2>
                             <ScrollArea orientation='horizontal'>
                                 <div class="space-y-1.5 space-x-1.5 flex sm:flex-row">
                                     <Button
                                         onclick={() => {selectedRegion = 'all'}}
-                                        class={` px-3 py-3 transition-colors border-1
+                                        class={`!h-fit px-2 py-1 sm:py-1.5 transition-colors border-1
                                             ${selectedRegion === 'all' ? 
                                             'bg-primary/90 hover:bg-primary/90 text-primary-foreground' :
                                             'bg-transparent hover:bg-primary/25 shadow-none text-foreground/80'}`}>
@@ -148,7 +148,7 @@
                                     {#each regions as region }
                                         <Button
                                             key={region.id}
-                                            class={` px-3 py-3 transition-colors border-2 cursor-pointer
+                                            class={`!h-fit px-2 py-1 sm:py-1.5 transition-colors border-1 cursor-pointer
                                                 ${selectedRegion === region.id ? 
                                                 'bg-primary/90 hover:bg-primary/90 text-primary-foreground' :
                                                 'bg-transparent hover:bg-primary/25 shadow-none text-foreground/80'}`}
@@ -188,7 +188,7 @@
 
                 </svelte:boundary>
 
-                <Pagination.Root bind:page={pageNum} count={pageCount} perPage={perPage}
+                <Pagination.Root class="py-8" bind:page={pageNum} count={pageCount} perPage={perPage}
                     onPageChange={(pageNum) => {
                         const searchParams = page.url.searchParams
                         searchParams.set('page', pageNum)

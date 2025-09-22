@@ -39,7 +39,7 @@
             <Card.Root class={` md:py-2 md:px-2 px-4 py-4 shadow-none rounded-xs h-full w-full bg-ring/10`}>
                 <div class="div flex flex-col h-full bg-gray-300">
                     <div class="relative h-32 w-full">
-                        <img class="object-cover h-full w-full" src={"https://images.pexels.com/photos/32802434/pexels-photo-32802434.jpeg"}/>
+                        <img class="object-cover h-full w-full" src={item.image ?? "https://images.pexels.com/photos/32802434/pexels-photo-32802434.jpeg"}/>
                         <div class="absolute left-0 top-0">
                             <div class={`flex p-3.25`}>
                                 <span class="flex gap-x-1 items-center bg-muted/30 px-2 py-0.75 rounded-xl backdrop-blur">

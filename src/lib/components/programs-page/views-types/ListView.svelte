@@ -6,7 +6,7 @@ import Button from "$lib/components/ui/button/button.svelte";
     import { Bookmark, Calendar, DollarSign, Link, MapPin, Star, Users } from "lucide-svelte";
 
 
-    let { savedPrograms = $bindable(), compareList = $bindable(), sortedPrograms } = $props()
+    let { savedPrograms = $bindable(), compareList = $bindable(), sortedPrograms, durations } = $props()
 
     const updateSavedPrograms = (id) => {
         if(!savedPrograms.delete(id)) {
