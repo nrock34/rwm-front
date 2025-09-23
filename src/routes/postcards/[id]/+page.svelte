@@ -66,7 +66,7 @@
                                 <Calendar class=" h-3.5 w-3.5" /> 
                                 <span
                                     class="text-xs font-light tracking-wide ml-0.5">
-                                    {new Date(postcard.created_at).toDateString()}
+                                    {new Date(postcard.datePublished).toDateString()}
                                 </span>
                             </div>
                         </div>
