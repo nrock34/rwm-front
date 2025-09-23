@@ -69,7 +69,7 @@
                         </Breadcrumb.Item>
                         <Breadcrumb.Separator/>
                         <Breadcrumb.Item>
-                            <Breadcrumb.Page class="text-white text-lg font-semibold" >Exploring The Sardinian Caves</Breadcrumb.Page>
+                            <Breadcrumb.Page class="text-white text-lg font-semibold">{postcard.title}</Breadcrumb.Page>
                         </Breadcrumb.Item>
                     </Breadcrumb.List>
                 </Breadcrumb.Root>
@@ -85,7 +85,7 @@
             <div class="px-3 flex items-center space-x-4 mt-2">
                 {#each postcard.tags as tag, idx}
                     <span class="cursor-pointer bg-secondary/70 border border-ring/80 px-1.75 py-0.5 text-foreground/90 text-xs font-medium rounded-md">
-                        #{tag.name}
+                        #{tag.name.replace(' ', '-')}
                     </span>
                 {/each}
             </div>

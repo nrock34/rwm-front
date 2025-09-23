@@ -27,6 +27,7 @@ function postcardDetail(postcard) {
                 city: postcard.location.city,
                 country: postcard.location.country
             },
+            datePublished: postcard.date_published ?? null,
             content: postcard.content ?? null,
             created_at: postcard.created_at,
             updatedAt: postcard.updated_at ?? null,
