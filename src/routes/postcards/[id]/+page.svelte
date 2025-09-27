@@ -53,6 +53,7 @@
                 <div class="grid space-y-0 my-4">
                     <div class="space-x-1.5 flex items-center text-secondary-foreground font-light text-sm">
                         <Avatar.Root class="h-9 w-9">
+                            <Avatar.Image src={postcard.author.avatar}/>
                             <Avatar.Fallback class="text-xs">{postcard.author.name.split(' ').map(s => s[0]).join('.')}</Avatar.Fallback>
                         </Avatar.Root>
                         <!-- <User class="h-6 w-6 text-accent-foreground fill-current" />  -->
