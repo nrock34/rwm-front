@@ -21,6 +21,7 @@
     </div>
 
     <div>
+        {#if program.highlights}
         <h3 class="text-base sm:text-lg font-semibold text-foreground mb-3">Program Highlights</h3>
         <div class="grid md:grid-cols-2 gap-3">
             {#each program.highlights as highlight, idx}
@@ -30,6 +31,7 @@
                 </div>
             {/each}
         </div>
+        {/if}
     </div>
 
     <div>
@@ -46,14 +48,18 @@
                     <span class="font-medium text-foreground">Students: </span>
                     <span class="text-foreground/90">~{program.university.students}</span>
                 </div>
+                {#if program.university.ranking}
                 <div class="space-x-1.5">
                     <span class="font-medium text-foreground">Ranking: </span>
                     <span class="text-nowrap text-foreground/90">{program.university.ranking}</span>
                 </div>
+                {/if}
+                {#if program.university.accreditation}
                 <div class="space-x-1.5">
                     <span class="font-medium text-foreground">Accreditation: </span>
                     <span class="text-nowrap text-foreground/90">{program.university.accreditation}</span>
                 </div>
+                {/if}
             </div>
         </div>
     </div>

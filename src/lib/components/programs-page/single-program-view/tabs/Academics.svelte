@@ -22,6 +22,7 @@
     </div>
 
     <div class="flex flex-col w-full">
+        {#if program.academics.fieldTrips}
         <h3 class="text-sm sm:text-base font-semibold text-foreground mb-1 sm:mb-2">Offered Trips & Excursioons</h3>
         <div class="grid md:grid-cols-2 gap-1 sm:gap-2 md:gap-2.5">
             {#each program.academics.fieldTrips as trip, idx}
@@ -31,16 +32,19 @@
                 </div>
             {/each}
         </div>
+        {/if}
     </div>
 
     <div class="grid grid-cols-2 gap-x-4 sm:gap-6 w-full">
         <div class="flex flex-col w-full">
             <h4 class="sm:text-base text-sm font-medium text-foreground mb-1 sm:mb-2">Academic Details</h4>
             <div class="space-y-1 text-xs sm:text-sm w-full">
+                {#if program.academics.faculty}
                 <div>
                     <span class="font-medium text-foreground">Faculty:</span>
                     <span class="text-secondary-foreground ml-2">{program.academics.faculty}</span>
                 </div>
+                {/if}
                 <div>
                     <span class="font-medium text-foreground">Class Size:</span>
                     <span class="text-secondary-foreground ml-2">{program.academics.classSize}</span>
@@ -55,13 +59,15 @@
                     <span class="text-secondary-foreground ml-2">{program.requirements.gpa}</span>
                 </div>
                 <div>
-                    <span class="font-medium text-foreground">Credits:</span>
+                    <span class="font-medium text-foreground">Credits During Program:</span>
                     <span class="text-secondary-foreground ml-2">{program.requirements.active_credits_needed}</span>
                 </div>
+                {#if program.fields}
                 <div>
                     <span class="font-medium text-foreground">Field:</span>
                     <span class="text-secondary-foreground ml-2">{program.fields}</span>
                 </div>
+                {/if}
                 <div>
                     <span class="font-medium text-foreground">Level:</span>
                     <span class="text-secondary-foreground ml-2">{program.requirements.level}</span>
