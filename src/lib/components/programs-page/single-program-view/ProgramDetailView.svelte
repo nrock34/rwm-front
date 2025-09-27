@@ -123,7 +123,7 @@
                         </Badge>
                         <Badge class={`!text-[0.65rem] sm:!text-xs ${pillClass}`}>
                             <DollarSign class="inline h-3.5 w-3.5"/>
-                            <p class="capitalize">{`${program.cost.program_fee} - ${program.cost.program_fee + program.cost.accommodation_fee + program.cost.extra_fee}`}</p>
+                            <p class="capitalize">{`${program.cost.program_fee + program.cost.accommodation_fee + program.cost.extra_fee}`}</p>
                         </Badge>
 
                         <Badge class={`!text-[0.65rem] sm:!text-xs ${pillClass}`}>
@@ -276,7 +276,7 @@
                 </Card.Root>
 
                 <!-- related programs -->
-                <Card.Root class="p-6 gap-0">
+                <!-- <Card.Root class="p-6 gap-0">
                     
                     <h3 class="font-semibold text-foreground mb-4">Related Programs</h3>
                     <div class="space-y-4">
@@ -308,7 +308,7 @@
                             </div>
                         {/each}
                     </div>
-                </Card.Root>
+                </Card.Root> -->
             </div>
         </aside>
     </div>
