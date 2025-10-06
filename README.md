@@ -36,7 +36,7 @@ Additional Systems: Custom Auth System, Custom API, Newsletter System, Error Mon
 - ⚙️ **BFF Architecture** — Optimized backend-for-frontend layer for cleaner API communication.  
 - 💌 **Newsletter Integration** — Automated email workflows with subscription management.  
 - 🧱 **Modular Frontend** — Built with SvelteKit and TailwindCSS for speed and maintainability.  
-- 🧑‍💻 **CI/CD Workflow** — Continuous deployment with Cloudflare + GitHub Actions.  
+- 🧑‍💻 **CI/CD Workflow** — Continuous deployment with Cloudflare. 
 - 🔍 **Error Monitoring** — Real-time logs and error tracking for production stability.  
 - 🌐 **Responsive UI** — Fully mobile-ready, with optimized components for performance.  
 
