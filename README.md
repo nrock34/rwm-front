@@ -120,9 +120,9 @@ It’s not just a blog — it’s a complete web application built to scale.
 **Created & developed by Naeem Hawkins**  
 Frontend Engineer | Full Stack Developer | Creative Technologist  
 
-- 🌐 Portfolio: [naeemhawkins.com](https://naeemhawkins.com)  
+- 🌐 Portfolio: --
 - 💼 LinkedIn: [linkedin.com/in/naeemhawkins](https://linkedin.com/in/naeemhawkins)  
-- ✉️ Email: [your-email-here]
+- ✉️ Email: --
 
 ---
 
