@@ -1,57 +1,137 @@
-# sv
+# 🌍 RomeWithMe — Frontend (RWM-Front)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+### ✨ A modern travel platform that started as a personal story
 
-## Creating a project
+**Live Site:** [https://romewithme.com](https://romewithme.com)
 
-If you're seeing this, you've probably already done this step. Congrats!
+---
 
-```bash
-# create a new project in the current directory
-npx sv create
+## 🧭 About the Project
 
-# create a new project in my-app
-npx sv create my-app
+**RomeWithMe** began as a personal blog during my semester abroad in Rome — but the idea behind it was born much earlier, in the hesitation, fears, and *“what ifs”* that almost stopped me from going in the first place.
+
+The thought of leaving home to step into a new continent was intimidating. I didn’t know the language, I didn’t know the people, and I had no idea what it would feel like to suddenly be surrounded by centuries of unfamiliar culture.  
+Money was also a worry — without steady income abroad, I had to save, find external funding, and plan every expense carefully. And then there was the cultural gap: what if I offended someone without meaning to, just because I didn’t understand their traditions?
+
+RomeWithMe grew from those early reflections into a **full-featured web platform** — a place to connect, share, and empower others to experience the world confidently.  
+It’s a fusion of storytelling and technology — designed, built, and deployed end-to-end as a showcase of real-world software engineering.
+
+---
+
+## ⚙️ Tech Stack
+
+``` 
+Frontend: Svelte, HTML, JavaScript, TailwindCSS  
+Backend: Django (Python), PostgreSQL  
+Infrastructure: Cloudflare Workers (Serverless Edge), CI/CD 
+Architecture: BFF (Backend for Frontend)  
+Additional Systems: Custom Auth System, Custom API, Newsletter System, Error Monitoring  
 ```
 
-## Developing
+---
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## 🚀 Features & Highlights
 
-```bash
-npm run dev
+- 🧩 **Custom Authentication System** — Secure login, registration, and token management built from scratch.  
+- ⚙️ **BFF Architecture** — Optimized backend-for-frontend layer for cleaner API communication.  
+- 💌 **Newsletter Integration** — Automated email workflows with subscription management.  
+- 🧱 **Modular Frontend** — Built with SvelteKit and TailwindCSS for speed and maintainability.  
+- 🧑‍💻 **CI/CD Workflow** — Continuous deployment with Cloudflare. 
+- 🔍 **Error Monitoring** — Real-time logs and error tracking for production stability.  
+- 🌐 **Responsive UI** — Fully mobile-ready, with optimized components for performance.  
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+---
+
+## 🧰 Getting Started
+
+### Prerequisites
+
+- Node.js (v16+ recommended)  
+- npm (or yarn / pnpm)  
+- Wrangler CLI (for Cloudflare Workers deployment)  
+
+### Installation
+
+``` 
+git clone https://github.com/nrock34/rwm-front.git  
+cd rwm-front  
+npm install  
 ```
 
-## Building
+### Development
 
-To create a production version of your app:
-
-```bash
-npm run build
+``` 
+npm run dev  
 ```
 
-You can preview the production build with `npm run preview`.
+Visit `http://localhost:5173` to preview locally.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+### Production Build
 
+```
+npm run build  
+npm run preview  
+```
 
+Deployment is configured for **Cloudflare Workers** via `wrangler.jsonc`.
 
-to-do
+---
 
-- add isLikedByUser state to like buttons on posts and maybe articles
-- implement commenting on posts
-- figure out why class= is being ignored by some lucide react components
-- add post type icon next to post type
-- review link handling in sveltekit
-- change all key props to be indexed for certified uniqueness among like-mapped elements
-- implement newsletter logic
-- implement state logic to deactivate filter by clicking again
-- add school indicator next profiles
-- add carousel to news and updates
-- implement filters on schoalrship section and study abroad section in community components
-- fix grid resizing in news and updates component for community page
-- redesign emergency contact card
-- (news view all page) add trending sort / change popular calc to be done backend / minimize data request
+## 🗂 Project Structure
+
+```
+/
+├── src/                      # SvelteKit source code: routes, components, stores  
+├── static/                   # Static assets (images, icons, etc.)  
+├── svelte.config.js          # SvelteKit configuration  
+├── tailwind.config.js        # Tailwind setup  
+├── vite.config.js            # Vite build configuration  
+├── wrangler.jsonc            # Cloudflare deployment settings  
+├── package.json  
+└── jsconfig.json  
+```
+
+---
+
+## 💡 Key Takeaways
+
+This project demonstrates:
+
+- Building a **scalable frontend architecture** from the ground up.  
+- Integrating **Cloudflare Workers** for serverless deployment.  
+- Managing **auth flows, APIs, and CI/CD** pipelines independently.  
+- Applying **UI/UX best practices** through responsive and accessible design.  
+
+It’s not just a blog — it’s a complete web application built to scale.
+
+---
+
+## 🛠 Future Enhancements
+
+- Community dashboard with post analytics  
+- Interactive map integrations  
+- Advanced content editor for travel stories   
+- Progressive Web App (PWA) support  
+
+---
+
+## 👤 About the Developer
+
+**Created & developed by Naeem Hawkins**  
+Frontend Engineer | Full Stack Developer | Creative Technologist  
+
+- 🌐 Portfolio: --
+- 💼 LinkedIn: [linkedin.com/in/naeemhawkins](https://linkedin.com/in/naeemhawkins)  
+- ✉️ Email: --
+
+---
+
+## 🪪 License
+
+```
+© 2025 Naeem Hawkins.  
+
+This code is provided for educational and portfolio review purposes only.  
+You may read, reference, or share this repository for demonstration purposes,  
+but you may not copy, modify, or use any part of it in your own projects or products.  
+```
