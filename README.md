@@ -129,5 +129,9 @@ Frontend Engineer | Full Stack Developer | Creative Technologist
 ## 🪪 License
 
 ```
-MIT © Naeem Hawkins  
+© 2025 Naeem Hawkins.  
+
+This code is provided for educational and portfolio review purposes only.  
+You may read, reference, or share this repository for demonstration purposes,  
+but you may not copy, modify, or use any part of it in your own projects or products.  
 ```
