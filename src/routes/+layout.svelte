@@ -26,6 +26,11 @@
 
 <svelte:head>
 	<title>RomeWithMe - Study Abroad Community</title>
+	<meta property="og:title" content="RomeWithMe – Connect, Share & Explore Abroad" />
+	<meta property="og:description" content="RomeWithMe is a platform for students and travelers to share experiences, find community, and stay connected while abroad." />
+	<meta property="og:image" content="https://romewithme.com/og-image.png" />
+	<meta property="og:url" content="https://romewithme.com" />
+	<meta property="og:type" content="website" />
 </svelte:head>
 
 <div class="min-h-screen flex flex-col">
