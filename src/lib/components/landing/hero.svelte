@@ -1,5 +1,5 @@
 <script>
-    import { ArrowRight } from "@lucide/svelte";
+    import { ArrowRight, Newspaper } from "@lucide/svelte";
     import { Award, CheckCircle, Globe } from "lucide-svelte";
     import TypingText from "../ui/typing-text/TypingText.svelte";
     import Button from "../ui/button/button.svelte";
@@ -44,21 +44,21 @@
                     </span>
                 </h1>
                 <p class="text-xl text-secondary-foreground mb-8 leading-relaxed">
-                    Connect with fellow students, discover scholarships, access essential resources, and make the most of your study abroad experience in the {tempLocationTagline}.
+                    Connect with fellow students, discover scholarships, explore essential resources, and make the most of your study abroad experience; wherever your journey takes you.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 mb-8">
-                    <a class="bg-primary/80 text-primary-foreground px-3 py-2 flex items-center rounded-lg cursor-pointer hover:bg-primary/70 transition-colors">
+                    <a href="/community" class="bg-primary/80 text-primary-foreground px-3 py-2 flex items-center rounded-lg cursor-pointer hover:bg-primary/70 transition-colors">
                         Join Community
                         <ArrowRight class="h-5 w-5 ml-2"/>
                     </a>
-                    <Button class="!py-6 text-base bg-primary-foreground/70 text-primary/85 hover:text-primary-foreground/80" href="/postcards">
+                    <Button class="!py-6 text-base bg-primary-foreground/70 text-primary/85 hover:text-primary-foreground/80" href="/postcards?q=Naeem">
                         Read My Story
                         <!-- <ArrowRight class="h-5 w-5 ml-2"/> -->
                     </Button>
                 </div>
 
-                <div class="flex items-center space-x-8 text-sm text-secondary-foreground/80">
+                <!-- <div class="flex items-center space-x-8 text-sm text-secondary-foreground/80">
                     <div class="flex items-center space-x-2">
                         <CheckCircle class="h-4 w-4 text-green-600"/>
                         <span>Free to join</span>
@@ -71,7 +71,7 @@
                         <CheckCircle class="h-4 w-4 text-green-600" />
                         <span>24/7 support</span>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="relative">
@@ -81,7 +81,7 @@
                             class="rounded-2xl shadow-2xl"
                     />
                     <div class="absolute -bottom-6 -left-6 bg-card p-4 rounded-xl border border-border">
-                        <div class="flex items-center space-x-3">
+                        <!-- <div class="flex items-center space-x-3">
                             <div class="flex -space-x-2">
                                 <img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop" 
                                     class="w-8 h-8 rounded-full border-2 border-white" alt="" />
@@ -94,14 +94,21 @@
                                 <p class="text-sm font-medium text-foreground">2,500+ Students</p>
                                 <p class="text-xs text-muted-foreground">Active Community</p>
                             </div>
+                        </div> -->
+                        <div class="flex justify-center items-center space-x-3 px-1">
+                            <Newspaper strokeWidth={2.5} class="h-7 w-7 text-ring"/>
+                            <div class="flex-col flex">
+                                <p class="text-sm font-medium text-foreground">Stories & Resources</p>
+                                <p class="text-xs text-muted-foreground">For Everybody</p>
+                            </div>
                         </div>
                     </div>
                     <div class="absolute -top-6 -right-6 bg-card p-4 rounded-xl shadow-lg border border-border">
                         <div class="flex items-center space-x-2">
                             <Award strokeWidth={2.5} class="h-7 w-7 text-ring" />
                             <div >
-                                <p class="text-sm font-medium text-foreground">89 Scholarships</p>
-                                <p class="text-xs text-muted-foreground">Available Now</p>
+                                <p class="text-sm font-medium text-foreground">Scholarship Opportunities</p>
+                                <p class="text-xs text-muted-foreground">Coming Soon</p>
                             </div>
                         </div>
                     </div>

@@ -23,6 +23,8 @@
         }
     }
 
+    const bookmarkEnabled = false;
+
 </script>
 
 
@@ -49,9 +51,8 @@
                         </Badge>
                     </div>
                 {/if}
-                <div class="absolute top-3 right-3 flex space-x-2">
+                <div hidden={!bookmarkEnabled} class="absolute top-3 right-3 flex space-x-2">
                     <Toggle
-                        
                         class={`rounded-full ${isSaved ? 
                         'bg-primary text-primary-foreground' : 
                         'bg-white/80 text-foreground hover:bg-white'}`}
@@ -125,9 +126,9 @@
                     {/if}
                 </div>
 
-                <div class="flex items-center justify-between mt-6">
+                <div class="flex items-center justify-end mt-6">
                     <!-- add compare here -->
-                    <Button variant="ghost" class={`text-foreground/70 pl-3 cursor-pointer hover:bg-transparent hover:underline hover:text-accent-foreground/60 ${compareList.has(program.id) ? 'text-accent-foreground/90' : ''}`}
+                    <Button hidden variant="ghost" class={`text-foreground/70 pl-3 cursor-pointer hover:bg-transparent hover:underline hover:text-accent-foreground/60 ${compareList.has(program.id) ? 'text-accent-foreground/90' : ''}`}
                         onclick={() => {
                             if (!compareList.delete(program.id)) {
                                 compareList.add(program.id)
@@ -137,7 +138,7 @@
                     </Button>
                     <Button
                         href={`/programs/${program.id}`}
-                        class="text-sm"    
+                        class="text-sm w-full opacity-95"    
                     >
                         View Details
                     </Button>

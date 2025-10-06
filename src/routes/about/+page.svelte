@@ -1,4 +1,8 @@
 
+<svelte:head>
+  <title>About Us - RomeWithMe</title>
+</svelte:head>
+
 <div class="relative">
     <img class="w-full object-cover h-120 opacity-80" src="https://images.pexels.com/photos/19240494/pexels-photo-19240494.jpeg"/>
     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
@@ -119,7 +123,7 @@
     </p>
     <ul>
       <li><a href="/community">Join the Community</a></li>
-      <li><a href="/subscribe">Subscribe for Updates</a></li>
+      <li><a href="/community#signup">Subscribe for Updates</a></li>
     </ul>
 
     <h3>A Note from the Founder</h3>

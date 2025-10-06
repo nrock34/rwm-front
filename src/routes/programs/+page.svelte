@@ -3,7 +3,7 @@
     import { page } from "$app/state";
     import ProgramsViewAll from "$lib/components/programs-page/ProgramsVIewAll.svelte";
     import Button from "$lib/components/ui/button/button.svelte";
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
 
     let { data } = $props();
 
@@ -27,7 +27,9 @@
     let search = data.search
     let sort = data.sort
 
-    let sortBy = $state(sort ?? 'rating');
+    let sortBy = $state(sort || 'rating');
+    $inspect(sortBy)
+
     let searchQuery = $state(search ?? '');
     let region = $state(programCountries.find(
         (country) => {
@@ -65,31 +67,41 @@
         console.log('after hydration ', results)
     })
 
+    onMount(() => {
+
+    })
+
     const config = getContext('config')
 
     //console.log(data)
 
 </script>
 
+<svelte:head>
+    <title>Browse Programs - RomeWithMe</title>
+</svelte:head>
+
 <div class="bg-muted">
     <div class="relative">
-        <img class="object-cover sm:h-70 md:h-80 lg:h-100 w-full" src={config.programHeroIMG ?? 'https://images.pexels.com/photos/28838309/pexels-photo-28838309.jpeg'}/>
+        <img class="object-cover h-70 sm:h-80 md:h-90 lg:h-100 w-full" src={config.programHeroIMG ?? 'https://images.pexels.com/photos/28838309/pexels-photo-28838309.jpeg'}/>
         <div class="absolute inset-x-0 top-0 backdrop-blur-[3px] w-full h-full"></div>
         <div class="absolute inset-x-0 top-0 bg-gradient-to-t from-white/70 to-white/50 w-full h-full opacity-80"></div>
-        <div class="absolute top-0 flex flex-col items-center justify-between min-w-full my-auto h-full p-20">
+        <div class="absolute top-0 flex flex-col items-center justify-center min-w-full my-auto h-full gap-y-8 p-8 sm:p-14 lg:p-20">
             <div class="mx-auto text-center max-w-3xl">
-                <h3 class="text-lg tracking-wider font-bold uppercase">Go Global</h3>
-                <h1 class="text-5xl tracking-tight font-extrabold text-accent-foreground uppercase">Find Your Perfect Program</h1>
-                <p class="tracking-wide leading-none">Compare programs across world-class universities and vibrant neighborhoods. Get a feel for academics, campus life, excursions, and term dates—then save and rank options that match your pace and priorities.</p>
+                <h3 class="text-md md:text-lg tracking-wider font-bold uppercase">Go Global</h3>
+                <h1 class="text-3xl md:text-5xl tracking-tight font-extrabold text-accent-foreground uppercase">Find Your Perfect Program</h1>
+                <p class="text-xs sm:text-sm md:text-base tracking-wide leading-none">Compare programs across world-class universities and vibrant neighborhoods. Get a feel for academics, campus life, excursions, and term dates—then save and rank options that match your pace and priorities.</p>
             </div>
             <div class="flex w-full justify-center gap-x-12">
                 <Button href="#programs" class="font-light tracking-wide" size="lg">Find Programs</Button>
-                <Button size="lg" variant="ghost" class="font-light tracking-wide bg-accent">Need Help?</Button>
+                <Button href="#footer-contactinfo" size="lg" variant="ghost" class="font-light tracking-wide bg-accent">Need Help?</Button>
             </div>
         </div>
     </div>
-    <div id="programs" class="max-w-[95rem] pt-12 py-8 w-full px-6 sm:px-8 md:px-12 lg:px-18 xl:px-24 justify-self-center">
+    <div id="programs" class="scroll-mt-20 max-w-[95rem] pt-12 py-8 w-full px-6 sm:px-8 md:px-12 lg:px-18 xl:px-24 justify-self-center">
         <ProgramsViewAll bind:duration bind:sortBy bind:searchQuery bind:region 
-        {programCountries} {next} {getMoreResults} {results} {durations}/>
+                        {programCountries} {next} {getMoreResults} {results} 
+                        {durations}
+        />
     </div>
 </div>

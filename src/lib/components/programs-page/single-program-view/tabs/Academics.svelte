@@ -22,7 +22,7 @@
     </div>
 
     <div class="flex flex-col w-full">
-        {#if program.academics.fieldTrips}
+        {#if program.academics.fieldTrips?.length !== 0}
         <h3 class="text-sm sm:text-base font-semibold text-foreground mb-1 sm:mb-2">Offered Trips & Excursioons</h3>
         <div class="grid md:grid-cols-2 gap-1 sm:gap-2 md:gap-2.5">
             {#each program.academics.fieldTrips as trip, idx}
@@ -62,7 +62,7 @@
                     <span class="font-medium text-foreground">Credits During Program:</span>
                     <span class="text-secondary-foreground ml-2">{program.requirements.active_credits_needed}</span>
                 </div>
-                {#if program.fields}
+                {#if program.fields?.length !== 0}
                 <div>
                     <span class="font-medium text-foreground">Field:</span>
                     <span class="text-secondary-foreground ml-2">{program.fields}</span>

@@ -3,8 +3,8 @@ import { newsletterSignup } from '$lib/server/shared-actions/newsletter-signup.j
 import { error, fail } from '@sveltejs/kit';
 
 
-export const load = async () => {
-
+export const load = async ({parent}) => {
+    await parent();
 }
 
 export const actions = {

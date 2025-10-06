@@ -17,7 +17,7 @@
                     <div class="flex-1">
                         <h4 class="font-medium text-foreground">{step.title}</h4>
                         <p class="text-sm text-secondary-foreground/80 mb-1">{step.description}</p>
-                        <p class="text-xs text-secondary-foreground font-medium">{step.deadline}</p>
+                        <p class="text-sm text-foreground font-semibold">{step.deadline}</p>
                     </div>
                 </div>
             {/each}

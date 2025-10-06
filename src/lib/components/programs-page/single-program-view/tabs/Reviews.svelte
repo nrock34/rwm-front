@@ -9,7 +9,7 @@
 <div class="space-y-6">
     <div>
         <h3 class="text-lg font-semibold text-foreground mb-3">Student Reviews</h3>
-        {#if program.testimonials}
+        {#if program.testimonials?.length !== 0}
         <div class="space-y-4">
             {#each program.testimonials as testimonial, idx}
                 <div key={idx} class="border border-border rounded-(--radius) p-4 bg-background">

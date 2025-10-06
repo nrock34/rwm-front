@@ -275,7 +275,7 @@
     {/if}
 
     <div class="py-10 mx-auto justify-self-center" id="bottomOfResults">
-        {#if resultsLoading}
+        {#if resultsLoading && !(viewMode === 'map')}
             <img src={Spinner} />
         {/if}
     </div>
