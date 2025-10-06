@@ -23,7 +23,7 @@ It’s a fusion of storytelling and technology — designed, built, and deployed
 ``` 
 Frontend: Svelte, HTML, JavaScript, TailwindCSS  
 Backend: Django (Python), PostgreSQL  
-Infrastructure: Cloudflare Workers (Serverless Edge), CI/CD (GitHub Actions)  
+Infrastructure: Cloudflare Workers (Serverless Edge), CI/CD 
 Architecture: BFF (Backend for Frontend)  
 Additional Systems: Custom Auth System, Custom API, Newsletter System, Error Monitoring  
 ```
