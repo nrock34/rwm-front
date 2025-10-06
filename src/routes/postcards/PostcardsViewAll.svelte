@@ -56,7 +56,7 @@
                         <!-- </div> -->
                         <!-- <div class="absolute inset-0 object-cover bg-muted/35 h-full w-full" src={item.image}/> -->
                         <!-- <div class='absolute inset-x-0 bottom-0 h- max-h-[65%] bg-white/30'></div> -->
-                        <div class={`absolute inset-x-0 bottom-0 grid grid-cols-3 md:gap-4 gap-8 max-h-[65%] w-full px-8 py-7 md:px-5 md:py-4 ${item.featured ? 'md:pt-2 pt-5' : 'md:pt-4 pt-7'} rounded-t-md bg-white/25 backdrop-blur-[8px]`}>
+                        <div class={`absolute inset-x-0 bottom-0 grid grid-cols-3 md:gap-4 gap-8 max-h-[65%] w-full px-8 py-7 md:px-5 md:py-4 ${item.featured ? 'md:pt-2 pt-5' : 'md:pt-4 pt-7'} rounded-t-md bg-white/45 backdrop-blur-[6px]`}>
                             <div class={`flex flex-col justify-between h-full col-span-2`}>
                                 <div class="h-max">
                                     <span>
