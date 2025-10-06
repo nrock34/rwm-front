@@ -79,7 +79,7 @@ Deployment is configured for **Cloudflare Workers** via `wrangler.jsonc`.
 
 ## 🗂 Project Structure
 
-[CODE BLOCK STARTS HERE]  
+```
 /
 ├── src/                      # SvelteKit source code: routes, components, stores  
 ├── static/                   # Static assets (images, icons, etc.)  
@@ -89,7 +89,7 @@ Deployment is configured for **Cloudflare Workers** via `wrangler.jsonc`.
 ├── wrangler.jsonc            # Cloudflare deployment settings  
 ├── package.json  
 └── jsconfig.json  
-[CODE BLOCK ENDS HERE]
+```
 
 ---
 
