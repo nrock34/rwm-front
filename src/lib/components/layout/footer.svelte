@@ -29,22 +29,22 @@
                 Empowering students to make the most of their study abroad experience through community, resources, and support.
             </p>
             <div class="flex space-x-4">
-                {#if config.socialLinkFB !== undefined && config.socialLinkFB !== ''}
+                {#if config?.socialLinkFB !== undefined && config.socialLinkFB !== ''}
                     <a href="#" class="text-gray-400 hover:text-white transition-colors">
                     <Facebook class="h-5 w-5" />
                     </a>
                 {/if}
-                {#if config.socialLinkIG !== undefined && config.socialLinkIG !== ''}
+                {#if config?.socialLinkIG !== undefined && config.socialLinkIG !== ''}
                     <a href="#" class="text-gray-400 hover:text-white transition-colors">
                     <Instagram class="h-5 w-5" />
                     </a>
                 {/if}
-                {#if config.socialLinkX !== undefined && config.socialLinkX !== ''}
+                {#if config?.socialLinkX !== undefined && config.socialLinkX !== ''}
                     <a href="#" class="text-gray-400 hover:text-white transition-colors">
                     <Twitter class="h-5 w-5" />
                     </a>
                 {/if}
-                {#if config.socialLinkYT !== undefined && config.socialLinkYT !== ''}
+                {#if config?.socialLinkYT !== undefined && config.socialLinkYT !== ''}
                     <a href="#" class="text-gray-400 hover:text-white transition-colors">
                     <Youtube class="h-5 w-5" />
                     </a>
