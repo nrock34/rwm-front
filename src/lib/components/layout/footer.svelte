@@ -3,8 +3,11 @@
     import { Globe, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-svelte';
     import GlobeLogo from '$lib/assets/logos/VX78WS01.svelte';
     import { Github } from '@lucide/svelte';
+    import { getContext } from 'svelte';
 
     const currentYear = new Date().getFullYear();
+
+    const config = getContext('config');
 
 </script>
 
@@ -26,18 +29,26 @@
                 Empowering students to make the most of their study abroad experience through community, resources, and support.
             </p>
             <div class="flex space-x-4">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                <Facebook class="h-5 w-5" />
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                <Instagram class="h-5 w-5" />
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                <Twitter class="h-5 w-5" />
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                <Youtube class="h-5 w-5" />
-                </a>
+                {#if config.socialLinkFB !== undefined && config.socialLinkFB !== ''}
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <Facebook class="h-5 w-5" />
+                    </a>
+                {/if}
+                {#if config.socialLinkIG !== undefined && config.socialLinkIG !== ''}
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <Instagram class="h-5 w-5" />
+                    </a>
+                {/if}
+                {#if config.socialLinkX !== undefined && config.socialLinkX !== ''}
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <Twitter class="h-5 w-5" />
+                    </a>
+                {/if}
+                {#if config.socialLinkYT !== undefined && config.socialLinkYT !== ''}
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <Youtube class="h-5 w-5" />
+                    </a>
+                {/if}
             </div>
             </div>
 
@@ -69,7 +80,7 @@
             </div>
 
             <!-- {/* Contact Information */} -->
-            <div>
+            <div id="footer-contactinfo">
             <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
             <div class="space-y-3 text-sm">
                 <!-- <div class="flex items-start space-x-2">

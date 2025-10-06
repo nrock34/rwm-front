@@ -28,7 +28,7 @@
     const perPage = 12
     let { pageCount, pageNum = 1, results } = $derived(data)
     const urlparams = $derived(page.url.searchParams)
-    let searchQuery = $state('')
+    let searchQuery = $state(data.search)
     let selectedRegion = $state('');
     $inspect(pageNum)
     $effect(() => {
@@ -54,6 +54,10 @@
 
     const featPostcard = false
 </script>
+
+<svelte:head>
+    <title>Browse Postcards - RomeWithMe</title>
+</svelte:head>
 
 <div class="bg-muted/80">
     <section class="relative overflow-hidden">

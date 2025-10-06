@@ -67,9 +67,9 @@ import Button from "$lib/components/ui/button/button.svelte";
                                 <Star class="h-4 w-4 text-yellow-500 fill-current"/>
                                 <span class="font-medium">{program.rating}</span>
                             </div>
-                            <Toggle>
+                            <!-- <Toggle>
                                 <Bookmark class="h-4 w-4"/>
-                            </Toggle>
+                            </Toggle> -->
                         </div>
                     </div>
 
@@ -102,15 +102,15 @@ import Button from "$lib/components/ui/button/button.svelte";
                         </div>
 
                         <div class="flex items-center space-x-3">
-                            <Button>
+                            <!-- <Button>
                                 {isComparing ? 'Remove from Compare' : 'Add to Compare'}
-                            </Button>
-                            <a 
+                            </Button> -->
+                            <Button 
                                 class="text-sm"
                                 href={`/programs/${program.id}`}
                             >
                                 View Details
-                            </a>
+                        </Button>
                         </div>
                     </div>
                 </div>

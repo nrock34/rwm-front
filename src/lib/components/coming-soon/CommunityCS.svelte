@@ -241,7 +241,7 @@
 
       <section id="signup" class="py-16 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold mb-4">Get Beta Access</h2>
+            <h2 class="text-3xl font-bold mb-4">Stay Tuned For Access</h2>
             <p class="text-xl opacity-90 mb-8">
                 Be among the first to join our community and help shape the platform
             </p>

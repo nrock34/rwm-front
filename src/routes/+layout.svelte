@@ -37,7 +37,6 @@
 		{@render children()}
 	</main>
 		
-
 	<div class="scrollerFooter shrink-0">
 		<Footer />
 	</div>

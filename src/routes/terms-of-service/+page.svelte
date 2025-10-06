@@ -1,5 +1,7 @@
 
-
+<svelte:head>
+    <title>Terms of Service - RomeWithMe</title>
+</svelte:head>
 
 <div class="bg-muted px-6 sm:px-10 md:px-16 lg:px-22 py-12">
     <div class="prose max-w-7xl mx-auto w-full">

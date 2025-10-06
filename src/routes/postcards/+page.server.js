@@ -20,6 +20,7 @@ export const load = async ({ event, url, fetch }) => {
 
     return {
         ...data,
+        search,
         pageNum
     }
 
