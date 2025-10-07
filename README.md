@@ -1,6 +1,6 @@
 # 🌍 RomeWithMe — Frontend (RWM-Front)
 
-### ✨ A modern travel platform that started as a personal story
+### A modern travel platform that started as a personal story
 
 **Live Site:** [https://romewithme.com](https://romewithme.com)
 
@@ -8,13 +8,13 @@
 
 ## 🧭 About the Project
 
-**RomeWithMe** began as a personal blog during my semester abroad in Rome — but the idea behind it was born much earlier, in the hesitation, fears, and *“what ifs”* that almost stopped me from going in the first place.
+**RomeWithMe** began as a personal blog during my semester abroad in Rome; but the idea behind it was born much earlier, from the hesitation, fears, and *“what ifs”* that almost stopped me from going in the first place.
 
 The thought of leaving home to step into a new continent was intimidating. I didn’t know the language, I didn’t know the people, and I had no idea what it would feel like to suddenly be surrounded by centuries of unfamiliar culture.  
-Money was also a worry — without steady income abroad, I had to save, find external funding, and plan every expense carefully. And then there was the cultural gap: what if I offended someone without meaning to, just because I didn’t understand their traditions?
+Money was also a worry; without steady income abroad, I had to save, find external funding, and plan every expense carefully. And then there was the cultural gap.
 
-RomeWithMe grew from those early reflections into a **full-featured web platform** — a place to connect, share, and empower others to experience the world confidently.  
-It’s a fusion of storytelling and technology — designed, built, and deployed end-to-end as a showcase of real-world software engineering.
+RomeWithMe grew from those early reflections into a **full-featured web platform**: a place to connect, share, and empower others to experience the world confidently.  
+It’s a fusion of storytelling, resources, and technology — designed, built, and deployed end-to-end as a showcase of real-world software engineering.
 
 ---
 
