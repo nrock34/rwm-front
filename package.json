@@ -8,7 +8,8 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"analyze": "ANALYZE=true vite build"
+		"analyze": "ANALYZE=true vite build",
+		"setup:git": "sh scripts/setup-git-hooks.sh"
 	},
 	"devDependencies": {
 		"@internationalized/date": "^3.8.2",
