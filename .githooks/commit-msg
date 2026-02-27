@@ -1,0 +1,48 @@
+#!/bin/sh
+
+set -eu
+
+MSG_FILE="${1:-}"
+
+if [ -z "$MSG_FILE" ] || [ ! -f "$MSG_FILE" ]; then
+	echo "commit-msg hook: missing commit message file path." >&2
+	exit 1
+fi
+
+FIRST_LINE="$(sed -n '1p' "$MSG_FILE")"
+
+# Allow system-generated commits.
+case "$FIRST_LINE" in
+	Merge\ *|Revert\ *|fixup!\ *|squash!\ *)
+		exit 0
+		;;
+esac
+
+PATTERN='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\([a-z0-9][a-z0-9._/-]*\): [a-z].+'
+
+if ! printf "%s" "$FIRST_LINE" | grep -Eq "$PATTERN"; then
+	cat >&2 <<'EOF'
+Invalid commit message format.
+Required format:
+  type(scope): short imperative summary
+
+Examples:
+  fix(auth): throw redirects in server hook
+  feat(resources): add resource detail loader
+  docs(audit): add prod-dev migration notes
+EOF
+	exit 1
+fi
+
+SUBJECT="$(printf "%s" "$FIRST_LINE" | sed -E 's/^[^:]+: //')"
+SUBJECT_LEN=${#SUBJECT}
+
+if [ "$SUBJECT_LEN" -gt 72 ]; then
+	echo "Commit subject is too long ($SUBJECT_LEN > 72)." >&2
+	exit 1
+fi
+
+if printf "%s" "$FIRST_LINE" | grep -Eq '\.$'; then
+	echo "Commit subject must not end with a period." >&2
+	exit 1
+fi

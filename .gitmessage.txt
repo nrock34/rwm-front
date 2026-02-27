@@ -1,0 +1,17 @@
+type(scope): short imperative summary
+
+Why:
+- what problem this change solves
+
+What:
+- what was changed
+
+Risk:
+- breaking change, migration, or "none"
+
+# Rules:
+# - format: type(scope): summary
+# - allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+# - lowercase summary, no trailing period
+# - keep summary <= 72 chars
+# - one logical change per commit
