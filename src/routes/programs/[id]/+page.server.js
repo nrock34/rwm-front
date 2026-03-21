@@ -1,11 +1,18 @@
-import { getProgramDetail } from '$lib/server/gatherers/programs.js'
+import { error } from "@sveltejs/kit";
+import { loadProgramDetailPage } from "$domains/programs";
 
-export const load = async ({params}) => {
-    const id = params.id
-    
-    const programData = await getProgramDetail(id);
+export const load = async ({ params, fetch }) => {
+    const id = params.id;
+    if (!id) {
+        throw error(400, "Missing program id.");
+    }
+
+    const result = await loadProgramDetailPage(id, { fetch });
+    if (!result.ok) {
+        throw error(result.error.status || 500, result.error.message);
+    }
 
     return {
-        programData
-    }
-}
+        programData: result.data
+    };
+};

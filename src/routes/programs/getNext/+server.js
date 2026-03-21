@@ -1,19 +1,24 @@
-import { API_URL } from '$env/static/private';
-import { getProgramList } from '$lib/server/gatherers/programs.js';
-import { json } from '@sveltejs/kit';
+import { json } from "@sveltejs/kit";
+import { loadProgramDirectoryPage } from "$domains/programs";
 
 
-export const GET = async ({ request, url }) => {
-    const cursor = url.searchParams.get('cursor') ?? null;
-    if (cursor) {
-        const api = new URL(`${API_URL}programs/list`)
-        api.searchParams.set('cursor', cursor);
-
-        const response = await getProgramList({url: api.href})
-
-        console.log(response)
-        return json(response)
+export const GET = async ({ url, fetch }) => {
+    const cursor = url.searchParams.get("cursor") ?? null;
+    if (!cursor) {
+        return json({ message: "Missing cursor." }, { status: 400 });
     }
 
-    return new Response('Hi')
-}
+    const result = await loadProgramDirectoryPage(
+        { fetch },
+        { ...Object.fromEntries(url.searchParams) }
+    );
+
+    if (!result.ok) {
+        return json({ message: result.error.message }, { status: result.error.status || 500 });
+    }
+
+    return json(result.data, {
+        status: result.status,
+        headers: result.headers
+    });
+};
