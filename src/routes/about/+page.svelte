@@ -5,17 +5,17 @@
 
 <div class="relative">
     <img class="w-full object-cover h-120 opacity-80" src="https://images.pexels.com/photos/19240494/pexels-photo-19240494.jpeg"/>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-background/92 via-background/68 to-background/15"></div>
 
     <div class="prose md:prose-xl !m-0 absolute inset-x-0 bottom-2 md:bottom-6 px-6 sm:px-10 md:px-16 lg:px-22 py-12 min-w-full flex">
-        <h1 class="text-muted mx-auto max-w-6xl w-full">About Us</h1>
+        <h1 class="mx-auto max-w-6xl w-full text-foreground">About Us</h1>
     </div>
     
 </div>
 
 <div class="bg-muted px-8 sm:px-10 md:px-16 lg:px-22 py-12">
 
-  <div class="prose max-w-6xl mx-auto w-full">
+  <div class="prose max-w-6xl mx-auto w-full text-foreground prose-headings:text-foreground prose-p:text-foreground prose-li:text-foreground prose-strong:text-foreground prose-a:text-primary">
     
     <h3>My Story</h3>
     <p>
