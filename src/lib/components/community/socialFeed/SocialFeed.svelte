@@ -1,45 +1,49 @@
 <script>
-    import SocialFeedHeader from "./SocialFeedHeader.svelte";
-    import SocialFeedPosts from "./SocialFeedPosts.svelte";
+	import SocialFeedHeader from "./SocialFeedHeader.svelte";
+	import SocialFeedPosts from "./SocialFeedPosts.svelte";
 
-    import { Users, BookOpen, Calendar, Award } from 'lucide-svelte';
+	let {
+		posts = [],
+		limit = 6,
+		currentPath = "/community"
+	} = $props();
 
-    let { limit = 6 } = $props()
+	let searchQuery = $state("");
+	let activeContentType = $state("all");
+	let activeFilter = $state("all");
 
-    let searchQuery = $state('');
-    let activeContentType = $state('all')
-    let activeFilter = $state('all')
+	const filters = [
+		{ id: "all", name: "All Posts" },
+		{ id: "opp", name: "Opportunities" },
+		{ id: "social", name: "Social" },
+		{ id: "academic", name: "Academic" },
+		{ id: "housing", name: "Housing" },
+		{ id: "events", name: "Events" }
+	];
 
-    const filters = [
-        { id: 'all', name: 'All Posts', icon: Users },
-        { id: 'academics', name: 'Academics', icon: BookOpen },
-        { id: 'events', name: 'Events', icon: Calendar },
-        { id: 'opportunities', name: 'Opportunities', icon: Award }
-    ];
-
-     const contentTypes = [
-        { id: 'all', name: 'All' },
-        { id: 'photo', name: 'Photos' },
-        { id: 'discussion', name: 'Discussions' },
-        { id: 'announcement', name: 'Announcements' }
-    ];
-
+	const contentTypes = [
+		{ id: "all", name: "All" },
+		{ id: "discussion", name: "Discussions" },
+		{ id: "announcement", name: "Announcements" },
+		{ id: "photo", name: "Photos" },
+		{ id: "question", name: "Questions" }
+	];
 </script>
 
-<div class="space-y-12 ">
-    <SocialFeedHeader
-        {filters}
-        {contentTypes}
-        bind:activeContentType
-        bind:activeFilter
-        bind:searchQuery
-         />
-    <SocialFeedPosts
-        {limit}
-        {contentTypes}
-        {activeFilter}
-        {activeContentType}
-        {searchQuery}
-         />
+<div class="space-y-12">
+	<SocialFeedHeader
+		{filters}
+		{contentTypes}
+		bind:activeContentType
+		bind:activeFilter
+		bind:searchQuery
+	/>
+	<SocialFeedPosts
+		{posts}
+		{limit}
+		{activeFilter}
+		{activeContentType}
+		{searchQuery}
+		{currentPath}
+	/>
 </div>
-
