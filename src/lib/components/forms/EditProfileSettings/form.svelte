@@ -2,87 +2,106 @@
     import * as Form from '$lib/components/ui/form';
     import { superForm } from 'sveltekit-superforms';
     import { yupClient } from 'sveltekit-superforms/adapters';
-    import { emailNotificationOptions, profileSettingsSchema, profileVisibilityOptions } from './schema';
-    import * as Select from '$lib/components/ui/select';
-   
-    import { Checkbox } from '$lib/components/ui/checkbox';
+    import { profileSettingsSchema } from './schema';
+    import { Input } from '$lib/components/ui/input';
     
     //form supervalidated
-    let { data, actionName } = $props();
+    let { data, actionName = "accountInfo" } = $props();
     
     let updated = $state(false);
 
     const form = superForm( data.editProfileSettingsForm, {
         dataType: 'json',
-        validators: yupClient(profileSettingsSchema),
+        validators: yupClient(profileSettingsSchema)
     })
 
-    const { form: formData, enhance } = form;
-
-
-    // select trigger content
-
-    const profileVisibilityTriggerContent = $derived(
-            profileVisibilityOptions.find(opt => opt.id === $formData.profileVisibility)?.label
-        )
+    const { form: formData, enhance, message } = form;
                 
     
 </script>
 
 
 
-<form class="space-y-10" action={`?/${actionName}`} method="POST" use:enhance>
-    <Form.Field class="text-left" {form} name="profileVisibility">
-        <Form.Control>
-            {#snippet children({ props })}
-                <Form.Label>Profile Visibility</Form.Label>
-                <Select.Root 
-                    type='single'
-                    onValueChange={() => {updated = true}}
-                    bind:value={$formData.profileVisibility}>
-                    <Select.Trigger class="w-xs" {...props}>
-                        {profileVisibilityTriggerContent}
-                    </Select.Trigger>
-                    <Select.Content>
-                        {#each profileVisibilityOptions as item}
-                            <Select.Item value={item.id}>{item.label}</Select.Item>
-                        {/each}
-                    </Select.Content>
-                </Select.Root>
-            {/snippet}
-        </Form.Control>
-        <Form.FieldErrors/>
-        <Form.Description>
-            If your profile is visible to others.
-        </Form.Description>
-    </Form.Field>
-    
-    <Form.Fieldset class="flex flex-col items-start" {form} name="emailNotifications">
-        <Form.Legend class="text-left mb-1">
-            Notification Opportunities
-        </Form.Legend>
-        <Form.Description class="text-xs mb-3">
-            Get notified for ...
-        </Form.Description>
-        {#each emailNotificationOptions as option}
-            {@const checked = $formData.emailNotifications[option.id]}
+<form class="space-y-6" action={`?/${actionName}`} method="POST" use:enhance>
+    <div class="grid gap-4 sm:grid-cols-2">
+        <Form.Field class="text-left" {form} name="first_name">
             <Form.Control>
                 {#snippet children({ props })}
-                    <div class="flex items-center space-x-2">
-                        <Checkbox
+                    <div class="space-y-2">
+                        <Form.Label>First Name</Form.Label>
+                        <Input
                             {...props}
-                            onCheckedChange={() => {updated = true}}
-                            bind:checked={$formData.emailNotifications[option.id]}
-                            value={option.id}
-                            />
-                        <Form.Label class="font-normal">
-                            {option.label}
-                        </Form.Label>
+                            class="h-10"
+                            bind:value={$formData.first_name}
+                            oninput={() => {updated = true}}
+                        />
                     </div>
                 {/snippet}
             </Form.Control>
-        {/each}
-    </Form.Fieldset>
+            <Form.FieldErrors/>
+        </Form.Field>
+
+        <Form.Field class="text-left" {form} name="last_name">
+            <Form.Control>
+                {#snippet children({ props })}
+                    <div class="space-y-2">
+                        <Form.Label>Last Name</Form.Label>
+                        <Input
+                            {...props}
+                            class="h-10"
+                            bind:value={$formData.last_name}
+                            oninput={() => {updated = true}}
+                        />
+                    </div>
+                {/snippet}
+            </Form.Control>
+            <Form.FieldErrors/>
+        </Form.Field>
+    </div>
+
+    <Form.Field class="text-left" {form} name="email">
+        <Form.Control>
+            {#snippet children({ props })}
+                <div class="space-y-2">
+                    <Form.Label>Email</Form.Label>
+                    <Input
+                        {...props}
+                        class="h-10"
+                        type="email"
+                        bind:value={$formData.email}
+                        oninput={() => {updated = true}}
+                    />
+                </div>
+            {/snippet}
+        </Form.Control>
+        <Form.FieldErrors/>
+    </Form.Field>
+
+    <Form.Field class="text-left" {form} name="username">
+        <Form.Control>
+            {#snippet children({ props })}
+                <div class="space-y-2">
+                    <Form.Label>Username</Form.Label>
+                    <Input
+                        {...props}
+                        class="h-10"
+                        bind:value={$formData.username}
+                        disabled
+                    />
+                </div>
+            {/snippet}
+        </Form.Control>
+        <Form.Description>
+            Username is read-only according to the current API contract.
+        </Form.Description>
+    </Form.Field>
+
+    {#if $message?.msg}
+        <p class={`text-sm ${$message?.error ? "text-destructive" : "text-secondary-foreground"}`}>
+            {$message.msg}
+        </p>
+    {/if}
+
     <Form.Button disabled={!updated}>
         Save Changes
     </Form.Button>
