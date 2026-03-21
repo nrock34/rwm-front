@@ -1,7 +1,7 @@
 <script>
-    import Badge from "$lib/components/ui/badge/badge.svelte";
+    import { Badge } from "$lib/components/ui/badge";
     import { buttonVariants } from "$lib/components/ui/button";
-    import Button from "$lib/components/ui/button/button.svelte";
+    import { Button } from "$lib/components/ui/button";
     import * as Dialog from "$lib/components/ui/dialog";
     import { ArrowDownToLine } from "lucide-svelte";
 
