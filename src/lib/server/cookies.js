@@ -1,27 +1,25 @@
-import { COOKIE_SECRET } from "$env/static/private";
-import { createHmac } from "crypto";
-import jwt from "jsonwebtoken"
+import { signCookieValue, verifyJwtNotExpired, verifySignedCookieValue } from "../../core/cookies/signed-cookie.js";
 
-export const sign = (value) => {
-    const hmac = createHmac('sha256', COOKIE_SECRET).update(value).digest('hex')
-    return `${value}....${hmac}`;
-}
+/**
+ * Compatibility shim that preserves the previous function name.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+export const sign = (value) => signCookieValue(value);
 
-export const verify = (signedValue) => {
-    const [value, sig] = signedValue.split('....');
-    if (!value || !sig) return undefined
+/**
+ * Compatibility shim that preserves the previous function name.
+ *
+ * @param {string} signedValue
+ * @returns {string | undefined}
+ */
+export const verify = (signedValue) => verifySignedCookieValue(signedValue);
 
-    const expectedSig = createHmac('sha256', COOKIE_SECRET).update(value).digest('hex')
-    return (sig === expectedSig) ? value : undefined;
-}
-
-export const verifyNotExpired = (v) => {
-    try {
-        jwt.verify(v, "12345")
-        return true
-    } catch (err) {
-        if (err instanceof jwt.TokenExpiredError) {
-            return false
-        } else return false
-    }
-}
+/**
+ * Compatibility shim that preserves the previous function name.
+ *
+ * @param {string} token
+ * @returns {boolean}
+ */
+export const verifyNotExpired = (token) => verifyJwtNotExpired(token);
