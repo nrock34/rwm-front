@@ -3,7 +3,7 @@
 
     let { program } = $props();
 
-    const descriptionParagraphs = program.fullDescription.split('\n\n')
+    const descriptionParagraphs = (program.fullDescription || program.description || "Program details are being updated.").split('\n\n')
 
 </script>
 
