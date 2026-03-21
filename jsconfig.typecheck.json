@@ -1,0 +1,38 @@
+{
+	"extends": "./jsconfig.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"noUncheckedIndexedAccess": true,
+		"skipLibCheck": true,
+		"maxNodeModuleJsDepth": 0
+	},
+	"files": [],
+	"include": [
+		".svelte-kit/ambient.d.ts",
+		"src/app.d.ts",
+		"src/types/**/*.d.ts",
+		"src/core/**/*.js",
+		"src/domains/**/*.js",
+		"src/lib/auth/**/*.js",
+		"src/lib/components/forms/community/**/*.js",
+		"src/routes/auth/**/*.js",
+		"src/routes/community/**/*.js",
+		"src/lib/server/newsletter/add-contact.js",
+		"src/lib/server/shared-actions/newsletter-signup.js",
+		"src/lib/components/forms/auth/signup-schema.js",
+		"src/lib/components/forms/auth/username-check.js",
+		"src/lib/stores/config.svelte.js",
+		"src/hooks.server.js",
+		"src/routes/+layout.server.js",
+		"tests/core/**/*.js",
+		"tests/domains/auth/**/*.js",
+		"tests/domains/community/**/*.js"
+	],
+	"exclude": [
+		"node_modules/**"
+	]
+}
