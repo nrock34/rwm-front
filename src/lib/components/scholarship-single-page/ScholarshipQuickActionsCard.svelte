@@ -1,47 +1,62 @@
 <script>
-  import ScholarshipSimilarsCard from './ScholarshipSimilarsCard.svelte';
-
-  import ScholarshipProviderContactCard from './ScholarshipProviderContactCard.svelte';
-
-  import ScholarshipDeadlineCard from './ScholarshipDeadlineCard.svelte';
-
-    import { AlertCircle, Clock, BadgeAlert, Bookmark, Calendar,
-             CheckCircle, DollarSign, ExternalLink, MapPin,
-              Share2, Star, Users, 
-              Check} from "lucide-svelte";
-    import Badge from "../ui/badge/badge.svelte";
     import * as Card from "../ui/card";
-    import { scholarship, similarScholarships } from "./testdata";
     import Button from "../ui/button/button.svelte";
-    import Toggle from "../ui/toggle/toggle.svelte";
-    import { getDaysUntil } from "$lib/helper-funcs/funcs";
-    import { SvelteSet } from 'svelte/reactivity'
-    import ScholarshipTimelineCard from "./ScholarshipTimelineCard.svelte";
+    import { scholarship as fallbackScholarship } from "./testdata";
 
+    let { scholarship = fallbackScholarship } = $props();
 
-    let isScholarshipSaved = $state(false)
+    const normalizeLink = (value) => {
+        if (typeof value !== "string") return null;
+        const trimmed = value.trim();
+        return trimmed.length > 0 ? trimmed : null;
+    };
 
-    let completedAppReqs = $state(new SvelteSet())
-    const updateCompletedAppReq = (id) => {
-        if (!completedAppReqs.delete(id)) completedAppReqs.add(id);
-    }
+    const actions = $derived.by(() => {
+        const contact = scholarship.contact ?? {};
+        const applicationLink = normalizeLink(scholarship.applicationLink);
+        const websiteLink = normalizeLink(contact.website);
+        const hasProviderContact = Boolean(
+            normalizeLink(contact.email) ||
+            normalizeLink(contact.phone) ||
+            normalizeLink(contact.address)
+        );
 
-    const daysLeft = getDaysUntil(scholarship.deadline)
-
+        return {
+            applicationLink,
+            websiteLink,
+            hasProviderContact,
+            hasAny: Boolean(applicationLink || websiteLink || hasProviderContact)
+        };
+    });
 </script>
 
-<Card.Root class="p-6 px-7 gap-0">
-    <h3 class="font-semibold text-foreground mb-4">Quick Actions</h3>
-    <div class="space-y-3">
-        <Button class="w-full">
-            I Want To Apply
-        </Button>
-        <Button class="w-full">
-            Visit Website
-        </Button>
-        <Button class="w-full">
-            Contact Provider
-        </Button>
-    </div>
+<Card.Root
+    class={actions.hasAny
+        ? "p-5 px-6 gap-0 bg-muted/10 border-border/70"
+        : "p-4 px-5 gap-0 bg-muted/10 border-border/70"}
+>
+    <h3 class="text-[0.95rem] font-semibold text-foreground mb-3">Quick Actions</h3>
+    {#if actions.hasAny}
+        <div class="space-y-3">
+            {#if actions.applicationLink}
+                <Button class="w-full" href={actions.applicationLink} rel="noopener noreferrer">
+                    I Want To Apply
+                </Button>
+            {/if}
+            {#if actions.websiteLink}
+                <Button class="w-full" href={actions.websiteLink} rel="noopener noreferrer">
+                    Visit Website
+                </Button>
+            {/if}
+            {#if actions.hasProviderContact}
+                <Button class="w-full" href="#provider-contact">
+                    Contact Provider
+                </Button>
+            {/if}
+        </div>
+    {:else}
+        <p class="text-[0.9rem] text-muted-foreground">
+            No actions available right now
+        </p>
+    {/if}
 </Card.Root>
-
