@@ -1,9 +1,8 @@
 import { updated } from "$app/state"
-import { API_URL } from "$env/static/private"
+import { env } from "$env/dynamic/private"
 import { error } from "@sveltejs/kit"
 
 function postcardDetail(postcard) {
-    console.log(postcard)
     if (postcard) {
         return {
             id: postcard.id,
@@ -39,9 +38,8 @@ function postcardDetail(postcard) {
 
 export const getPostcardsList = async (params) => {
 
-    console.log(params)
 
-    const api = new URL(`${API_URL}postcards/list`)
+    const api = new URL(`${env.API_URL}postcards/list`)
     for (let key in params) {
         if (params[key]) {
             api.searchParams.set(key, params[key])
@@ -63,7 +61,6 @@ export const getPostcardsList = async (params) => {
     }
 
     const data = await response.json()
-    // console.log(data)
     return {
         count: data.count,
         next: data.next,
@@ -74,8 +71,7 @@ export const getPostcardsList = async (params) => {
 
 
 export const getPostcardDetail = async (id) => {
-    console.log(id)
-    const api = new URL(`${API_URL}postcards/${id}`)
+    const api = new URL(`${env.API_URL}postcards/${id}`)
     const response = await fetch(api);
 
     if (!response.ok) {

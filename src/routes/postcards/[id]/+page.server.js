@@ -2,7 +2,6 @@ import { newsletterSignup } from '$lib/server/shared-actions/newsletter-signup.j
 
 export const load = async ({parent}) => {
     const data = await parent()
-    console.log(data)
     return { data }
 }
 
