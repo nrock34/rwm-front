@@ -1,87 +1,59 @@
 <script>
-    import { ChevronsLeft, ChevronsRight } from "lucide-svelte";
+    import PaginationControls from "$lib/components/shared/PaginationControls.svelte";
+    import { createListController } from "$lib/components/shared/listing/controller.svelte.js";
 
-    import * as Pagination from '$lib/components/ui/pagination'
-    import {Button} from "../ui/button/";
-    
+    let {
+        newsItems,
+        selectedCategory,
+        selectedSort,
+        searchQuery,
+        itemsPerPage,
+        currentPage,
+        paginatedNews = $bindable(),
+        filteredNews: filteredNewsUp = $bindable(),
+        passedClass
+    } = $props();
 
-    let { newsItems, selectedCategory, selectedSort,
-         searchQuery, itemsPerPage, currentPage,
-         paginatedNews = $bindable(), filteredNews: filteredNewsUp = $bindable(),
-        passedClass } = $props();
+    const listController = $derived.by(() => createListController({
+        items: newsItems,
+        filters: [
+            (item) => selectedCategory === "all" || item.category === selectedCategory
+        ],
+        search: (item) => {
+            if (!searchQuery) return true;
+            const query = searchQuery.toLowerCase();
+            return (
+                String(item.title ?? "").toLowerCase().includes(query) ||
+                String(item.excerpt ?? "").toLowerCase().includes(query)
+            );
+        },
+        sort: (a, b) => {
+            switch (selectedSort) {
+                case "date":
+                    return new Date(b.date).getTime() - new Date(a.date).getTime();
+                case "popularity":
+                    return (Number(b.views ?? 0) + Number(b.comments ?? 0) + Number(b.shares ?? 0))
+                        - (Number(a.views ?? 0) + Number(a.comments ?? 0) + Number(a.shares ?? 0));
+                case "relevance":
+                    return Number(b.views ?? 0) - Number(a.views ?? 0);
+                default:
+                    return 0;
+            }
+        },
+        page: currentPage,
+        perPage: itemsPerPage
+    }));
 
-    const filteredNews = $derived(newsItems.filter(item => {
-        const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-        const matchesSearch = searchQuery === '' || 
-            item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-        
-        return matchesCategory && matchesSearch
-    }))
-
-    const sortedNews = $derived.by(() => [...filteredNews].sort((b, a) => {
-        let ssort = selectedSort
-        switch (ssort) {
-            case 'date':
-                return new Date(b.date).getTime() - new Date(a.date).getTime();
-            case 'popularity':
-                return (b.views + b.comments + b.shares) - (a.views + a.comments + a.shares)
-            case 'relevance':
-                return b.views - a.views
-            default:
-                return 0;
-        }
-    }))
-
-    const totalPages = $derived(Math.ceil(sortedNews.length / itemsPerPage));
+    const totalPages = $derived(listController.totalPages);
 
     $effect(() => {
-        if (totalPages < currentPage){
-            currentPage = totalPages
+        if (currentPage !== listController.page) {
+            currentPage = listController.page;
         }
-        paginatedNews = sortedNews.slice(
-            (currentPage - 1) * itemsPerPage,
-            currentPage * itemsPerPage
-        )
-        filteredNewsUp = filteredNews
-    })
-    
-    
+        paginatedNews = listController.paginated;
+        filteredNewsUp = listController.filtered;
+    });
 
 </script>
 
-<div class={(" " + passedClass)}>
-{#if totalPages > 1}
-    <Pagination.Root bind:page={currentPage} count={totalPages} perPage={1} siblingCount={1}>
-        {#snippet children({ pages, currentPage})}
-            <Pagination.Content>
-                <Pagination.Item>
-                    <Pagination.PrevButton>
-                        <ChevronsLeft class="size-4"/>
-                    </Pagination.PrevButton>
-                </Pagination.Item>
-                {#each pages as page (page.key)}
-                    {#if page.type === "ellipsis"}
-                        <Pagination.Item>
-                            <PaginationEllipsis />
-                        </Pagination.Item>
-                    {:else}
-                        <Pagination.Item>
-                            <Pagination.Link {page} isActive={currentPage === page.value}>
-                                {page.value}
-                            </Pagination.Link>
-                        </Pagination.Item>
-                    {/if}
-                {/each}
-                <Pagination.Item>
-                    <Pagination.NextButton>
-                        <ChevronsRight class="size-4"/>
-                    </Pagination.NextButton>
-                </Pagination.Item>
-            </Pagination.Content>
-        {/snippet}
-    </Pagination.Root>
-{/if}
-
-</div>
-
+<PaginationControls bind:currentPage {totalPages} {passedClass} />
