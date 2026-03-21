@@ -4,7 +4,6 @@
     let { data } = $props()
     let { activityData} = data
 
-    console.log(data)
 </script>
 
 

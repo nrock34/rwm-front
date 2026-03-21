@@ -1,16 +1,21 @@
-import { ACS_TKN, API_URL } from '$env/static/private'
-import { error } from '@sveltejs/kit'
-import { getActivityData } from '../utils.js'
+import { error } from "@sveltejs/kit";
+import { loadProfileActivity } from "../../../domains/profile/index.js";
+import { asProfileFailure } from "../../../domains/profile/types.js";
 
+/** @type {import("./$types").PageServerLoad} */
+export const load = async ({ fetch, data, locals }) => {
+	const activityResult = await loadProfileActivity({
+		fetch,
+		accessToken: locals.token
+	});
 
-export const load = async ({ fetch, data }) => {
+	if (!activityResult.ok) {
+		const failure = asProfileFailure(activityResult);
+		throw error(failure.error.status || 500, failure.error.message);
+	}
 
-    let activityData = await getActivityData(API_URL, ACS_TKN, fetch, error)
-
-    console.log(activityData)
-
-    return {
-        ...data, activityData
-    }
-    
-}
+	return {
+		...data,
+		activityData: activityResult.data
+	};
+};
