@@ -1,8 +1,8 @@
 <script>
-	import { Button } from "$lib/components/ui/button/index.js";
-	import * as Card from "$lib/components/ui/card/index.js";
-	import { Label } from "$lib/components/ui/label/index.js";
-	import { Input } from "$lib/components/ui/input/index.js";
+	import { Button } from "$lib/components/ui/button";
+	import * as Card from "$lib/components/ui/card";
+	import { Label } from "$lib/components/ui/label";
+	import { Input } from "$lib/components/ui/input";
 	import { cn } from "$lib/utils.js";
 
 	import * as yup from "yup";
@@ -15,7 +15,7 @@
     import { error } from "@sveltejs/kit";
 
 
-	let { class: className, data, actionName, onSIgnup, ...restProps } = $props();
+	let { class: className, data, actionName, onSignup, ...restProps } = $props();
     let usernameExist = $state(false);
 
 	const id = $props.id();
