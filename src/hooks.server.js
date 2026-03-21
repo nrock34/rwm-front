@@ -1,70 +1,57 @@
-import {sequence} from '@sveltejs/kit/hooks';
-import * as Sentry from '@sentry/sveltekit';
-import { goto } from '$app/navigation';
-import { verify } from '$lib/server/cookies';
-import { redirect } from '@sveltejs/kit';
-import jwt from "jsonwebtoken"
+import { sequence } from "@sveltejs/kit/hooks";
+import * as Sentry from "@sentry/sveltekit";
+import { redirect } from "@sveltejs/kit";
+import { clearAuthCookies, getSessionState, validateAccessToken } from "$domains/auth/index.js";
+import { buildLoginRedirectUrl } from "$lib/auth/redirect.js";
 
 
 const authRoutes = [
-    '/profile',
-]
+	"/profile"
+];
 
+/**
+ * @param {string} pathName
+ * @param {readonly string[]} routes
+ * @returns {boolean}
+ */
 const isAuthRoute = (pathName, routes) => {
-    return routes.some(route =>
-        pathName === route || pathName.startsWith(`${route}/`)
-    )
-}
+	return routes.some((route) =>
+		pathName === route || pathName.startsWith(`${route}/`)
+	);
+};
 
+/** @type {import("@sveltejs/kit").Handle} */
 export const handle = sequence(async ({ event, resolve }) => {
 
-    const cookie = event.cookies.get('acs_tkn')
-    const rCookie = event.cookies.get('rfh_tkn')
-
-    const acsTkn = cookie ? verify(cookie) : null
-
+	const session = getSessionState(event.cookies);
 
 
 	if (isAuthRoute(event.url.pathname, authRoutes)) {
 
-        if (!rCookie){
-            redirect(303, '/auth/login', {invalidateAll: true})
-            return resolve(event)
-        }
+		if (!session.hasRefreshToken) {
+			throw redirect(303, buildLoginRedirectUrl(event.url));
+		}
 
-        if (!acsTkn) {
-            return resolve(event)
-        }
+		if (!session.accessToken) {
+			throw redirect(303, buildLoginRedirectUrl(event.url));
+		}
 
-        try {
-            if(jwt.verify(acsTkn, "12345")) {
-                event.locals.token = acsTkn
-            }
-        } catch (err) {
-            console.log(err)
-            if (err instanceof jwt.TokenExpiredError) {console.log('token expired')
-                //return resolve(event)
-            }
-            else if (err instanceof jwt.NotBeforeError || err instanceof jwt.JsonWebTokenError) {
-                console.log(err)
-                delete event.locals.token
-                event.cookies.delete('rfh_tkn', {'path': '/'})
-                event.cookies.delete('acs_tkn', {'path': '/'})
-                redirect(303, '/auth/login', {invalidateAll: true})
-                //return resolve(event)
-            }
-        }
+		const tokenValidation = validateAccessToken(session.accessToken);
+		if (tokenValidation.ok) {
+			event.locals.token = session.accessToken;
+		} else if (tokenValidation.error.code === "invalid_token") {
+			delete event.locals.token;
+			clearAuthCookies(event.cookies);
+			throw redirect(303, buildLoginRedirectUrl(event.url));
+		}
 	}
 
-    console.log(event.url.pathname.startsWith('/community/news/'))
-
-    if ((event.url.pathname.startsWith('/community/news/') || (event.url.pathname === '/community/news')) ||
-        event.url.pathname.startsWith('/community/updates')
-    ) {
-        const restOfRoute = event.url.pathname
-        console.log(86776)
-        await redirect (308, '/community/news-and-updates/')
-    }
+	if (
+		(event.url.pathname.startsWith("/community/news/") || event.url.pathname === "/community/news") ||
+		event.url.pathname.startsWith("/community/updates")
+	) {
+		throw redirect(308, "/community/news-and-updates");
+	}
 	const response = await resolve(event);
 	return response;
 });
