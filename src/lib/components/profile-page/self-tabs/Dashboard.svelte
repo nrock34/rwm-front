@@ -2,15 +2,14 @@
     import { Badge } from "$lib/components/ui/badge";
     import * as Card from "$lib/components/ui/card";
     import { Progress } from "$lib/components/ui/progress";
-    import Separator from "$lib/components/ui/separator/separator.svelte";
+    import { Separator } from "$lib/components/ui/separator";
     import { ExternalLink, Share } from "lucide-svelte";
     import { getActivityIcon } from "../helper-funcs";
-    import {  recentActivity, savedItems } from "../test";
 
 
-    let { applicationsData, activityData } = $props()
+    let { applicationsData = [], activityData = [], savedItemData = [] } = $props()
     const profileStats = [
-        {stat: 'Saved Items', value: savedItems.length},
+        {stat: 'Saved Items', value: savedItemData.length},
         {stat: 'Applications', value: applicationsData.length},
         {stat: 'Posts', value: 0},
         {stat: 'Member Since', value: 0}
@@ -60,11 +59,11 @@
                 <div key={idx} class="px-6 pt-1 py-4">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center justify-center space-x-3">
-                            <Badge class={`tracking-tight text-[0.625rem] py-[0.075rem] bg-secondary text-accent-foreground rounded-xl`}>
+                            <Badge class={`text-badge-xs py-badge-tight tracking-tight bg-secondary text-accent-foreground rounded-xl`}>
                                 {app.status.replace('-', ' ').toUpperCase()}
                             </Badge>
                             <div>
-                                <h4 class="font-medium text-[0.95rem] text-foreground">{app.title}</h4>
+                                <h4 class="text-body-sm font-medium text-foreground">{app.title}</h4>
                                 <p class="text-xs text-secondary-foreground">{app.provider}</p>
                             </div>
                         </div>
@@ -82,7 +81,7 @@
 
                     <div class="flex justify-center items-center space-x-2 pl-6">
                         <Progress class="" value={app.progress} />
-                        <span class="text-[0.725rem] text-secondary-foreground w-10 text-right">{app.progress}%</span>
+                        <span class="text-label-sm w-10 text-right text-secondary-foreground">{app.progress}%</span>
                     </div>
 
                 </div>

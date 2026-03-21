@@ -1,22 +1,39 @@
-import { API_URL, ACS_TKN } from '$env/static/private';
-import { savedItems } from '$lib/components/profile-page/test.js';
-// import { program } from '$lib/components/programs-page/single-program-view/test.js';
-import { error } from '@sveltejs/kit';
-import { getActivityData, getApplicationsData } from '../utils.js';
+import { error } from "@sveltejs/kit";
+import {
+	loadProfileActivity,
+	loadProfileApplications,
+	loadProfileSavedItems
+} from "../../../domains/profile/index.js";
+import { asProfileFailure } from "../../../domains/profile/types.js";
 
+/** @type {import("./$types").PageServerLoad} */
+export const load = async ({ fetch, data, locals }) => {
+	const [activityResult, applicationsResult, savedItemsResult] = await Promise.all([
+		loadProfileActivity({
+			fetch,
+			accessToken: locals.token
+		}),
+		loadProfileApplications({
+			fetch,
+			accessToken: locals.token
+		}),
+		loadProfileSavedItems({
+			fetch,
+			accessToken: locals.token
+		})
+	]);
 
+	for (const result of [activityResult, applicationsResult, savedItemsResult]) {
+		if (!result.ok) {
+			const failure = asProfileFailure(result);
+			throw error(failure.error.status || 500, failure.error.message);
+		}
+	}
 
-export const load = async ({ fetch, data }) => {
-    
-    let savedItemData
-
-    let activityData = await getActivityData(API_URL, ACS_TKN, fetch, error)
-    let applicationsData = await getApplicationsData(API_URL, ACS_TKN, fetch, error)
-
-    
-
-
-    return {
-         ...data, activityData, applicationsData,
-    }
-}
+	return {
+		...data,
+		activityData: activityResult.data,
+		applicationsData: applicationsResult.data,
+		savedItemData: savedItemsResult.data
+	};
+};
