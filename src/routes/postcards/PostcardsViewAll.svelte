@@ -12,7 +12,7 @@
     import { AspectRatio } from "$lib/components/ui/aspect-ratio"
     import Stamp from "$lib/assets/stamp.svelte";
     import stampSvg from "$lib/assets/stamp.svg?raw";
-    import Calendar from "$lib/components/ui/calendar/calendar.svelte";
+    import { Calendar } from "$lib/components/ui/calendar";
 
     
 
@@ -33,30 +33,30 @@
 
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-12 w-full h-full px-6 sm:px-8 md:px-10 lg:px-6">
+<div class="mx-auto grid h-full w-full max-w-[76rem] grid-cols-1 items-start justify-items-center gap-8 px-0 md:grid-cols-2 xl:grid-cols-3">
     {#each results as item, idx1}
 
         <!-- <AspectRatio ratio = {16/12}> -->
-            <Card.Root class={`relative py-0 shadow-none rounded-xs h-fit w-full bg-ring/10`}>
+            <Card.Root class={`relative mx-auto h-fit w-full max-w-[24rem] rounded-xs bg-ring/10 py-0 shadow-none`}>
                 <div class="px-2 py-2 h-full w-full">
-                    <div class="div relative flex-col h-full border-black/20 border-1 bg-gray-300">
+                    <div class="div relative flex-col h-full border border-border/60 bg-card/75">
                         <!-- <div class="absolute inset-x-0 top-0 relative h-48 w-full"> -->
                             <img class="object-cover h-90 w-full" src={item.image ?? "https://images.pexels.com/photos/32802434/pexels-photo-32802434.jpeg"}/>
                             <div class="absolute left-0 top-0">
                                 <div class={`flex p-3.25`}>
                                     <span class="flex gap-x-1 items-center bg-muted/30 px-2 py-0.75 rounded-xl backdrop-blur">
                                         <p class="text-xs font-semibold tracking-normal">{item.region}</p>
-                                        <Pin strokeWidth={1.25} class="w-4 h-4 text-foreground fill-red-400" />
+                                        <Pin strokeWidth={1.25} class="w-4 h-4 fill-primary text-foreground" />
                                     </span>
                                 </div>
                             </div>
                             <div class="absolute top-0 right-0 p-3">
-                                <Stamp class="w-11 h-11 fill-red-400/70"/>
+                                <Stamp class="w-11 h-11 fill-primary/70"/>
                             </div>
                         <!-- </div> -->
                         <!-- <div class="absolute inset-0 object-cover bg-muted/35 h-full w-full" src={item.image}/> -->
                         <!-- <div class='absolute inset-x-0 bottom-0 h- max-h-[65%] bg-white/30'></div> -->
-                        <div class={`absolute inset-x-0 bottom-0 grid grid-cols-3 md:gap-4 gap-8 max-h-[65%] w-full px-8 py-7 md:px-5 md:py-4 ${item.featured ? 'md:pt-2 pt-5' : 'md:pt-4 pt-7'} rounded-t-md bg-white/45 backdrop-blur-[6px]`}>
+                        <div class={`absolute inset-x-0 bottom-0 grid max-h-[65%] w-full grid-cols-3 gap-8 rounded-t-md bg-background/72 px-8 py-7 backdrop-blur-[6px] md:gap-4 md:px-5 md:py-4 ${item.featured ? 'md:pt-2 pt-5' : 'md:pt-4 pt-7'}`}>
                             <div class={`flex flex-col justify-between h-full col-span-2`}>
                                 <div class="h-max">
                                     <span>
@@ -112,4 +112,3 @@
         <!-- </AspectRatio> -->
     {/each}
 </div>
-

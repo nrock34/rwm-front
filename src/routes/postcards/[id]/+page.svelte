@@ -1,16 +1,16 @@
 <script>
     import * as Card from '$lib/components/ui/card';
-    import CardHeader from '$lib/components/ui/card/card-header.svelte';
+    import { CardHeader } from '$lib/components/ui/card';
     import { Root } from 'postcss';
-    import * as Avatar from "$lib/components/ui/avatar/index.js";
+    import * as Avatar from "$lib/components/ui/avatar";
 
-    import Button from '$lib/components/ui/button/button.svelte';
-    import Input from '$lib/components/ui/input/input.svelte';
-    import Separator from '$lib/components/ui/separator/separator.svelte';
+    import { Button } from '$lib/components/ui/button';
+    import { Input } from '$lib/components/ui/input';
+    import { Separator } from '$lib/components/ui/separator';
 
     import { Calendar, User, MessageSquare, MessageSquareReply, Share, Share2 } from 'lucide-svelte';
-    import * as Dialog from '$lib/components/ui/dialog/index.js';
-    import DialogTitle from '$lib/components/ui/dialog/dialog-title.svelte';
+    import * as Dialog from '$lib/components/ui/dialog';
+    import { DialogTitle } from '$lib/components/ui/dialog';
     import { enhance } from '$app/forms';
     import { fly } from 'svelte/transition';
 
@@ -103,7 +103,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex space-x-3.5 items-center">
                             <Avatar.Root class='w-8 h-8'>
-                                <Avatar.Fallback class="text-xs tracking-tight font-semibold bg-indigo-200">
+                                <Avatar.Fallback class="bg-secondary/55 text-xs font-semibold tracking-tight">
                                     MR
                                 </Avatar.Fallback>
                             </Avatar.Root>
@@ -151,7 +151,7 @@
                                     <p in:fly={{y: 10}} class="pt-1 pl-1 capitalize tracking-normal text-destructive text-xs ">Error: {form.error} - {form.description} </p>
                                 {/if}
                                 {#if form?.status === 'success'}
-                                    <p in:fly={{y: 10}} class="pt-1 pl-1 leading-none tracking-normal text-green-600 text-xs ">Success, you're now subscribed to the newsletter. Stay tuned for updates sent to your email!</p>
+                                    <p in:fly={{y: 10}} class="pt-1 pl-1 text-xs leading-none tracking-normal text-primary">Success, you're now subscribed to the newsletter. Stay tuned for updates sent to your email!</p>
                                 {/if}
                             </div>
                         <Button type="submit" class="w-full mt-1.5">

@@ -39,7 +39,7 @@
                 src={postcard.banner ?? "https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg"}/>
 
             <div 
-                class="absolute top-0 w-full h-[45vh] sm:h-[50vh] lg:h-[60vh]  inset-x-0 bg-black/40"
+                class="absolute inset-x-0 top-0 h-[45vh] w-full bg-background/52 sm:h-[50vh] lg:h-[60vh]"
             />
 
             <div 
@@ -69,7 +69,7 @@
                         </Breadcrumb.Item>
                         <Breadcrumb.Separator/>
                         <Breadcrumb.Item>
-                            <Breadcrumb.Page class="text-white text-lg font-semibold">{postcard.title}</Breadcrumb.Page>
+                            <Breadcrumb.Page class="text-foreground text-lg font-semibold">{postcard.title}</Breadcrumb.Page>
                         </Breadcrumb.Item>
                     </Breadcrumb.List>
                 </Breadcrumb.Root>
@@ -79,7 +79,7 @@
             </div>
 
             <div>
-            <h1 class="p-3 text-accent text-4xl sm:text-6xl bg-white/1 rounded-xl font-bold mb-0 max-w-240">
+            <h1 class="mb-0 max-w-240 rounded-xl bg-card/8 p-3 text-4xl font-bold text-accent sm:text-6xl">
                 {postcard.title}
             </h1>
             <div class="px-3 flex items-center space-x-4 mt-2">
@@ -94,7 +94,7 @@
     </div>
     
 
-    <div class="mx-auto items-start px-6 sm:px-12 md:px-16 lg:px-24 xl:px-26 max-w-[80rem] h-full mt-5">
+    <div class="page-detail-shell mx-auto mt-5 h-full items-start px-6 sm:px-12 md:px-16 lg:px-24 xl:px-26">
         <svelte:boundary>
             
             {@render children()}
@@ -124,4 +124,3 @@
     
     
 </div>
-
