@@ -1,54 +1,58 @@
-import { KEILA_TKN } from "$env/static/private"
-import { json } from "@sveltejs/kit"
+import { env } from "$env/dynamic/private";
 
+const KEILA_URL = "http://keila.cr.romewithme.com/api/v1/contacts";
 
-const KEILA_URL = 'http://keila.cr.romewithme.com/api/v1/contacts'
+/**
+ * @typedef {{
+ *   title: string;
+ *   detail: string;
+ * }} NewsletterError
+ */
 
+/**
+ * @typedef {{
+ *   errors?: NewsletterError[];
+ *   [key: string]: unknown;
+ * }} NewsletterResponse
+ */
+
+/**
+ * @param {string | null | undefined} email
+ * @param {string | undefined} [firstName]
+ * @param {string | undefined} [lastName]
+ * @param {string[]} [tags]
+ * @returns {Promise<string | NewsletterResponse | false>}
+ */
 export const addContact = async (email, firstName = undefined, lastName = undefined, tags = []) => {
-    if (!email) {
-        return false
-    }
+	if (!email) return false;
 
-    const body = {
-        data: {
-            data: {
-                tags: [
-                    ...tags
-                ]
-            },
-            email: email,
-        }
-    }
+	/** @type {{ data: { data: { tags: string[] }; email: string; first_name?: string; last_name?: string } }} */
+	const body = {
+		data: {
+			data: {
+				tags: [...tags]
+			},
+			email
+		}
+	};
 
-    if (firstName) data.first_name = firstName;
-    if (lastName) data.last_name = lastName;
+	if (firstName) body.data.first_name = firstName;
+	if (lastName) body.data.last_name = lastName;
 
-    console.log(body)
+	const response = await fetch(KEILA_URL, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${env.KEILA_TKN}`
+		},
+		body: JSON.stringify(body)
+	});
 
-    const response = await fetch(KEILA_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${KEILA_TKN}`
-        },
-        body: JSON.stringify(body)
-    })
-    console.log(response.status)
-    if (response.status === 400) {
-        const jsonData = await response.json()
-        console.log(jsonData)
-        if (jsonData.errors) {
-            console.log(jsonData)
-            return jsonData
-        }
-    }
-    else if (!response.ok) {
-        const jsonData = await response.json()
-        console.log(jsonData)
-        return jsonData
-    } else {
-        const jsonData = await response.json()
-        return jsonData.data.id
-    }
+	if (!response.ok) {
+		const jsonData = /** @type {NewsletterResponse} */ (await response.json());
+		return jsonData;
+	}
 
-}
+	const jsonData = /** @type {{ data?: { id?: string } }} */ (await response.json());
+	return jsonData.data?.id ?? "";
+};
