@@ -1,39 +1,38 @@
 <script>
-    
-    import { Users, MessageCircle, Heart, Share2, Globe, Bell, CheckCircle, Camera, MapPin, Calendar } from 'lucide-svelte';
-    import Input from '../ui/input/input.svelte';
-    import Button from '../ui/button/button.svelte';
-    import { Search } from '@lucide/svelte';
-    
-    let { form } = $props()
+    import { enhance } from "$app/forms";
+    import { fly } from "svelte/transition";
 
-    import { enhance } from '$app/forms';
+    import { Button } from "../ui/button";
+    import { Input } from "../ui/input";
 
+    let { form } = $props();
 </script>
 
-<form use:enhance method="POST" action={'?/newsletterSignup'} class="flex flex-col sm:flex-row sm:items-start gap-4 max-w-md mx-auto">
-                    <!-- <label for="email">
-                        Email:
-                    </label> -->
-                    <div class="flex-1 flex-col flex items-start gap-y-1">
-                        <Input
-                            name="email"
-                            value={form?.email}
-                            type="email"
-                            placeholder="Enter your email address"
-                            class="flex-1 border-border border-2"
-                        />
-                        {#if form?.error}
-                            <p in:fly={{y: 10}} class="pt-1 pl-1 capitalize tracking-normal text-destructive text-xs ">Error: {form.error} - {form.description} </p>
-                        {/if}
-                        {#if form?.status === 'success'}
-                            <p in:fly={{y: 10}} class="pt-1 pl-1 leading-none tracking-normal text-green-600 text-xs ">Success, you're now subscribed to the newsletter. Stay tuned for updates sent to your email!</p>
-                        {/if}
+<form
+    use:enhance
+    method="POST"
+    action="?/newsletterSignup"
+    class="mx-auto flex max-w-md flex-col gap-4 sm:flex-row sm:items-start"
+>
+    <div class="flex flex-1 flex-col items-start gap-y-1">
+        <Input
+            name="email"
+            value={form?.email}
+            type="email"
+            placeholder="Enter your email address"
+            class="flex-1 border-2 border-border"
+        />
+        {#if form?.error}
+            <p in:fly={{ y: 10 }} class="pt-1 pl-1 text-xs capitalize tracking-normal text-destructive">
+                Error: {form.error} - {form.description}
+            </p>
+        {/if}
+        {#if form?.status === "success"}
+            <p in:fly={{ y: 10 }} class="pt-1 pl-1 text-xs leading-none tracking-normal text-green-600">
+                Success, you're now subscribed to the newsletter. Stay tuned for updates sent to your email!
+            </p>
+        {/if}
+    </div>
 
-                    </div>
-                    
-                    <Button type="submit" class="btn-primary cursor-pointer">
-                        Subscribe
-                    </Button>
-                </form>
-
+    <Button type="submit" class="btn-primary cursor-pointer">Subscribe</Button>
+</form>
