@@ -6,6 +6,7 @@ import Link from "./navigation-menu-link.svelte";
 import List from "./navigation-menu-list.svelte";
 import Trigger from "./navigation-menu-trigger.svelte";
 import Viewport from "./navigation-menu-viewport.svelte";
+export { navigationMenuTriggerStyle } from "./navigation-menu-trigger.svelte";
 
 export {
 	Root,
