@@ -1,39 +1,52 @@
-import { ACS_TKN, API_URL } from '$env/static/private';
-import { error } from '@sveltejs/kit';
+import { error } from "@sveltejs/kit";
+import { loadProfileSummary } from "../../domains/profile/index.js";
+import { asProfileFailure } from "../../domains/profile/types.js";
 
-export const load = async ({ fetch }) => {
+/**
+ * @param {unknown} details
+ * @param {string} fallback
+ * @returns {string}
+ */
+function getApiErrorMessage(details, fallback) {
+	if (typeof details === "string" && details.length > 0) {
+		return details;
+	}
 
-    let profileData;
+	if (details instanceof Error && typeof details.message === "string" && details.message.length > 0) {
+		return details.message;
+	}
 
-    const fetchProfileDataResp = await fetch(`${API_URL}users/me/profile`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${ACS_TKN}`
-        }
-    })
-    if (!fetchProfileDataResp.ok) {
-        error(fetchProfileDataResp.status, "Error fetching profile")
-    } else {
+	if (details && typeof details === "object" && !Array.isArray(details)) {
+		const record = /** @type {Record<string, unknown>} */ (details);
 
-        let data = await fetchProfileDataResp.json()
-        let { name, profile, username, location, major, phone_num, university } = data
+		if (typeof record.error === "string" && record.error.length > 0) {
+			return record.error;
+		}
 
-        //console.log(data)
+		if (typeof record.detail === "string" && record.detail.length > 0) {
+			return record.detail;
+		}
+	}
 
-        profileData = { 
-            name: name,
-            email: 'sarah.johnson@email.com',
-            phone: '+1 (555) 123-4567',
-            location: location,
-            university: university,
-            major: major,
-            bio: profile.bio,
-            avatar: profile.avatar
-        }
-    }
-
-    return {
-        profileData
-    }
-
+	return fallback;
 }
+
+/** @type {import("./$types").LayoutServerLoad} */
+export const load = async ({ fetch, locals }) => {
+	const profileResult = await loadProfileSummary({
+		fetch,
+		accessToken: locals.token
+	});
+
+	if (!profileResult.ok) {
+		const failure = asProfileFailure(profileResult);
+		throw error(
+			failure.error.status || 500,
+			getApiErrorMessage(failure.error.details, failure.error.message)
+		);
+	}
+
+	return {
+		profileData: profileResult.data
+	};
+};
