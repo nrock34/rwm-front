@@ -1,8 +1,8 @@
 <script>
-	import { Button } from "$lib/components/ui/button/index.js";
-	import * as Card from "$lib/components/ui/card/index.js";
-	import { Label } from "$lib/components/ui/label/index.js";
-	import { Input } from "$lib/components/ui/input/index.js";
+	import { Button } from "$lib/components/ui/button";
+	import * as Card from "$lib/components/ui/card";
+	import { Label } from "$lib/components/ui/label";
+	import { Input } from "$lib/components/ui/input";
 	import { cn } from "$lib/utils.js";
 
 	import * as yup from "yup";
@@ -44,6 +44,7 @@
 		</Card.Header>
 		<Card.Content>
 			<form method="POST" action={actionName} use:enhance>
+				<input type="hidden" name="redirectTo" value={data?.redirectTo ?? ""} />
 				<div class="grid gap-6">
 					<div hidden class="flex flex-col gap-4">
 						<Button variant="outline" class="w-full">
