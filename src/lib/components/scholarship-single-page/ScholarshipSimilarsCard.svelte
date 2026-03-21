@@ -1,41 +1,19 @@
 <script>
-  import ScholarshipProviderContactCard from './ScholarshipProviderContactCard.svelte';
-
-  import ScholarshipDeadlineCard from './ScholarshipDeadlineCard.svelte';
-
-    import { AlertCircle, Clock, BadgeAlert, Bookmark, Calendar,
-             CheckCircle, DollarSign, ExternalLink, MapPin,
-              Share2, Star, Users, 
-              Check} from "lucide-svelte";
-    import Badge from "../ui/badge/badge.svelte";
+    import { Star } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { scholarship, similarScholarships } from "./testdata";
-    import Button from "../ui/button/button.svelte";
-    import Toggle from "../ui/toggle/toggle.svelte";
-    import { getDaysUntil } from "$lib/helper-funcs/funcs";
-    import { SvelteSet } from 'svelte/reactivity'
-    import ScholarshipTimelineCard from "./ScholarshipTimelineCard.svelte";
+    import { similarScholarships as fallbackSimilarScholarships } from "./testdata";
 
-
-    let isScholarshipSaved = $state(false)
-
-    let completedAppReqs = $state(new SvelteSet())
-    const updateCompletedAppReq = (id) => {
-        if (!completedAppReqs.delete(id)) completedAppReqs.add(id);
-    }
-
-    const daysLeft = getDaysUntil(scholarship.deadline)
-
+    let { similarScholarships = fallbackSimilarScholarships } = $props();
 </script>
 
-<Card.Root class="p-6 px-7 gap-0">
-    <h3 class="font-semibold text-foreground mb-4">Similar Scholarships</h3>
-    <div class="space-y-4">
+<Card.Root class="p-5 px-6 gap-0">
+    <h3 class="text-[0.95rem] font-semibold text-foreground mb-4">Similar Scholarships</h3>
+    <div class="divide-y divide-border">
         {#each similarScholarships as similar}
-            <div key={similar.id} class="border border-border rounded p-3">
+            <div key={similar.id} class="py-3 first:pt-0 last:pb-0">
                 <a
                     href={`/scholarships/${similar.id}`}
-                    class="font-medium text-foreground hover:text-primary text-sm"
+                    class="font-medium text-foreground hover:text-primary text-[0.92rem]"
                 >
                     {similar.title}
                 </a>
@@ -51,4 +29,3 @@
         {/each}
     </div>
 </Card.Root>
-

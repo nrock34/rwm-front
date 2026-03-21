@@ -1,43 +1,27 @@
 <script>
-  import ScholarshipApplicationProcess from './ScholarshipApplicationProcess.svelte';
-
-
-    import ScholarshipQuickActionsCard from './ScholarshipQuickActionsCard.svelte';
-    import ScholarshipSimilarsCard from './ScholarshipSimilarsCard.svelte';
-    import ScholarshipProviderContactCard from './ScholarshipProviderContactCard.svelte';
-    import ScholarshipDeadlineCard from './ScholarshipDeadlineCard.svelte';
-    import ScholarshipTimelineCard from "./ScholarshipTimelineCard.svelte";
-
-
-    import { AlertCircle, Clock, BadgeAlert, Bookmark, Calendar,
-             CheckCircle, DollarSign, ExternalLink, MapPin,
-              Share2, Star, Users, 
-              Check} from "lucide-svelte";
-    import Badge from "../ui/badge/badge.svelte";
+    import { Check } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { scholarship, similarScholarships } from "./testdata";
-    import Button from "../ui/button/button.svelte";
     import Toggle from "../ui/toggle/toggle.svelte";
-    import { getDaysUntil } from "$lib/helper-funcs/funcs";
-    import { SvelteSet } from 'svelte/reactivity'
-    
+    import { SvelteSet } from 'svelte/reactivity';
+    import { scholarship as fallbackScholarship } from "./testdata";
 
+    let { scholarship = fallbackScholarship } = $props();
 
-    let isScholarshipSaved = $state(false)
-
-    let completedAppReqs = $state(new SvelteSet())
+    let completedAppReqs = $state(new SvelteSet());
     const updateCompletedAppReq = (id) => {
         if (!completedAppReqs.delete(id)) completedAppReqs.add(id);
-    }
+    };
 
-    const daysLeft = getDaysUntil(scholarship.deadline)
-
+    const requirements = $derived(Array.isArray(scholarship.requirements) ? scholarship.requirements : []);
 </script>
 
- <Card.Root class="p-6 px-7 gap-0">
-    <h2 class="text-xl font-semibold text-foreground mb-4">Application Requirements</h2>
+ <Card.Root class="p-5 px-6 gap-0 border-primary/20 bg-primary/5">
+    <div class="mb-4">
+        <h2 class="text-lg font-semibold text-foreground">Application Requirements</h2>
+        <p class="mt-1 text-[0.85rem] text-muted-foreground">Check off items as you prepare your application.</p>
+    </div>
     <div class="space-y-2">
-        {#each scholarship.requirements as requirement, idx}
+        {#each requirements as requirement, idx}
             {@const isSelected = completedAppReqs.has(requirement.id)}
             <div class="flex items-center space-x-2">
                 <Toggle
@@ -48,9 +32,8 @@
 
                     <Check class={completedAppReqs.has(requirement.id) ? '' : 'hidden'}/>
                 </Toggle>
-                <span class="text-sm text-muted-foreground"> {requirement.req} </span>
+                <span class="text-[0.92rem] text-muted-foreground"> {requirement.req} </span>
             </div>
         {/each}
     </div>
 </Card.Root>
-
