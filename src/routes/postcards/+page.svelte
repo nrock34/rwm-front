@@ -4,14 +4,14 @@
     import { get } from "svelte/store";
     import * as Card from "$lib/components/ui/card";
     import * as Avatar from "$lib/components/ui/avatar";
-    import AvatarImage from "$lib/components/ui/avatar/avatar-image.svelte";
+    import { AvatarImage } from "$lib/components/ui/avatar";
     import { Eye, Filter, Heart, Search } from "lucide-svelte";
     import { innerWidth, innerHeight } from 'svelte/reactivity/window';
     import { Badge } from "$lib/components/ui/badge";
     import { Input } from "$lib/components/ui/input";
     import { Button } from "$lib/components/ui/button";
     import { Separator } from "$lib/components/ui/separator";
-    import * as Pagination from "$lib/components/ui/pagination/index.js";
+    import * as Pagination from "$lib/components/ui/pagination";
     import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-svelte';
     import { goto } from '$app/navigation';
 
@@ -19,7 +19,7 @@
 
     import { page } from '$app/state';
     import { range } from '$lib/utils';
-    import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
+    import { ScrollArea } from '$lib/components/ui/scroll-area';
     import { getContext } from 'svelte';
  
     
@@ -40,7 +40,6 @@
     })
 
     const config = getContext('config')
-    console.log(config)
 
     let postcardsResults = $state('')
 
@@ -66,18 +65,17 @@
             alt='Postcards Banner Image'
             src={`${config?.postcardsHeroIMG ?? 'https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d'}`}
         />
-            {console.log(featPostcard)}
-        <div class="absolute inset-0 bg-gradient-to-b from-foreground/80 via-foreground/40 to-foreground/20 backdrop-blur-[3px]"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-background/92 via-background/68 to-background/44 backdrop-blur-[3px]"></div>
         <div class="absolute inset-0 mx-4 sm:mx-8 md:mx-14">
             
-            <div class="flex flex-col h-full w-full justify-center py-1 text-primary-foreground max-w-6xl py-6 px-6 sm:px-8 md:px-6  justify-self-center">
+            <div class="flex h-full w-full max-w-6xl flex-col justify-center justify-self-center px-6 py-6 text-foreground sm:px-8 md:px-6">
                 <h6 class="text-xs sm:text-sm tracking-widest mb-1">COLLECTION</h6>
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Explore Postcards</h2>
-                <p class="text-sm sm:text-base md:text-lg pt-2 text-muted tracking-wide font-light leading-tight">
+                <p class="pt-2 text-sm font-light leading-tight tracking-wide text-muted-foreground sm:text-base md:text-lg">
                     Browse curated travel stories from our community. Filter by region or author and collect your favorites.
                 </p>
                 {#if featPostcard}
-                <div class="mt-12 bg-white/70 grid grid-cols-2 p-8 m-2 min-h-60 max-w-140 ring-ring/60 ring-2 rounded-sm">
+                <div class="mt-12 m-2 grid min-h-60 max-w-140 grid-cols-2 rounded-sm bg-card/80 p-8 ring-2 ring-ring/60">
                     <div class="flex flex-col text-foreground">
                         <span class="text-xs tracking-wide font-light">
                             TOP PICK
@@ -95,7 +93,7 @@
                                     {#if (idx === 1)}
                                         <p class="w-full inline-flex justify-center font-script text-foreground font-[600]  ">{featPostcard.location}</p>
                                     {:else}
-                                        <p class="texm-sm">‎</p>
+                                        <p class="text-sm">‎</p>
                                     {/if}
                                     <div class="border border-foreground/70"></div>
                                 {/each}
@@ -108,11 +106,11 @@
         </div>
     </section>
 
-    <section class="w-full max-w-7xl py-6 px-6 sm:px-8 md:px-6 justify-self-center ">
+    <section class="w-full mx-auto max-w-7xl py-6 px-6 sm:px-8 md:px-6 justify-self-center ">
         <div class="grid grid-cols-6 gap-0">
             <div class="col-span-6 px-6 sm:px-8 md:px-10 lg:px-6">
                 <div class="sticky top-20 pb-4 w-full mt-2 sm:mt-6">
-                    <div class="px-8 gap-x-4 space-y-3 p-2 w-full justify-self-center py-4 flex flex-col lg:flex-row space-x-4 bg-white rounded-lg border-border border-1 ">
+                    <div class="w-full justify-self-center space-y-3 rounded-lg border border-border bg-card px-8 py-4 lg:flex lg:items-end lg:gap-x-4 lg:space-y-0">
                         <!-- search section -->
                         <div class="space-y-1.5 w-full">
                             <h2 class="text-xs sm:text-sm font-semibold text-foreground/90 flex items-center gap-1">
