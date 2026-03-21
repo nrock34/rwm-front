@@ -1,52 +1,27 @@
 <script>
-  import ScholarshipEligibilityReqCard from './ScholarshipEligibilityReqCard.svelte';
-
-  import ScholarshipReqTrackerCard from './ScholarshipReqTrackerCard.svelte';
-
-  import ScholarshipApplicationProcess from './ScholarshipApplicationProcess.svelte';
-
-
-    import ScholarshipQuickActionsCard from './ScholarshipQuickActionsCard.svelte';
-    import ScholarshipSimilarsCard from './ScholarshipSimilarsCard.svelte';
-    import ScholarshipProviderContactCard from './ScholarshipProviderContactCard.svelte';
-    import ScholarshipDeadlineCard from './ScholarshipDeadlineCard.svelte';
-    import ScholarshipTimelineCard from "./ScholarshipTimelineCard.svelte";
-
-
-    import { AlertCircle, Clock, BadgeAlert, Bookmark, Calendar,
-             CheckCircle, DollarSign, ExternalLink, MapPin,
-              Share2, Star, Users, 
-              Check} from "lucide-svelte";
-    import Badge from "../ui/badge/badge.svelte";
+    import { CheckCircle } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { scholarship, similarScholarships } from "./testdata";
-    import Button from "../ui/button/button.svelte";
-    import Toggle from "../ui/toggle/toggle.svelte";
-    import { getDaysUntil } from "$lib/helper-funcs/funcs";
-    import { SvelteSet } from 'svelte/reactivity'
-    
+    import { scholarship as fallbackScholarship } from "./testdata";
 
+    let { scholarship = fallbackScholarship } = $props();
 
-    let isScholarshipSaved = $state(false)
-
-    let completedAppReqs = $state(new SvelteSet())
-    const updateCompletedAppReq = (id) => {
-        if (!completedAppReqs.delete(id)) completedAppReqs.add(id);
-    }
-
-    const daysLeft = getDaysUntil(scholarship.deadline)
-
+    const benefits = $derived(Array.isArray(scholarship.benefits) ? scholarship.benefits : []);
 </script>
 
-<Card.Root class="p-6 px-8 gap-0">
-                <h2 class="text-xl">Benefits & Coverage</h2>
-                <div class="grid grid-cols-2 gap-3">
-                    {#each scholarship.benefits as benefit, idx}
-                        <div key={idx} class="flex items-center space-x-2">
-                            <CheckCircle class="h-4 w-4 text-green-600"/>
-                            <span class="text-sm text-muted-foreground">{benefit}</span>
-                        </div>
-                    {/each}    
+<Card.Root class="p-5 px-6 gap-0">
+    <h2 class="text-lg font-semibold text-foreground mb-4">Benefits & Coverage</h2>
+    {#if benefits.length > 0}
+        <div class="grid grid-cols-2 gap-3">
+            {#each benefits as benefit, idx}
+                <div key={idx} class="flex items-center space-x-2">
+                    <CheckCircle class="h-4 w-4 text-green-600"/>
+                    <span class="text-[0.92rem] text-muted-foreground">{benefit}</span>
                 </div>
-            </Card.Root>
-
+            {/each}
+        </div>
+    {:else}
+        <p class="text-[0.92rem] text-muted-foreground">
+            Benefits and coverage details have not been provided yet.
+        </p>
+    {/if}
+</Card.Root>
