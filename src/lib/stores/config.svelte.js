@@ -1,16 +1,37 @@
-import { API_URL } from "$env/static/private"
+import { getApiUrl, resolveApiUrl } from "../../core/env/server.js";
 
-let cachedConfig = null 
+/** @typedef {Record<string, unknown>} SiteConfig */
+
+/** @type {SiteConfig | null} */
+let cachedConfig = null;
 
 export function newConfig() {
-    let config = cachedConfig
+	/** @type {SiteConfig | null} */
+	let config = cachedConfig;
 
-    async function loadConfig(params) {
-        if (cachedConfig) return
-        const res = await fetch(`${API_URL}site-properties`)
-        cachedConfig = await res.json()
-        config = cachedConfig
-    }
+	async function loadConfig() {
+		if (cachedConfig) return;
+		const apiUrl = getApiUrl();
 
-    return { config, loadConfig }
+		const endpoint = resolveApiUrl("site-properties", apiUrl);
+		const res = await fetch(endpoint, {
+			headers: { Accept: "application/json" }
+		});
+
+		if (!res.ok) {
+			const body = await res.text();
+			throw new Error(`Failed config fetch (${res.status}) from ${endpoint}: ${body.slice(0, 200)}`);
+		}
+
+		const contentType = res.headers.get("content-type") ?? "";
+		if (!contentType.includes("application/json")) {
+			const body = await res.text();
+			throw new Error(`Expected JSON from ${endpoint}, got "${contentType}". Body starts with: ${body.slice(0, 200)}`);
+		}
+
+		cachedConfig = /** @type {SiteConfig} */ (await res.json());
+		config = cachedConfig;
+	}
+
+	return { config, loadConfig };
 }

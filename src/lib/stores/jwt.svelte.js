@@ -1,3 +1,4 @@
+import { browser } from "$app/environment";
 import { jwtDecode } from "jwt-decode";
 import { getContext, setContext } from "svelte"
 
@@ -5,17 +6,11 @@ class TokenStateClass {
 
     constructor(token) {
         this.token = $state(token || null)
-        if (this.isExpired) {
+        if (this.token && !this.isExpired && browser) {
+            this.scheduleRefresh()
+        } else if (this.isExpired) {
             this.token = null
         }
-
-        const printTokenEXpiry = ()=> {
-            setTimeout(() => {
-                console.log("this token is expired: ", this.isExpired)
-                printTokenEXpiry()
-            }, 1000)
-        }
-        
     }
     
     refreshTimer = $state(null)
@@ -26,30 +21,83 @@ class TokenStateClass {
     }
 
     getExpiration = () => {
-        let exp = this.getPayload()?.exp
-        console.log(exp)
-        console.log(exp * 1000, "\n", Date.now())
+        const exp = this.getPayload()?.exp
         return exp ? exp * 1000 : null
     }
 
-    refreshAccessToken = async (msg = "") => {
+    clear = () => {
+        if (this.refreshTimer) {
+            clearTimeout(this.refreshTimer)
+            this.refreshTimer = null
+        }
+        this.token = null
+    }
+
+    syncToken = (token) => {
+        if (!token) {
+            this.clear()
+            return
+        }
+
+        if (this.token === token && this.refreshTimer) {
+            return
+        }
+
+        this.token = token
+        if (this.isExpired) {
+            this.clear()
+            return
+        }
+
+        if (!browser) {
+            return
+        }
+
+        this.scheduleRefresh()
+    }
+
+    refreshAccessToken = async () => {
+        if (!browser) {
+            return
+        }
+
         const res = await fetch('/auth/refresh', {method: 'POST'});
+        const body = await res.json().catch(() => null);
+
         if (res.ok) {
-            let { acs_tkn } = await res.json();
-            this.token = acs_tkn;
-            await this.scheduleRefresh()
+            const nextToken = typeof body?.acs_tkn === "string" ? body.acs_tkn : null
+            this.syncToken(nextToken)
         } else {
-            console.log(await res.json())
-            this.token = null
+            this.clear()
         }
        
     }
 
-    scheduleRefresh = async () => {
+    scheduleRefresh = () => {
+        if (!browser) {
+            return
+        }
+
+        if (!this.token) {
+            this.clear()
+            return
+        }
+
+        if (this.refreshTimer) {
+            clearTimeout(this.refreshTimer)
+        }
+
+        const expiration = this.getExpiration()
+        if (!expiration) {
+            this.clear()
+            return
+        }
+
         const now = Date.now()
-        const refresh = this.getExpiration() - now - (1 * 30 * 1000)
+        const refresh = expiration - now - (1 * 30 * 1000)
         if (refresh <= 0) {
-            await this.refreshAccessToken()
+            void this.refreshAccessToken()
+            return
         }
         this.refreshTimer = setTimeout(async () => {
             await this.refreshAccessToken()
