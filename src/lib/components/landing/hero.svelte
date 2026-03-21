@@ -1,8 +1,8 @@
 <script>
     import { ArrowRight, Newspaper } from "@lucide/svelte";
     import { Award, CheckCircle, Globe } from "lucide-svelte";
-    import TypingText from "../ui/typing-text/TypingText.svelte";
-    import Button from "../ui/button/button.svelte";
+    import { TypingText } from "../ui/typing-text";
+    import { Button } from "../ui/button";
     import { getContext } from "svelte";
 
     let wordIndex = 0;
@@ -15,7 +15,6 @@
 
     let tempLocation = 'Rome'
     let tempLocationTagline = 'Eternal City'
-    console.log(siteConfig?.heroBackgroundIMG)
 </script>
 
 
