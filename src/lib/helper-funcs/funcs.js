@@ -1,6 +1,7 @@
-
-
-
+/**
+ * @param {string} dateString
+ * @returns {string}
+ */
 export const getTimeAgo = (dateString) => {
     const now = new Date();
     const date = new Date(dateString);
@@ -19,6 +20,10 @@ export const getTimeAgo = (dateString) => {
     // return date.toLocaleDateString();
 };
 
+/**
+ * @param {string} deadline
+ * @returns {number | "TODAY"}
+ */
 export const getDaysUntil = (deadline) => {
 
     const today = new Date();
@@ -30,11 +35,14 @@ export const getDaysUntil = (deadline) => {
     if (diffDays < 0) return diffDays
     if (diffDays < 1) return 'TODAY';
     return diffDays;
-
 }
 
-export const capitalize = (string) => {
+/**
+ * @param {string} value
+ * @returns {string}
+ */
+export const capitalize = (value) => {
 
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
 
 }
