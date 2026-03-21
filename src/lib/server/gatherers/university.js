@@ -1,9 +1,9 @@
-import { API_URL } from "$env/static/private"
+import { env } from "$env/dynamic/private"
 import { error } from "@sveltejs/kit"
 
 export const getUniDetail = async (id) => {
 
-    const response = await fetch(`${API_URL}universities/${id}`)
+    const response = await fetch(`${env.API_URL}universities/${id}`)
 
     if (!response.ok) {
         if (response.status === 404) {

@@ -1,9 +1,9 @@
-import { API_URL } from "$env/static/private"
+import { env } from "$env/dynamic/private"
 import { error } from "@sveltejs/kit"
 import { getUniDetail } from "./university"
 
 export const getProgramDetail = async (id) => {
-    const response = await fetch(`${API_URL}programs/${id}`)
+    const response = await fetch(`${env.API_URL}programs/${id}`)
 
     if (!response.ok) {
         if (response.status === 404) return error(
@@ -11,13 +11,10 @@ export const getProgramDetail = async (id) => {
         )
     }
 
-    // console.log(await response.json())
 
     const data = await response.json()
-    //console.log(data)
 
     const university = data.provider.university ? await getUniDetail(data.provider.university) : undefined
-   // console.log(university)
     const programData = {
 
         id: data.id,
@@ -58,14 +55,13 @@ export const getProgramDetail = async (id) => {
         programData.university.students = programData.university.size
         delete programData.university.size
     }
-    console.log(programData)
     return programData
 
 }
 
 
 export const getProgramList = async ({params, url}) => {
-    const api = new URL(url ?? `${API_URL}programs/list`)
+    const api = new URL(url ?? `${env.API_URL}programs/list`)
     
     for (let key in params) {
         if (params[key]) {
@@ -103,8 +99,6 @@ export const getProgramList = async ({params, url}) => {
             requirements: program.requirements
         }
     })
-    // console.log(data)
-    // console.log(data.next)
     return {
         next: data.next?.split('cursor=')[1],
         prev: data.previous?.split('cursor=')[1],
@@ -113,7 +107,7 @@ export const getProgramList = async ({params, url}) => {
 }
 
 export const getProgramCountries = async () => {
-    const res = await fetch(`${API_URL}programs/countries`);
+    const res = await fetch(`${env.API_URL}programs/countries`);
 
     if (!res.ok) {
         return {
