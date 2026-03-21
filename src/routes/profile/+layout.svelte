@@ -2,12 +2,12 @@
     import { Bookmark, Calendar, Mail, MessageSquare, Phone, Settings2, MapPin, User, IdCard } from "lucide-svelte";
     import { Button } from "$lib/components/ui/button";
     import * as Card from "$lib/components/ui/card";
+    import AuthGuard from "$lib/components/auth/AuthGuard.svelte";
     import Activity from "$lib/components/profile-page/self-tabs/Activity.svelte";
     import ApplicationTracker from "$lib/components/profile-page/self-tabs/ApplicationTracker.svelte";
     import Bookmarked from "$lib/components/profile-page/self-tabs/Bookmarked.svelte";
     import Dashboard from "$lib/components/profile-page/self-tabs/Dashboard.svelte";
     import Settings from "$lib/components/profile-page/self-tabs/Settings.svelte";
-    // import { profileData } from "$lib/components/profile-page/test";
     import Info from "$lib/components/profile-page/self-tabs/Info.svelte";
 
     let activeTab = $state('settings');
@@ -33,79 +33,92 @@
         tabs.find((tab) => tab.id === activeTab)?.component()
     )
     
-    console.log( data )
 
 
 </script>
 
+<AuthGuard>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid lg:grid-cols-4 gap-8">
 
-    <div class="grid lg:grid-cols-4 gap-8">
+            <!-- profile sidebar -->
+            <div class="lg:col-span-1">
 
-        <!-- profile sidebar -->
-        <div class="lg:col-span-1">
-
-            <Card.Root class="p-6 gap-0 mb-6">
-                <div class="text-center mb-4">
-                    <div class="relative inline-block">
-                        <img
-                            src={profileData.avatar}
-                            alt={profileData.name}
-                            class="w-24 h-24 rounded-full object-cover mx-auto"
-                        />
+                <Card.Root class="p-6 gap-0 mb-6">
+                    <div class="text-center mb-4">
+                        <div class="relative inline-block">
+                            {#if profileData.avatar}
+                                <img
+                                    src={profileData.avatar}
+                                    alt={profileData.name}
+                                    class="w-24 h-24 rounded-full object-cover mx-auto"
+                                />
+                            {:else}
+                                <div class="w-24 h-24 rounded-full bg-muted flex items-center justify-center mx-auto">
+                                    <User class="h-10 w-10 text-muted-foreground" />
+                                </div>
+                            {/if}
+                        </div>
+                        <h2 class="text-xl font-semibold text-foreground mt-3">
+                            {profileData.name}
+                        </h2>
+                        <p class="text-sm text-muted-foreground">
+                            {profileData.major || "Major not set"}
+                        </p>
+                        <p class="text-sm text-muted-foreground">
+                            {profileData.university || "University not set"}
+                        </p>
                     </div>
-                    <h2 class="text-xl font-semibold text-foreground mt-3">
-                        {profileData.name}
-                    </h2>
-                    <p class="text-sm text-muted-foreground">{profileData.major}</p>
-                    <p class="text-sm text-muted-foreground">{profileData.university}</p>
-                </div>
 
-                <div class="space-y-2.5">
-                    <div class="flex items-center space-x-2.5 text-sm">
-                        <Mail class="h-5 w-5 text-secondary-foreground" />
-                        <span class="text-secondary-foreground">{profileData.email}</span>
+                    <div class="space-y-2.5">
+                        <div class="flex items-center space-x-2.5 text-sm">
+                            <Mail class="h-5 w-5 text-secondary-foreground" />
+                            <span class="text-secondary-foreground">
+                                {profileData.email || "Email not set"}
+                            </span>
+                        </div>
+                        <div class="flex items-center space-x-2.5 text-sm">
+                            <MapPin class="h-5 w-5 text-secondary-foreground" />
+                            <span class="text-secondary-foreground">
+                                {profileData.location || "Location not set"}
+                            </span>
+                        </div>
+                        <p class="text-sm text-secondary-foreground mt-3.5">
+                            {profileData.bio || "Add a bio to complete your profile."}
+                        </p>
                     </div>
-                    <div class="flex items-center space-x-2.5 text-sm">
-                        <MapPin class="h-5 w-5 text-secondary-foreground" />
-                        <span class="text-secondary-foreground">{profileData.location}</span>
-                    </div>
-                    <p class="text-sm text-secondary-foreground mt-3.5">
-                        {profileData.bio}
-                    </p>
-                </div>
 
-            </Card.Root>
+                </Card.Root>
 
 
-            <!-- side navigation -->
-            <nav class="space-y-1.5">
-                {#each tabs as tab}
-                    {@const IconComponent = tab.icon}
-                    <Button
-                        href={`${tab.id}`}
-                        data-sveltekit-noscroll
-                        data-sveltekit-preload-data="hover"
-                        key={tab.id}
-                        onclick={() => activeTab = tab.id}
-                        class={`w-full items-center space-x-2 px-4 py-6 shadow-none bg-transparent 
-                            ${activeTab === tab.id
-                                ? 'bg-primary text-foreground/90' 
-                                : 'text-foreground/70 hover:bg-muted hover:text-foreground'} justify-start
-                        `}>
-                        <IconComponent class=" h-4 w-4" />
-                        <span class="text-sm font-medium">{tab.name}</span>
-                    </Button>
-                {/each}
-            </nav>
+                <!-- side navigation -->
+                <nav class="space-y-1.5">
+                    {#each tabs as tab}
+                        {@const IconComponent = tab.icon}
+                        <Button
+                            href={`${tab.id}`}
+                            data-sveltekit-noscroll
+                            data-sveltekit-preload-data="hover"
+                            key={tab.id}
+                            onclick={() => activeTab = tab.id}
+                            class={`w-full items-center space-x-2 px-4 py-6 shadow-none bg-transparent 
+                                ${activeTab === tab.id
+                                    ? 'bg-primary text-foreground/90' 
+                                    : 'text-foreground/70 hover:bg-muted hover:text-foreground'} justify-start
+                            `}>
+                            <IconComponent class=" h-4 w-4" />
+                            <span class="text-sm font-medium">{tab.name}</span>
+                        </Button>
+                    {/each}
+                </nav>
+            </div>
+
+            <div class="lg:col-span-3">
+                {@render children()}
+                <!-- <ActiveTabComponent { data }/> -->
+            </div>
+
         </div>
-
-        <div class="lg:col-span-3">
-            {@render children()}
-            <!-- <ActiveTabComponent { data }/> -->
-        </div>
-
     </div>
-
-</div>
+</AuthGuard>
