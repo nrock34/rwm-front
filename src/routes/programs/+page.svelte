@@ -1,21 +1,19 @@
 <script>
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import ProgramsViewAll from "$lib/components/programs-page/ProgramsVIewAll.svelte";
-    import Button from "$lib/components/ui/button/button.svelte";
+    import ProgramsViewAll from "$lib/components/programs-page/ProgramsViewAll.svelte";
+    import { Button } from "$lib/components/ui/button";
     import { getContext, onMount } from "svelte";
 
     let { data } = $props();
 
     let { programCountries } = data
     
-    //console.log(data)
     const urlparams = page.url.searchParams
 
     const getMoreResults = async (next) => {
         const response = await fetch(`/programs/getNext?cursor=${next}&${urlparams.toString()}`);
         if (!response.ok) {
-            console.log('error fetching more programs')
             return
         } else {
             return await response.json()
@@ -64,7 +62,6 @@
 
         goto(`?${urlparams.toString()}`, {keepFocus: true, replaceState: false})
 
-        console.log('after hydration ', results)
     })
 
     onMount(() => {
@@ -73,7 +70,6 @@
 
     const config = getContext('config')
 
-    //console.log(data)
 
 </script>
 
@@ -81,11 +77,11 @@
     <title>Browse Programs - RomeWithMe</title>
 </svelte:head>
 
-<div class="bg-muted">
+<div class="bg-background">
     <div class="relative">
         <img class="object-cover h-70 sm:h-80 md:h-90 lg:h-100 w-full" src={config.programHeroIMG ?? 'https://images.pexels.com/photos/28838309/pexels-photo-28838309.jpeg'}/>
         <div class="absolute inset-x-0 top-0 backdrop-blur-[3px] w-full h-full"></div>
-        <div class="absolute inset-x-0 top-0 bg-gradient-to-t from-white/70 to-white/50 w-full h-full opacity-80"></div>
+        <div class="absolute inset-x-0 top-0 h-full w-full bg-gradient-to-t from-background/85 via-background/72 to-background/58"></div>
         <div class="absolute top-0 flex flex-col items-center justify-center min-w-full my-auto h-full gap-y-8 p-8 sm:p-14 lg:p-20">
             <div class="mx-auto text-center max-w-3xl">
                 <h3 class="text-md md:text-lg tracking-wider font-bold uppercase">Go Global</h3>
