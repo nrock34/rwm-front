@@ -1,62 +1,60 @@
-import { API_URL, ACS_TKN } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { error } from '@sveltejs/kit'
-
-console.log(API_URL)
 
 
 export const load = async ({ fetch, params }) => {
+    if (!env.API_URL || !env.ACS_TKN) {
+        throw error(500, 'API_URL or ACS_TKN is not configured');
+    }
+
     const profileUserId = params.id;
 
     let profileData;
     let recentPostsData;
     
-    const fetchRecentPostsIdsResponse = await fetch(`${API_URL}authors/${profileUserId}/posts`, {
+    const fetchRecentPostsIdsResponse = await fetch(`${env.API_URL}authors/${profileUserId}/posts`, {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': `Bearer ${ACS_TKN}`
+            'Authorization': `Bearer ${env.ACS_TKN}`
         }
     })
     if (!fetchRecentPostsIdsResponse.ok) {
-        console.log('ERROR')
-        error(fetchRecentPostsIdsResponse.status)
+        throw error(fetchRecentPostsIdsResponse.status)
     } else {
         let data = await fetchRecentPostsIdsResponse.json()
-        console.log(data)
 
         if (data.posts) {
             const profileRecentPosts = Promise.all((await data.posts.map(
                 async (postId) => {
-                    let fetchPostResponse = await fetch(`${API_URL}posts/${postId}`, {
+                    let fetchPostResponse = await fetch(`${env.API_URL}posts/${postId}`, {
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${ACS_TKN}`
+                            'Authorization': `Bearer ${env.ACS_TKN}`
                         }
                     })
                     if (fetchPostResponse.ok) {
                         let postData = await fetchPostResponse.json()
                         return {'id': postId, 'data': postData}
                     } 
-                    error(fetchPostResponse.status, 'Could not load recent posts.')
+                    throw error(fetchPostResponse.status, 'Could not load recent posts.')
                 }
             )))
             recentPostsData = await profileRecentPosts;
-            console.log(recentPostsData)
         }
     }
 
 
 
-    const fetchProfileDataResponse = await fetch(`${API_URL}users/${profileUserId}/profile`, {
+    const fetchProfileDataResponse = await fetch(`${env.API_URL}users/${profileUserId}/profile`, {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': `Bearer ${ACS_TKN}`
+            'Authorization': `Bearer ${env.ACS_TKN}`
         }
     })
     if (!fetchProfileDataResponse.ok) {
-        console.log('ERROR')
-        error(fetchProfileDataResponse.status, "Error retrieving profile")
+        throw error(fetchProfileDataResponse.status, "Error retrieving profile")
     } else {
         let data = await fetchProfileDataResponse.json()
         let { 
@@ -87,20 +85,13 @@ export const load = async ({ fetch, params }) => {
                 helpfulVotes: null
             },
             badges: [
-                { name: 'Local Expert', color: 'bg-blue-100 text-blue-700' },
-                { name: 'Top Contributor', color: 'bg-purple-100 text-purple-700' },
-                { name: 'Photography Pro', color: 'bg-green-100 text-green-700' }
+                { name: 'Local Expert', tone: 'blue' },
+                { name: 'Top Contributor', tone: 'purple' },
+                { name: 'Photography Pro', tone: 'green' }
             ],
             recentPosts: await recentPostsData,
         }
     }
 
-
-    
-
-    console.log(recentPostsData)
-    //console.log(await publicProfileRecentPosts)
-    console.log(profileUserId)
-
-    return await { profileData }
+    return { profileData }
 }

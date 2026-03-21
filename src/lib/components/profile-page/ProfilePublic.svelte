@@ -1,16 +1,28 @@
 <script>
     import { Award, Calendar, Eye, MapPin, MessageSquare, Star, User } from "lucide-svelte";
     import * as Card from "../ui/card";
-    //import { userProfile } from "./test";
     import { Badge } from "../ui/badge";
     import {Button} from "../ui/button";
 
-    let isFollowing = $state(false);
-    let { profileData } = $props()
+	    let isFollowing = $state(false);
+	    let { profileData } = $props()
 
-    let userProfile = profileData
+	    let userProfile = profileData
 
-</script>
+		function getBadgeToneClass(tone) {
+			switch (tone) {
+				case "blue":
+					return "tone-pill tone-pill--blue";
+				case "purple":
+					return "tone-pill tone-pill--purple";
+				case "green":
+					return "tone-pill tone-pill--green";
+				default:
+					return "bg-muted text-muted-foreground";
+			}
+		}
+
+	</script>
 
 <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -109,12 +121,12 @@
             <Card.Root class="p-6 gap-0">
 
                 <h3 class="font-semibold text-foreground mb-4">Achievments</h3>
-                <div class="space-y-2">
-                    {#each userProfile.badges as badge, idx}
-                        <Badge class={`${badge.color} w-full justify-center`}>
-                            {badge.name}
-                        </Badge>
-                    {/each}
+	                <div class="space-y-2">
+	                    {#each userProfile.badges as badge, idx}
+	                        <Badge class={`${getBadgeToneClass(badge.tone)} w-full justify-center`}>
+	                            {badge.name}
+	                        </Badge>
+	                    {/each}
                 </div>
             </Card.Root>
 
@@ -138,10 +150,10 @@
                         <div key={idx} class="border-1 border-border/40 rounded p-4">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="badge-outline text-xs capitalize">{contrib.type}</span>
-                                <div class="flex items-center space-x-1">
-                                    <Star class="h-3 w-3 text-yellow-500 fill-current"/>
-                                    <span class="text-xs font-medium">{contrib.rating}</span>
-                                </div>
+	                            <div class="flex items-center space-x-1">
+	                                    <Star class="tone-star h-3 w-3 fill-current"/>
+	                                    <span class="text-xs font-medium">{contrib.rating}</span>
+	                                </div>
                             </div>
                             <h3 class="font-medium text-foreground mb-1">{contrib.title}</h3>
                             <p class="text-sm text-muted-foreground mb-2">{contrib.description}</p>
