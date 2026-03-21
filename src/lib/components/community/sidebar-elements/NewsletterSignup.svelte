@@ -1,38 +1,35 @@
 <script>
-    import { Button } from "$lib/components/ui/button";
-    import { Input } from "$lib/components/ui/input";
-    import * as Card from "$lib/components/ui/card";
-    import { Mail } from "lucide-svelte";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
+	import * as Card from "$lib/components/ui/card";
+	import { Mail } from "lucide-svelte";
 
+	let { result = null } = $props();
 </script>
 
+<Card.Root class="gap-2 border-ring bg-ring/10 sm:gap-4">
+	<Card.Header class="gap-1 sm:gap-2">
+		<div class="flex items-center gap-2 sm:gap-3">
+			<Mail class="w-4" />
+			<h3 class="text-xs font-semibold text-foreground sm:text-sm">Want to Stay Updated?</h3>
+		</div>
+			<p class="text-meta-xs text-secondary-foreground sm:text-xs">
+				Get monthly updates with the latest community highlights and opportunities.
+			</p>
+	</Card.Header>
 
-<Card.Root class="bg-ring/10 gap-2 sm:gap-4 border-ring">
-    <Card.Header class="gap-1 sm:gap-2">
-        <div class="flex items-center space-x-2 sm:space-x-3">
-            <Mail class="w-4" />
-            <h3 class="text-xs sm:text-sm font-semibold text-foreground">Want to Stay Updated?</h3>
-        </div>
-        <p class="text-secondary-foreground text-[0.65rem] sm:text-xs">
-            Get monthly updates with the latest community highlights & opportunities.</p>
-    </Card.Header>
+	<Card.Content>
+		<form class="space-y-1 sm:space-y-3" method="POST" action="?/newsletterSignup">
+			<Input name="email" type="email" placeholder="Enter your email" class="h-7 text-xs sm:h-11 sm:text-sm" required />
+			<Button type="submit" class="h-6 w-full text-xs sm:text-sm">Subscribe</Button>
+		</form>
 
-    <Card.Content>
-        <form class="space-y-1 sm:space-y-3">
-            <Input
-                type="email"
-                placeholder="Enter your email"
-                class="h-7 sm:h-11 text-xs sm:text-sm" 
-            />
-            <Button 
-                type="submit"
-                class="w-full h-6 text-xs sm:text-sm"
-                >
-                Subscribe
-            </Button>
-        </form>
-        <p class="text-[0.60rem] text-secondary-foreground mt-2 ml-[1px]">
-            Unsubscribe anytime.
-        </p>
-    </Card.Content>
+		{#if result?.status === "success"}
+			<p class="mt-2 text-xs text-secondary-foreground">You’re subscribed. We’ll keep you posted.</p>
+		{:else if result?.error}
+			<p class="mt-2 text-xs text-destructive">{result.description ?? result.error}</p>
+		{/if}
+
+			<p class="text-micro-xs mt-2 ml-[1px] text-secondary-foreground">Unsubscribe anytime.</p>
+		</Card.Content>
 </Card.Root>
