@@ -1,56 +1,62 @@
 <script>
-  import ScholarshipDeadlineCard from './ScholarshipDeadlineCard.svelte';
-
-    import { AlertCircle, Clock, BadgeAlert, Bookmark, Calendar,
-             CheckCircle, DollarSign, ExternalLink, MapPin,
-              Share2, Star, Users, 
-              Check} from "lucide-svelte";
-    import Badge from "../ui/badge/badge.svelte";
+    import { ExternalLink } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { scholarship, similarScholarships } from "./testdata";
-    import Button from "../ui/button/button.svelte";
-    import Toggle from "../ui/toggle/toggle.svelte";
-    import { getDaysUntil } from "$lib/helper-funcs/funcs";
-    import { SvelteSet } from 'svelte/reactivity'
-    import ScholarshipTimelineCard from "./ScholarshipTimelineCard.svelte";
+    import { scholarship as fallbackScholarship } from "./testdata";
 
+    let { scholarship = fallbackScholarship } = $props();
 
-    let isScholarshipSaved = $state(false)
-
-    let completedAppReqs = $state(new SvelteSet())
-    const updateCompletedAppReq = (id) => {
-        if (!completedAppReqs.delete(id)) completedAppReqs.add(id);
-    }
-
-    const daysLeft = getDaysUntil(scholarship.deadline)
-
+    const contact = $derived(scholarship.contact ?? {});
+    const website = $derived(
+        typeof contact.website === "string" && contact.website.trim().length > 0 ? contact.website : null
+    );
+    const hasAnyContact = $derived(
+        Boolean(contact.email || contact.phone || contact.address || website)
+    );
 </script>
 
-<Card.Root class="p-6 px-7 gap-0">
-    <h3 class="font-semibold text-foreground mb-4">Contact Information</h3>
-    <div class="space-y-3 text-sm">
-        <div>
-            <p class="font-medium text-foreground">Email</p>
-            <p class="text-muted-foreground">{scholarship.contact.email}</p>
+<Card.Root
+    id="provider-contact"
+    class={hasAnyContact
+        ? "p-5 px-6 gap-0 bg-muted/15 border-border/70"
+        : "p-4 px-5 gap-0 bg-muted/15 border-border/70"}
+>
+    <h3 class="text-[0.95rem] font-semibold text-foreground mb-3">Contact Information</h3>
+    {#if hasAnyContact}
+        <div class="space-y-3 text-[0.92rem]">
+            {#if contact.email}
+                <div>
+                    <p class="font-medium text-foreground">Email</p>
+                    <p class="text-muted-foreground">{contact.email}</p>
+                </div>
+            {/if}
+            {#if contact.phone}
+                <div>
+                    <p class="font-medium text-foreground">Phone</p>
+                    <p class="text-muted-foreground">{contact.phone}</p>
+                </div>
+            {/if}
+            {#if website}
+                <div>
+                    <p class="font-medium text-foreground">Website</p>
+                    <a
+                        class="flex items-center"
+                        href={website}
+                        rel="noopener noreferrer">
+                        Visit Website
+                        <ExternalLink class="h-3 w-3 ml-1"/>
+                    </a>
+                </div>
+            {/if}
+            {#if contact.address}
+                <div>
+                    <p class="font-medium text-foreground">Address</p>
+                    <p class="text-muted-foreground">{contact.address}</p>
+                </div>
+            {/if}
         </div>
-        <div>
-            <p class="font-medium text-foreground">Phone</p>
-            <p class="text-muted-foreground">{scholarship.contact.phone}</p>
-        </div>
-        <div>
-            <p class="font-medium text-foreground">Website</p>
-            <a
-                class="flex items-center "
-                href={scholarship.contact.website}
-                rel="noopener noreferrer">
-                Visit Website
-                <ExternalLink class="h-3 w-3 ml-1"/>
-            </a>
-        </div>
-        <div>
-            <p class="font-medium text-foreground">Address</p>
-            <p class="text-muted-foreground">{scholarship.contact.address}</p>
-        </div>
-    </div>
+    {:else}
+        <p class="text-[0.9rem] text-muted-foreground">
+            Contact information is not available right now.
+        </p>
+    {/if}
 </Card.Root>
-
