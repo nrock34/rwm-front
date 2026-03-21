@@ -1,5 +1,5 @@
 <script>
-    import Button from "../ui/button/button.svelte";
+    import { Button } from "../ui/button";
 
 </script>
 <section class="py-20 bg-gradient-to-br from-primary/90 via-primary/80 to-secondary text-primary-foreground">

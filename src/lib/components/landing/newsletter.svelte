@@ -1,6 +1,6 @@
 <script>
-    import Button from "../ui/button/button.svelte";
-    import Input from "../ui/input/input.svelte";
+    import { Button } from "../ui/button";
+    import { Input } from "../ui/input";
 
     import { fly } from "svelte/transition";
     import { enhance } from "$app/forms";
