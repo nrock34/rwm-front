@@ -7,16 +7,15 @@
     import * as Select from '$lib/components/ui/select';
    
     import { Checkbox } from '$lib/components/ui/checkbox';
-    import Input from '$lib/components/ui/input/input.svelte';
+    import { Input } from '$lib/components/ui/input';
     import { CameraIcon } from 'lucide-svelte';
 
     import { today, getLocalTimeZone } from "@internationalized/date";
 
-    import Button from '$lib/components/ui/button/button.svelte';
-    import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+    import { Button } from '$lib/components/ui/button';
+    import { Textarea } from '$lib/components/ui/textarea';
     import UniversitySelect from '../utils/UniversitySelect.svelte';
     import { range } from '$lib/utils';
-    import SelectItem from '$lib/components/ui/select/select-item.svelte';
  
     let value = $state()
     let updated = $state(false)
@@ -33,7 +32,9 @@
 
     let currentYear = today(getLocalTimeZone()).year
     let yearOptions = range(currentYear-20, currentYear+8)
-    $formData.gradYear = currentYear
+    if (!$formData.grad_year) {
+        $formData.grad_year = currentYear
+    }
     // select trigger content
                 
     
@@ -74,7 +75,7 @@
                     </Form.Control>
                 </Form.Field>
 
-                <Form.Field {form} name="year">
+                <Form.Field {form} name="grad_year">
                     <Form.Control>
                         {#snippet children({ props })}
                             <Form.Label>Graduation Year</Form.Label>
