@@ -1,18 +1,7 @@
 <script>
-	import { cn } from "$lib/utils.js";
+	import CalendarMonths from "$lib/components/ui/calendar/calendar-months.svelte";
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		children,
-		...restProps
-	} = $props();
+	const props = $props();
 </script>
 
-<div
-	bind:this={ref}
-	class={cn("relative flex flex-col gap-4 md:flex-row", className)}
-	{...restProps}
->
-	{@render children?.()}
-</div>
+<CalendarMonths {...props} />
