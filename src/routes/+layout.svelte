@@ -1,19 +1,31 @@
 <script>
 	import '../app.css';
-	import { NavigationMenuRoot, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '$lib/components/ui/navigation-menu/';
-    import { navigationMenuTriggerStyle } from '$lib/components/ui/navigation-menu/navigation-menu-trigger.svelte';
 	import { Toaster } from "$lib/components/ui/sonner"
     import { setTokenState } from '$lib/stores/jwt.svelte';
     import { onMount } from 'svelte';
     import Footer from '$lib/components/layout/footer.svelte';
     import { setContext } from 'svelte';
+    import { page } from "$app/state";
     import Navigation from '$lib/components/layout/navigation.svelte';
 
 	let { children, data } = $props();
 
+    function hidesAppChrome(pathname) {
+        return pathname === "/auth/login" ||
+            pathname === "/auth/signup" ||
+            pathname.startsWith("/onboarding");
+    }
+
 	setContext('config', data.config);
 
-	const tokenState = setTokenState()
+	const tokenState = setTokenState(data.acs_tkn)
+    const showHeader = $derived(!hidesAppChrome(page.url.pathname));
+    const showFooter = $derived(!hidesAppChrome(page.url.pathname));
+
+	$effect(() => {
+		tokenState.syncToken(data.acs_tkn)
+	})
+
 	onMount(() => {
 		if (!data.acs_tkn) {
 			tokenState.refreshAccessToken()
@@ -34,16 +46,23 @@
 </svelte:head>
 
 <div class="min-h-screen flex flex-col">
-	<header class="sticky top-0 w-full backdrop-blur-[4px] z-50">
-		<Navigation class="bg-muted/70 py-2.5 pt-3 border-b-3 border-b-accent-foreground"/>
-	</header>
+	{#if showHeader}
+		<header class="sticky top-0 w-full backdrop-blur-[4px] z-50">
+			<Navigation
+				auth={data.auth}
+				viewer={data.viewer}
+				class="bg-muted/70 py-2.5 pt-3 border-b-3 border-b-accent-foreground"
+			/>
+		</header>
+	{/if}
 
 	<main class="flex-grow">
 		{@render children()}
 	</main>
 		
-	<div class="scrollerFooter shrink-0">
-		<Footer />
-	</div>
+	{#if showFooter}
+		<div class="scrollerFooter shrink-0">
+			<Footer />
+		</div>
+	{/if}
 </div>
-
