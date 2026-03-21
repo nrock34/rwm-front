@@ -10,7 +10,8 @@
         {
             "binding": "PFP_BUCKET",
             "bucket_name": "rwm-pfp",
-            "preview_bucket_name": "pfprwm"
+            "preview_bucket_name": "rwm-pfp",
+            "remote": true,
         },
     ],
     "compatibility_flags": ["nodejs_compat", "nodejs_als",],
