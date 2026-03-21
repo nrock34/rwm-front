@@ -1,8 +1,3 @@
-import { ACS_TKN, API_URL } from "$env/static/private"
-import { applications } from "$lib/components/profile-page/test"
-import { error } from "@sveltejs/kit"
-
-
 export const getActivityData = async ( API_URL, ACS_TKN, fetch, error) => {
 
     let activityData
@@ -33,7 +28,6 @@ export const getActivityData = async ( API_URL, ACS_TKN, fetch, error) => {
             }
         )
         )
-        console.log(activityData)
     }
 
     return activityData
@@ -59,8 +53,6 @@ export const getApplicationsData = async ( API_URL, ACS_TKN, fetch, error) => {
     } else {
         applicationsData = await fetchApplicationsResponse.json()
 
-        console.log(applicationsData)
-
         applicationsData = applicationsData.map((application) => {
             return { 
                 id: 1,
@@ -72,8 +64,6 @@ export const getApplicationsData = async ( API_URL, ACS_TKN, fetch, error) => {
                 progress: application.progress
             }
         })
-
-        console.log(applicationsData)
 
     }
 
