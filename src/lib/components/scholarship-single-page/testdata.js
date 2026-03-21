@@ -89,6 +89,7 @@ export const scholarship = {
       website: 'https://us.fulbrightonline.org',
       address: 'Institute of International Education, 1400 K Street NW, Washington, DC 20005'
     },
+    applicationLink: null,
     status: 'open',
     featured: true,
     rating: 4.8,
