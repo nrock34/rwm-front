@@ -1,13 +1,12 @@
 <script>
 
+    import { onDestroy } from 'svelte';
     import * as Form from '$lib/components/ui/form';
     import { superForm, fileProxy } from 'sveltekit-superforms';
     import { yupClient } from 'sveltekit-superforms/adapters';
+    import Compressor from 'compressorjs';
     import { profileInfoSchema } from './schema';
-    import * as Select from '$lib/components/ui/select';
-   
-    import { Checkbox } from '$lib/components/ui/checkbox';
-    import Input from '$lib/components/ui/input/input.svelte';
+    import { Input } from '$lib/components/ui/input';
     import { CameraIcon } from 'lucide-svelte';
 
     import CalendarIcon from "@lucide/svelte/icons/calendar";
@@ -19,11 +18,11 @@
 
     } from "@internationalized/date";
     import { cn } from "$lib/utils.js";
-    import { buttonVariants } from "$lib/components/ui/button/index.js";
-    import { Calendar } from "$lib/components/ui/calendar/index.js";
-    import * as Popover from "$lib/components/ui/popover/index.js";
-    import Button from '$lib/components/ui/button/button.svelte';
-    import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+    import { buttonVariants } from "$lib/components/ui/button";
+    import { Calendar } from "$lib/components/ui/calendar";
+    import * as Popover from "$lib/components/ui/popover";
+    import { Button } from '$lib/components/ui/button';
+    import { Textarea } from '$lib/components/ui/textarea';
  
     const df = new DateFormatter("en-US", {
         dateStyle: "long"
@@ -33,30 +32,122 @@
     let { actionName, data } = $props();
 
     let updated = $state(false)
+    let compressingAvatar = $state(false)
+    let compressionMessage = $state("")
+    let avatarPreviewUrl = $state(/** @type {string | null} */ (null))
 
     
     const form = superForm(data.editProfileInfoForm, {
-        dataType: 'json',
-        validators: yupClient(profileInfoSchema),
-        onSubmit: ({ jsonData }) => {
-            const taintedData = Object.fromEntries(
-                Object.entries($formData).filter(([key]) => {
-                    return form.isTainted(key)
-                })
-            )
-            jsonData(taintedData)
-        }
+        validators: yupClient(profileInfoSchema)
     })
 
-    const { form: formData, enhance, isTainted } = form;
+    const { form: formData, enhance, message } = form;
 
     const pfpFile = fileProxy(form, 'avatar')
+    const currentAvatarUrl = $derived(
+        typeof data.currentAvatarUrl === "string" && data.currentAvatarUrl.length > 0
+            ? data.currentAvatarUrl
+            : "https://picsum.photos/350/350"
+    )
+    const displayAvatarUrl = $derived(avatarPreviewUrl ?? currentAvatarUrl)
 
     // calendar variables
     let dateValue = $derived($formData.birthday ? parseDate($formData.birthday) : undefined)
     let datePlaceholder = $state(today(getLocalTimeZone()))
 
-    // select trigger content
+    function revokeAvatarPreview() {
+        if (!avatarPreviewUrl) {
+            return
+        }
+
+        URL.revokeObjectURL(avatarPreviewUrl)
+        avatarPreviewUrl = null
+    }
+
+    onDestroy(() => {
+        revokeAvatarPreview()
+    })
+
+    /**
+     * @param {Blob | File} result
+     * @param {File} originalFile
+     * @returns {File}
+     */
+    function toUploadFile(result, originalFile) {
+        if (result instanceof File) {
+            return result
+        }
+
+        return new File([result], originalFile.name, {
+            type: result.type || originalFile.type,
+            lastModified: Date.now()
+        })
+    }
+
+    /**
+     * @param {File} file
+     * @returns {Promise<File>}
+     */
+    function compressAvatar(file) {
+        return new Promise((resolve, reject) => {
+            new Compressor(file, {
+                quality: 0.7,
+                maxWidth: 1600,
+                maxHeight: 1600,
+                mimeType: file.type,
+                success(result) {
+                    try {
+                        resolve(toUploadFile(result, file))
+                    } catch (err) {
+                        reject(err)
+                    }
+                },
+                error(err) {
+                    reject(err)
+                }
+            })
+        })
+    }
+
+    /**
+     * @param {Event & { currentTarget: EventTarget & HTMLInputElement }} event
+     */
+    async function handleAvatarChange(event) {
+        compressionMessage = ""
+        const selectedFile = event.currentTarget.files?.item(0)
+
+        if (!selectedFile) {
+            revokeAvatarPreview()
+            pfpFile.set(null)
+            updated = true
+            return
+        }
+
+        compressingAvatar = true
+
+        try {
+            const compressedFile = await compressAvatar(selectedFile)
+            const uploadFile = compressedFile.size > 0 && compressedFile.size < selectedFile.size
+                ? compressedFile
+                : selectedFile
+
+            pfpFile.set(uploadFile)
+            revokeAvatarPreview()
+            avatarPreviewUrl = URL.createObjectURL(uploadFile)
+
+            if (uploadFile !== selectedFile) {
+                compressionMessage = `Image compressed from ${Math.round(selectedFile.size / 1024)} KB to ${Math.round(uploadFile.size / 1024)} KB.`
+            }
+        } catch {
+            pfpFile.set(selectedFile)
+            revokeAvatarPreview()
+            avatarPreviewUrl = URL.createObjectURL(selectedFile)
+            compressionMessage = "Image compression failed. The original file will be uploaded."
+        } finally {
+            compressingAvatar = false
+            updated = true
+        }
+    }
                 
 </script>
 
@@ -143,6 +234,7 @@
                                 </Popover.Root>
                             {/snippet}
                         </Form.Control>
+                        <Form.FieldErrors/>
                     </Form.Field>
                 </div>
 
@@ -161,6 +253,7 @@
                                 />
                             {/snippet}
                         </Form.Control>
+                        <Form.FieldErrors/>
                     </Form.Field>
                 </div>
 
@@ -200,12 +293,12 @@
                             class="cursor-pointer flex justify-center items-center w-36 h-36 rounded-full bg-muted/40 overflow-hidden"
                             for="profile-avatar-edit" 
                         >
-                            <img class="object-cover w-full h-full -z-1" src="https://picsum.photos/350/350"/>
+                            <img class="object-cover w-full h-full -z-1" src={displayAvatarUrl} alt="Current profile avatar"/>
                             <div class=""></div>
                             <CameraIcon class="text-foreground absolute w-6 h-6"/>
                         </label>
                         <input
-                            onchange={() => updated = true}
+                            onchange={handleAvatarChange}
                             {...props}
                             accept="image/png, image/jpeg"
                             hidden
@@ -216,10 +309,21 @@
                 {/snippet}
             </Form.Control>
             <Form.FieldErrors/>
+            {#if compressingAvatar}
+                <p class="text-sm text-muted-foreground">Compressing image...</p>
+            {:else if compressionMessage}
+                <p class="text-sm text-muted-foreground">{compressionMessage}</p>
+            {/if}
         </Form.Field>
     </div>
+
+    {#if $message?.msg}
+        <p class={`text-sm ${$message?.error ? "text-destructive" : "text-secondary-foreground"}`}>
+            {$message.msg}
+        </p>
+    {/if}
     
-    <Form.Button disabled={!updated} class="">
+    <Form.Button disabled={!updated || compressingAvatar} class="">
         Save Changes
     </Form.Button>
 
