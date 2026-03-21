@@ -1,41 +1,49 @@
 <script>
-    import { AlertCircle, Clock, BadgeAlert, Bookmark, Calendar,
-             CheckCircle, DollarSign, ExternalLink, MapPin,
-              Share2, Star, Users, 
-              Check} from "lucide-svelte";
-    import Badge from "../ui/badge/badge.svelte";
     import * as Card from "../ui/card";
-    import { scholarship, similarScholarships } from "./testdata";
-    import Button from "../ui/button/button.svelte";
-    import Toggle from "../ui/toggle/toggle.svelte";
-    import { getDaysUntil } from "$lib/helper-funcs/funcs";
-    import { SvelteSet } from 'svelte/reactivity'
+    import { scholarship as fallbackScholarship } from "./testdata";
 
+    let { scholarship = fallbackScholarship } = $props();
 
-    let isScholarshipSaved = $state(false)
+    const timeline = $derived(Array.isArray(scholarship.timeline) ? scholarship.timeline : []);
 
-    let completedAppReqs = $state(new SvelteSet())
-    const updateCompletedAppReq = (id) => {
-        if (!completedAppReqs.delete(id)) completedAppReqs.add(id);
-    }
-
-    const daysLeft = getDaysUntil(scholarship.deadline)
-
+    const getStatusClasses = (status) => {
+        switch (status) {
+            case 'past':
+                return {
+                    dot: 'bg-muted-foreground',
+                    text: 'text-muted-foreground'
+                };
+            case 'upcoming':
+                return {
+                    dot: 'bg-yellow-300',
+                    text: 'text-yellow-300'
+                };
+            case 'current':
+                return {
+                    dot: 'bg-green-500/80',
+                    text: 'text-green-500/80'
+                };
+            default:
+                return {
+                    dot: 'bg-muted-foreground',
+                    text: 'text-muted-foreground'
+                };
+        }
+    };
 </script>
 
-<Card.Root class="p-6 px-7 gap-0">
-    <h2 class="text-xl font-semibold text-foreground mb-4">Important Dates</h2>
+<Card.Root class="p-5 px-6 gap-0">
+    <h2 class="text-lg font-semibold text-foreground mb-4">Important Dates</h2>
     <div>
-        {#each scholarship.timeline as item, idx}
-            {@const statusColor = item.status === 'upcoming' ? 'yellow-300' :
-                                item.status === 'current' ? 'green-500/80' : 'muted-foreground'}
+        {#each timeline as item, idx}
+            {@const statusClasses = getStatusClasses(item.status)}
             <div key={idx} class="flex items-center space-x-2 mb-3">
                 <div class="flex-shrink-0">
-                    <div class={`w-4 h-4 rounded-full bg-${statusColor} border-muted-foreground/60 border`}></div>
+                    <div class={`w-4 h-4 rounded-full ${statusClasses.dot} border-muted-foreground/60 border`}></div>
                 </div>
                 <div class="flex-1 flex justify-between items-center">
-                    <span class="text-sm font-medium text-foreground">{item.event}</span>
-                    <span class={`text-sm text-${statusColor}`}>
+                    <span class="text-[0.92rem] font-medium text-foreground">{item.event}</span>
+                    <span class={`text-[0.92rem] ${statusClasses.text}`}>
                         {new Date(item.date).toLocaleDateString()}
                     </span>
                 </div>
@@ -43,4 +51,3 @@
         {/each}
     </div>
 </Card.Root>
-
