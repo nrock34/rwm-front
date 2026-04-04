@@ -9,6 +9,7 @@
     import Dashboard from "$lib/components/profile-page/self-tabs/Dashboard.svelte";
     import Settings from "$lib/components/profile-page/self-tabs/Settings.svelte";
     import Info from "$lib/components/profile-page/self-tabs/Info.svelte";
+    import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 
     let activeTab = $state('settings');
 
@@ -49,10 +50,12 @@
                     <div class="text-center mb-4">
                         <div class="relative inline-block">
                             {#if profileData.avatar}
-                                <img
+                                <ResilientImage
                                     src={profileData.avatar}
+                                    fallbackSrc={null}
                                     alt={profileData.name}
                                     class="w-24 h-24 rounded-full object-cover mx-auto"
+                                    hideOnError={true}
                                 />
                             {:else}
                                 <div class="w-24 h-24 rounded-full bg-muted flex items-center justify-center mx-auto">

@@ -1,10 +1,19 @@
 
+<script>
+    import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
+</script>
+
 <svelte:head>
   <title>About Us - RomeWithMe</title>
 </svelte:head>
 
 <div class="relative">
-    <img class="w-full object-cover h-120 opacity-80" src="https://images.pexels.com/photos/19240494/pexels-photo-19240494.jpeg"/>
+    <ResilientImage
+        class="w-full object-cover h-120 opacity-80"
+        src="https://images.pexels.com/photos/19240494/pexels-photo-19240494.jpeg"
+        fallbackSrc="https://images.pexels.com/photos/2064827/pexels-photo-2064827.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+        alt="About RomeWithMe"
+    />
     <div class="absolute inset-0 bg-gradient-to-t from-background/92 via-background/68 to-background/15"></div>
 
     <div class="prose md:prose-xl !m-0 absolute inset-x-0 bottom-2 md:bottom-6 px-6 sm:px-10 md:px-16 lg:px-22 py-12 min-w-full flex">

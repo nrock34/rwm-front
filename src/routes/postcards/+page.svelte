@@ -21,6 +21,7 @@
     import { range } from '$lib/utils';
     import { ScrollArea } from '$lib/components/ui/scroll-area';
     import { getContext } from 'svelte';
+    import ResilientImage from '$lib/components/shared/ResilientImage.svelte';
  
     
     let { data } = $props()
@@ -60,10 +61,11 @@
 
 <div class="bg-muted/80">
     <section class="relative overflow-hidden">
-        <img
+        <ResilientImage
             class="w-full h-80 sm:h-90 md:h-110 object-cover"
             alt='Postcards Banner Image'
             src={`${config?.postcardsHeroIMG ?? 'https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d'}`}
+            fallbackSrc="https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg"
         />
         <div class="absolute inset-0 bg-gradient-to-b from-background/92 via-background/68 to-background/44 backdrop-blur-[3px]"></div>
         <div class="absolute inset-0 mx-4 sm:mx-8 md:mx-14">

@@ -86,7 +86,11 @@ export const load = async ({ cookies, fetch }) => {
     }
 
     const properties = newConfig()
-    await properties.loadConfig()
+    try {
+        await properties.loadConfig()
+    } catch {
+        // Allow the app to render with local fallbacks when site settings are unavailable.
+    }
 
     return {
         config: properties.config,

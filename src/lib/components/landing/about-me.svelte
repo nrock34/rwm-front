@@ -10,7 +10,7 @@
     <div class="flex justify-center w-full">
         <div class="flex items-center gap-x-10 sm:gap-x-20 md:gap-x-30 lg:justify-between px-8 sm:px-14 md:px-26 w-full max-w-[60rem]">
             <Avatar.Root class="min-w-30 min-h-30">
-                <Avatar.Fallback class="bg-blue-400 "></Avatar.Fallback>
+                <Avatar.Fallback class="bg-blue-400 text-white">N</Avatar.Fallback>
                 <Avatar.Image src={siteConfig?.landingAboutMeIMG}/>
             </Avatar.Root>
             <div class="flex flex-col gap-y-1">

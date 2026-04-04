@@ -2,6 +2,7 @@
 	import * as Avatar from "$lib/components/ui/avatar";
 	import { Badge } from "$lib/components/ui/badge";
 	import { Button } from "$lib/components/ui/button";
+	import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 	import { Clock3, Heart, MessageSquareReply, Tag } from "lucide-svelte";
 
 	let { post, currentPath = "/community" } = $props();
@@ -51,7 +52,13 @@
 
 	{#if post.image}
 		<div class="overflow-hidden rounded-2xl border border-border/70 bg-card">
-			<img src={post.image} alt={post.title || "Community post"} class="max-h-[18rem] w-full object-cover sm:max-h-[20rem] lg:max-h-[22rem]" />
+			<ResilientImage
+				src={post.image}
+				fallbackSrc={null}
+				alt={post.title || "Community post"}
+				class="max-h-[18rem] w-full object-cover sm:max-h-[20rem] lg:max-h-[22rem]"
+				hideOnError={true}
+			/>
 		</div>
 	{/if}
 

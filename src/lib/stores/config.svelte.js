@@ -33,5 +33,10 @@ export function newConfig() {
 		config = cachedConfig;
 	}
 
-	return { config, loadConfig };
+	return {
+		get config() {
+			return cachedConfig ?? config;
+		},
+		loadConfig
+	};
 }

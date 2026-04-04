@@ -4,6 +4,7 @@
     import { TypingText } from "../ui/typing-text";
     import { Button } from "../ui/button";
     import { getContext } from "svelte";
+    import ResilientImage from "../shared/ResilientImage.svelte";
 
     let wordIndex = 0;
     let charIndex = 1;
@@ -20,8 +21,14 @@
 
 
 <section class="relative bg-graident-to-br from-primary/5 via-background to-accent/5 overflow-hidden">
-    <div class={`absolute inset-0 bg-cover bg-center opacity-20`}
-        style:background-image={`url('${siteConfig?.heroBackgroundIMG ?? 'https://images.pexels.com/photos/2064827/pexels-photo-2064827.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop'}')`}></div>
+    <div class="absolute inset-0 opacity-20">
+        <ResilientImage
+            src={siteConfig?.heroBackgroundIMG ?? 'https://images.pexels.com/photos/2064827/pexels-photo-2064827.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop'}
+            fallbackSrc="https://images.pexels.com/photos/2064827/pexels-photo-2064827.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+            alt=""
+            class="h-full w-full object-cover object-center"
+        />
+    </div>
     <div class="relative max-w-[75rem] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 py-16 lg:py-28">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -75,9 +82,11 @@
 
             <div class="relative">
                 <div class="relative z-10">
-                    <img src={siteConfig?.heroFocusIMG ?? "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"}
-                            alt="Students In Rome"
-                            class="rounded-2xl shadow-2xl"
+                    <ResilientImage
+                        src={siteConfig?.heroFocusIMG ?? "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"}
+                        fallbackSrc="https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
+                        alt="Students In Rome"
+                        class="rounded-2xl shadow-2xl"
                     />
                     <div class="absolute -bottom-6 -left-6 bg-card p-4 rounded-xl border border-border">
                         <!-- <div class="flex items-center space-x-3">

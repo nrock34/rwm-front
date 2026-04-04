@@ -24,6 +24,7 @@
     import PhotoGalleryCard from "./cards/PhotoGalleryCard.svelte";
     import QuickActionsCard from "./cards/QuickActionsCard.svelte";
     import ContactInformationCard from "./cards/ContactInformationCard.svelte";
+    import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 
     let { data } = $props();
 
@@ -74,8 +75,9 @@
 <div class="min-w-full bg-ring/5 space-y-8 pb-20">
 
     <section class="relative overflow-hidden">
-        <img 
+        <ResilientImage 
             src={program.image}
+            fallbackSrc="https://images.pexels.com/photos/28838309/pexels-photo-28838309.jpeg"
             alt={program.title}
             class="w-full h-80 sm:h-100 lg:h-120 object-cover blur-[4px] saturate-125 brightness-90"
         />

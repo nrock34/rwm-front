@@ -3,6 +3,7 @@
     import * as Card from "../ui/card";
     import { Badge } from "../ui/badge";
     import {Button} from "../ui/button";
+    import ResilientImage from "../shared/ResilientImage.svelte";
 
 	    let isFollowing = $state(false);
 	    let { profileData } = $props()
@@ -33,10 +34,12 @@
             <Card.Root class="p-8 gap-2 mb-6">
                 <div class="text-center mb-6">
                     <div class="relative inline-block">
-                        <img
+                        <ResilientImage
                             src={userProfile.avatar}
+                            fallbackSrc={null}
                             alt={userProfile.name}
                             class="w-24 h-24 rounded-full object-cover mx-auto shadow-md"
+                            hideOnError={true}
                         />
                         {#if userProfile.isVerified}
                             <div class="absolute bottom-0 right-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
@@ -176,10 +179,12 @@
                     {#each userProfile.recentPosts as post}
                         <article key={post.id} class="border-b border-border pb-6 last:border-b-0">
                             <div class="flex items-start space-x-3">
-                                <img
+                                <ResilientImage
                                     src={userProfile.avatar}
+                                    fallbackSrc={null}
                                     alt={userProfile.name}
                                     class="w-10 h-10 border-1 border-foreground/80 rounded-full object-cover"
+                                    hideOnError={true}
                                 />
 
                                 <div class="flex-1">
@@ -196,10 +201,12 @@
 
                                     {#if post.image}
                                         <div class="rounded overflow-hidden mb-3">
-                                            <img 
+                                            <ResilientImage 
                                                 src={post.image}
+                                                fallbackSrc={null}
                                                 alt="Post Image"
                                                 class="w-full h-48 object-cover"
+                                                hideOnError={true}
                                             />
                                         </div>
                                     {/if}

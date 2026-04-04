@@ -4,6 +4,7 @@
 	import { Button } from "$lib/components/ui/button";
 	import ResourcePreviewDialog from "./ResourcePreviewDialog.svelte";
 	import { Eye, FileText, Heart, LinkIcon, LoaderCircle, Map, Star, Video } from "lucide-svelte";
+	import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 	import {
 		fetchResourcePreviewData,
 		supportsResourcePreview,
@@ -51,14 +52,16 @@
 </script>
 
 <Card.Root class={`p-6 ${resource.featured ? "ring-2 ring-ring/30" : ""}`}>
-	<div class="flex items-start space-x-4">
-		{#if resource.thumbnail}
-			<img
-				src={resource.thumbnail}
-				alt={resource.title}
-				class="h-20 w-20 flex-shrink-0 rounded object-cover"
-			/>
-		{/if}
+		<div class="flex items-start space-x-4">
+			{#if resource.thumbnail}
+				<ResilientImage
+					src={resource.thumbnail}
+					fallbackSrc={null}
+					alt={resource.title}
+					class="h-20 w-20 flex-shrink-0 rounded object-cover"
+					hideOnError={true}
+				/>
+			{/if}
 
 		<div class="flex-1">
 			<div class="mb-2 flex items-start justify-between">

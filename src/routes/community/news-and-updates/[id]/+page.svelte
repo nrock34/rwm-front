@@ -3,6 +3,7 @@
 	import UpdateDetailSidebar from "$lib/components/community/CommunityNewsUpdates/UpdateDetailSidebar.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
+	import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 	import { ArrowLeft } from "lucide-svelte";
 
 	let { data } = $props();
@@ -27,10 +28,12 @@
 				<div class="px-6 py-6 sm:px-8 sm:py-8">
 					{#if data.update.image}
 						<div class="mb-5 max-w-2xl overflow-hidden rounded-xl border border-border/60 bg-muted/20">
-							<img
+							<ResilientImage
 								src={data.update.image}
+								fallbackSrc={null}
 								alt={data.update.title}
 								class="max-h-[12rem] w-full object-cover sm:max-h-[14rem] lg:max-h-[16rem]"
+								hideOnError={true}
 							/>
 						</div>
 					{/if}

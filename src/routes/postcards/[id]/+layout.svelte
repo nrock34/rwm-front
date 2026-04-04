@@ -9,6 +9,7 @@
     import { Separator } from '$lib/components/ui/separator';
     import { render } from 'svelte/server';
     import Stamp from '$lib/assets/stamp.svelte';
+    import ResilientImage from '$lib/components/shared/ResilientImage.svelte';
 
     import FullStamp from '$lib/assets/FullStamp2.png?enhanced'
     import { Skeleton } from '$lib/components/ui/skeleton';
@@ -34,9 +35,12 @@
 
     <div class="grid grid-rows-9 relative z-1 ">
         <div class="w-full h-fit col-start-1 row-start-1 row-end-10 -z-10">
-            <img
+            <ResilientImage
                 class="rounded-b-xl w-full -z-5 h-[45vh] sm:h-[50vh] lg:h-[60vh] object-cover"
-                src={postcard.banner ?? "https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg"}/>
+                src={postcard.banner ?? "https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg"}
+                fallbackSrc="https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg"
+                alt={postcard.title}
+            />
 
             <div 
                 class="absolute inset-x-0 top-0 h-[45vh] w-full bg-background/52 sm:h-[50vh] lg:h-[60vh]"

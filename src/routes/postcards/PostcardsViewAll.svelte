@@ -8,6 +8,7 @@
     import { Input } from "$lib/components/ui/input";
     import { Button } from "$lib/components/ui/button";
     import { Separator } from "$lib/components/ui/separator";
+    import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 
     import { AspectRatio } from "$lib/components/ui/aspect-ratio"
     import Stamp from "$lib/assets/stamp.svelte";
@@ -41,7 +42,12 @@
                 <div class="px-2 py-2 h-full w-full">
                     <div class="div relative flex-col h-full border border-border/60 bg-card/75">
                         <!-- <div class="absolute inset-x-0 top-0 relative h-48 w-full"> -->
-                            <img class="object-cover h-90 w-full" src={item.image ?? "https://images.pexels.com/photos/32802434/pexels-photo-32802434.jpeg"}/>
+                            <ResilientImage
+                                class="object-cover h-90 w-full"
+                                src={item.image ?? "https://images.pexels.com/photos/32802434/pexels-photo-32802434.jpeg"}
+                                fallbackSrc="https://images.pexels.com/photos/32802434/pexels-photo-32802434.jpeg"
+                                alt={item.title}
+                            />
                             <div class="absolute left-0 top-0">
                                 <div class={`flex p-3.25`}>
                                     <span class="flex gap-x-1 items-center bg-muted/30 px-2 py-0.75 rounded-xl backdrop-blur">

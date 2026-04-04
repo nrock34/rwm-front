@@ -23,6 +23,7 @@
     import * as Popover from "$lib/components/ui/popover";
     import { Button } from '$lib/components/ui/button';
     import { Textarea } from '$lib/components/ui/textarea';
+    import ResilientImage from '$lib/components/shared/ResilientImage.svelte';
  
     const df = new DateFormatter("en-US", {
         dateStyle: "long"
@@ -293,7 +294,12 @@
                             class="cursor-pointer flex justify-center items-center w-36 h-36 rounded-full bg-muted/40 overflow-hidden"
                             for="profile-avatar-edit" 
                         >
-                            <img class="object-cover w-full h-full -z-1" src={displayAvatarUrl} alt="Current profile avatar"/>
+                            <ResilientImage
+                                class="object-cover w-full h-full -z-1"
+                                src={displayAvatarUrl}
+                                fallbackSrc="https://picsum.photos/350/350"
+                                alt="Current profile avatar"
+                            />
                             <div class=""></div>
                             <CameraIcon class="text-foreground absolute w-6 h-6"/>
                         </label>

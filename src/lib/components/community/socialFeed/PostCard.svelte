@@ -3,6 +3,7 @@
 	import { Badge } from "$lib/components/ui/badge";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
+	import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 	import { Separator } from "$lib/components/ui/separator";
 	import { Clock3, ExternalLink, Heart, MessageSquareReply, Tag } from "lucide-svelte";
 
@@ -63,7 +64,13 @@
 
 		{#if showImage && post.image}
 			<div class="overflow-hidden rounded-lg border border-border/60">
-				<img src={post.image} alt={post.title || "Community post"} class="h-72 w-full object-cover" />
+				<ResilientImage
+					src={post.image}
+					fallbackSrc={null}
+					alt={post.title || "Community post"}
+					class="h-72 w-full object-cover"
+					hideOnError={true}
+				/>
 			</div>
 		{/if}
 

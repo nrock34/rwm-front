@@ -2,6 +2,7 @@
 	import { Badge } from "$lib/components/ui/badge";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
+	import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 	import { AlertCircle, Calendar, Clock3, Eye, Heart, MessageSquareReply, Share2 } from "lucide-svelte";
 
 	let { update, variant = "default" } = $props();
@@ -75,9 +76,15 @@
 	<Card.Root class="overflow-hidden border-border/70 bg-card/95 p-0 shadow-sm transition-shadow hover:shadow-md">
 		<div class="flex flex-col sm:grid sm:grid-cols-[11rem_minmax(0,1fr)]">
 			<div class="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 sm:aspect-auto">
-				{#if update.image}
-					<img src={update.image} alt={update.title} class="absolute inset-0 h-full w-full object-cover" />
-				{/if}
+					{#if update.image}
+						<ResilientImage
+							src={update.image}
+							fallbackSrc={null}
+							alt={update.title}
+							class="absolute inset-0 h-full w-full object-cover"
+							hideOnError={true}
+						/>
+					{/if}
 			</div>
 
 			<div class="flex min-w-0 flex-1 flex-col gap-4 p-4">
@@ -120,9 +127,15 @@
 	</Card.Root>
 {:else}
 	<Card.Root class="overflow-hidden border-border/70 py-0 gap-0 hover:shadow-md transition-shadow">
-		{#if update.image}
-			<img src={update.image} alt={update.title} class="h-48 w-full object-cover" />
-		{:else}
+			{#if update.image}
+				<ResilientImage
+					src={update.image}
+					fallbackSrc={null}
+					alt={update.title}
+					class="h-48 w-full object-cover"
+					hideOnError={true}
+				/>
+			{:else}
 			<div class="h-32 w-full bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10"></div>
 		{/if}
 

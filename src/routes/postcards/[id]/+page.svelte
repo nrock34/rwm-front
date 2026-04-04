@@ -13,6 +13,7 @@
     import { DialogTitle } from '$lib/components/ui/dialog';
     import { enhance } from '$app/forms';
     import { fly } from 'svelte/transition';
+    import ResilientImage from '$lib/components/shared/ResilientImage.svelte';
 
     const extractImageSources = (html) => {
         const parser = new DOMParser();
@@ -176,10 +177,12 @@
                                     Image
                                 </Dialog.Title>
                             </Dialog.Header>
-                            <img
+                            <ResilientImage
                                 class="h-full w-full object-cover rounded-md transition-transform"
                                 src={galleryImageViewData.image}
+                                fallbackSrc={null}
                                 alt={galleryImageViewData.id} 
+                                hideOnError={true}
                             />
                         </Dialog.Content>
                     </Dialog.Root>
@@ -194,10 +197,12 @@
                                 {@render children(image, idx)}
                             </button>
                             {#snippet children(image, idx)}
-                                <img
+                                <ResilientImage
                                     class="cursor-pointer h-28 w-full object-cover rounded-md hover:scale-102 transition-transform"
                                     src={image}
+                                    fallbackSrc={null}
                                     alt={idx} 
+                                    hideOnError={true}
                                 />
                             {/snippet}
                         </div>

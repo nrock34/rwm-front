@@ -3,6 +3,7 @@
     import { page } from "$app/state";
     import ProgramsViewAll from "$lib/components/programs-page/ProgramsViewAll.svelte";
     import { Button } from "$lib/components/ui/button";
+    import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
     import { getContext, onMount } from "svelte";
 
     let { data } = $props();
@@ -79,7 +80,12 @@
 
 <div class="bg-background">
     <div class="relative">
-        <img class="object-cover h-70 sm:h-80 md:h-90 lg:h-100 w-full" src={config.programHeroIMG ?? 'https://images.pexels.com/photos/28838309/pexels-photo-28838309.jpeg'}/>
+        <ResilientImage
+            class="object-cover h-70 sm:h-80 md:h-90 lg:h-100 w-full"
+            src={config?.programHeroIMG ?? 'https://images.pexels.com/photos/28838309/pexels-photo-28838309.jpeg'}
+            fallbackSrc="https://images.pexels.com/photos/28838309/pexels-photo-28838309.jpeg"
+            alt="Programs hero"
+        />
         <div class="absolute inset-x-0 top-0 backdrop-blur-[3px] w-full h-full"></div>
         <div class="absolute inset-x-0 top-0 h-full w-full bg-gradient-to-t from-background/85 via-background/72 to-background/58"></div>
         <div class="absolute top-0 flex flex-col items-center justify-center min-w-full my-auto h-full gap-y-8 p-8 sm:p-14 lg:p-20">
