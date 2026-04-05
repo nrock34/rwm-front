@@ -45,6 +45,7 @@
                 <img
                     src={program.image}
                     alt={program.title}
+                    loading="lazy"
                     class="h-44 w-full object-cover" 
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-background/96 via-background/36 to-transparent"></div>

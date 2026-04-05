@@ -5,6 +5,6 @@
     let { data, children } = $props();
 </script>
 
-<AuthGuard requiresAuth={true}>
+<AuthGuard requiresAuth={false}>
     {@render children()}
 </AuthGuard>

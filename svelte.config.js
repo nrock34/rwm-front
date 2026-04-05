@@ -5,7 +5,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 const config = {
 		compilerOptions: {
 			experimental: {
-							async: true
+				async: true
 			}
 		},
 		kit: {

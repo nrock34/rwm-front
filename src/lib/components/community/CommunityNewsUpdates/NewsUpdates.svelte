@@ -15,8 +15,8 @@
 	const visibleUpdates = $derived(updates.slice(0, md ? 1 : 4));
 </script>
 
-<section class="flex">
-		<div class="page-shell mx-6 w-full justify-self-center py-6 sm:mx-10 md:mx-14 lg:mx-18 xl:mx-22">
+<section class="flex w-full">
+	<div class="page-shell mx-auto w-full px-6 py-6 sm:px-10 md:px-14 lg:px-18 xl:px-22">
 		<div class="mb-3 flex items-center justify-between gap-4">
 			<div class="flex items-center space-x-2 leading-tight">
 				<Bell class="h-6 w-6 text-primary" />

@@ -195,6 +195,107 @@ export async function loadCommunitySummary({ fetch, accessToken = null }) {
 }
 
 /**
+ * @param {import("./types.js").CommunityFetchDeps} deps
+ * @returns {Promise<import("./types.js").CommunityResult<import("./types.js").CommunityPostCard[]>>}
+ */
+export async function loadCommunitySummaryPosts({ fetch, accessToken = null }) {
+	try {
+		const response = await requestJson(buildApiUrl("posts/list"), {
+			fetchFn: fetch,
+			headers: withBearerAuth(accessToken)
+		});
+
+		if (!response.ok) {
+			return { ok: false, error: mapHttpFailure(asHttpFailure(response), "Failed to load community posts.") };
+		}
+
+		return {
+			ok: true,
+			data: mapCursorPage(assertPostPage(response.data), mapCommunityPost).results,
+			status: response.status,
+			headers: response.headers
+		};
+	} catch (err) {
+		return { ok: false, error: asCommunityDomainError(err) };
+	}
+}
+
+/**
+ * @param {import("./types.js").CommunityFetchDeps} deps
+ * @returns {Promise<import("./types.js").CommunityResult<import("./types.js").CommunityUpdateCard[]>>}
+ */
+export async function loadCommunitySummaryUpdates({ fetch }) {
+	try {
+		const response = await requestJson(buildApiUrl("news-updates/updates"), {
+			fetchFn: fetch
+		});
+
+		if (!response.ok) {
+			return { ok: false, error: mapHttpFailure(asHttpFailure(response), "Failed to load community updates.") };
+		}
+
+		return {
+			ok: true,
+			data: mapCursorPage(assertUpdatePage(response.data), mapCommunityUpdate).results,
+			status: response.status,
+			headers: response.headers
+		};
+	} catch (err) {
+		return { ok: false, error: asCommunityDomainError(err) };
+	}
+}
+
+/**
+ * @param {import("./types.js").CommunityFetchDeps} deps
+ * @returns {Promise<import("./types.js").CommunityResult<import("./types.js").CommunityProgramCard[]>>}
+ */
+export async function loadCommunityFeaturedPrograms({ fetch }) {
+	try {
+		const response = await requestJson(buildApiUrl("programs/featured"), {
+			fetchFn: fetch
+		});
+
+		if (!response.ok) {
+			return { ok: false, error: mapHttpFailure(asHttpFailure(response), "Failed to load featured programs.") };
+		}
+
+		return {
+			ok: true,
+			data: assertProgramList(response.data).map(mapCommunityProgram),
+			status: response.status,
+			headers: response.headers
+		};
+	} catch (err) {
+		return { ok: false, error: asCommunityDomainError(err) };
+	}
+}
+
+/**
+ * @param {import("./types.js").CommunityFetchDeps} deps
+ * @returns {Promise<import("./types.js").CommunityResult<import("./types.js").CommunityScholarshipCard[]>>}
+ */
+export async function loadCommunityFeaturedScholarships({ fetch }) {
+	try {
+		const response = await requestJson(buildApiUrl("scholarships/featured"), {
+			fetchFn: fetch
+		});
+
+		if (!response.ok) {
+			return { ok: false, error: mapHttpFailure(asHttpFailure(response), "Failed to load featured scholarships.") };
+		}
+
+		return {
+			ok: true,
+			data: assertScholarshipList(response.data).map(mapCommunityScholarship),
+			status: response.status,
+			headers: response.headers
+		};
+	} catch (err) {
+		return { ok: false, error: asCommunityDomainError(err) };
+	}
+}
+
+/**
  * @param {{ q?: string | null; category?: string | null; type?: string | null; tag?: string | null; sort_by?: string | null; cursor?: string | null }} params
  * @param {import("./types.js").CommunityFetchDeps} deps
  * @returns {Promise<import("./types.js").CommunityResult<import("./types.js").CommunityCursorPage<import("./types.js").CommunityPostCard>>>}

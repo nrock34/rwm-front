@@ -100,7 +100,7 @@
             </div>
         </div>
     </div>
-    <div id="programs" class="scroll-mt-20 max-w-[95rem] pt-12 py-8 w-full px-6 sm:px-8 md:px-12 lg:px-18 xl:px-24 justify-self-center">
+    <div id="programs" class="scroll-mt-20 max-w-[95rem] pt-12 py-8 w-full px-6 sm:px-8 md:px-12 lg:px-18 xl:px-24 mx-auto">
         <ProgramsViewAll bind:duration bind:sortBy bind:searchQuery bind:region 
                         {programCountries} {next} {getMoreResults} {results} 
                         {durations}

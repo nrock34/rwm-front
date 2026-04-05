@@ -1,5 +1,9 @@
 export {
 	loadCommunitySummary,
+	loadCommunitySummaryPosts,
+	loadCommunitySummaryUpdates,
+	loadCommunityFeaturedPrograms,
+	loadCommunityFeaturedScholarships,
 	loadCommunityPostsPage,
 	loadCommunityPostDetail,
 	createCommunityPost,
