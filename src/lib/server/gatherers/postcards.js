@@ -1,6 +1,7 @@
 import { updated } from "$app/state"
 import { env } from "$env/dynamic/private"
 import { error } from "@sveltejs/kit"
+import { parsePostcardEditorDocument } from "$domains/postcards/contracts.js";
 
 function postcardDetail(postcard) {
     if (postcard) {
@@ -28,6 +29,7 @@ function postcardDetail(postcard) {
             },
             datePublished: postcard.date_published ?? null,
             content: postcard.content ?? null,
+            contentBlocks: parsePostcardEditorDocument(postcard.content_blocks),
             created_at: postcard.created_at,
             updatedAt: postcard.updated_at ?? null,
             commentCount: postcard.comment_count ?? null
