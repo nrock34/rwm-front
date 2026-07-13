@@ -1,9 +1,7 @@
 <script>
     import { ExternalLink } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { scholarship as fallbackScholarship } from "./testdata";
-
-    let { scholarship = fallbackScholarship } = $props();
+    let { scholarship } = $props();
 
     const contact = $derived(scholarship.contact ?? {});
     const website = $derived(

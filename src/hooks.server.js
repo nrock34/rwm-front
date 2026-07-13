@@ -1,13 +1,19 @@
 import { sequence } from "@sveltejs/kit/hooks";
 import * as Sentry from "@sentry/sveltekit";
 import { redirect } from "@sveltejs/kit";
-import { clearAuthCookies, getSessionState, validateAccessToken } from "$domains/auth/index.js";
 import { buildLoginRedirectUrl } from "$lib/auth/redirect.js";
+import { reconcileRequestSession } from "$lib/auth/server.js";
 
 
 const authRoutes = [
-	"/profile"
+	"/profile",
+	"/onboarding"
 ];
+
+const sessionMutationRoutes = new Set([
+	"/auth/logout",
+	"/auth/refresh"
+]);
 
 /**
  * @param {string} pathName
@@ -22,26 +28,13 @@ const isAuthRoute = (pathName, routes) => {
 
 /** @type {import("@sveltejs/kit").Handle} */
 export const handle = sequence(async ({ event, resolve }) => {
-
-	const session = getSessionState(event.cookies);
-
+	let accessToken = event.locals.token ?? null;
+	if (!sessionMutationRoutes.has(event.url.pathname)) {
+		accessToken = await reconcileRequestSession(event);
+	}
 
 	if (isAuthRoute(event.url.pathname, authRoutes)) {
-
-		if (!session.hasRefreshToken) {
-			throw redirect(303, buildLoginRedirectUrl(event.url));
-		}
-
-		if (!session.accessToken) {
-			throw redirect(303, buildLoginRedirectUrl(event.url));
-		}
-
-		const tokenValidation = validateAccessToken(session.accessToken);
-		if (tokenValidation.ok) {
-			event.locals.token = session.accessToken;
-		} else if (tokenValidation.error.code === "invalid_token") {
-			delete event.locals.token;
-			clearAuthCookies(event.cookies);
+		if (!accessToken) {
 			throw redirect(303, buildLoginRedirectUrl(event.url));
 		}
 	}
@@ -53,6 +46,18 @@ export const handle = sequence(async ({ event, resolve }) => {
 		throw redirect(308, "/community/news-and-updates");
 	}
 	const response = await resolve(event);
+	response.headers.set("X-Content-Type-Options", "nosniff");
+	response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+	response.headers.set("X-Frame-Options", "SAMEORIGIN");
+	response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
+	response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+	response.headers.set(
+		"Content-Security-Policy",
+		"base-uri 'self'; object-src 'none'; frame-ancestors 'self'"
+	);
+	if (event.url.protocol === "https:") {
+		response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+	}
 	return response;
 });
 

@@ -4,21 +4,20 @@
     import ProgramsViewAll from "$lib/components/programs-page/ProgramsViewAll.svelte";
     import { Button } from "$lib/components/ui/button";
     import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
-    import { getContext, onMount } from "svelte";
+    import { getContext } from "svelte";
 
     let { data } = $props();
 
     let { programCountries } = data
     
-    const urlparams = page.url.searchParams
-
     const getMoreResults = async (next) => {
-        const response = await fetch(`/programs/getNext?cursor=${next}&${urlparams.toString()}`);
+        const params = new URLSearchParams(page.url.searchParams);
+        params.set('cursor', next);
+        const response = await fetch(`/programs/getNext?${params.toString()}`);
         if (!response.ok) {
-            return
-        } else {
-            return await response.json()
+            throw new Error('Unable to load more programs');
         }
+        return await response.json()
     }
 
     let next = $derived(data.next)
@@ -27,12 +26,10 @@
     let sort = data.sort
 
     let sortBy = $state(sort || 'rating');
-    $inspect(sortBy)
-
     let searchQuery = $state(search ?? '');
     let region = $state(programCountries.find(
         (country) => {
-            return country.name === urlparams.get('country')
+            return country.name === page.url.searchParams.get('country')
         }
     )?.name ?? 'all')
 
@@ -47,12 +44,11 @@
     ];
 
     let duration = $state(durations.find((d) => {
-        return d.id === urlparams.get('duration')
+        return d.id === page.url.searchParams.get('duration')
     })?.id ?? 'all')
-
-    $inspect(results)
     
     $effect(() => {
+        const urlparams = new URLSearchParams(page.url.searchParams);
         if (sortBy) urlparams.set('sort_by', sortBy)
         if (searchQuery) urlparams.set('q', searchQuery)
         if (!searchQuery) urlparams.delete('q')
@@ -61,12 +57,12 @@
         if (duration !== 'all') urlparams.set('duration', duration)
         if (duration === 'all') urlparams.delete('duration')
 
-        goto(`?${urlparams.toString()}`, {keepFocus: true, replaceState: false})
-
-    })
-
-    onMount(() => {
-
+        const nextQuery = urlparams.toString();
+        if (nextQuery === page.url.searchParams.toString()) return;
+        const timer = window.setTimeout(() => {
+            void goto(`?${nextQuery}`, {keepFocus: true, noScroll: true, replaceState: true});
+        }, 250);
+        return () => window.clearTimeout(timer);
     })
 
     const config = getContext('config')
@@ -76,6 +72,7 @@
 
 <svelte:head>
     <title>Browse Programs - RomeWithMe</title>
+	<meta name="description" content="Compare study abroad programs by destination, duration, cost, and academic focus." />
 </svelte:head>
 
 <div class="bg-background">

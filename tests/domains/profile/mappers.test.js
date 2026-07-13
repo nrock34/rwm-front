@@ -3,7 +3,8 @@ import {
 	mapProfileApplications,
 	mapProfileEducationSettings,
 	mapProfileSavedItems,
-	mapProfileSummary
+	mapProfileSummary,
+	mapPublicProfile
 } from "../../../src/domains/profile/mappers.js";
 
 describe("profile summary mapping", () => {
@@ -113,6 +114,31 @@ describe("profile summary mapping", () => {
 			university: "",
 			major: "",
 			grad_year: undefined
+		});
+	});
+
+	it("maps public profile fields without inventing badges or dates", () => {
+		const profile = mapPublicProfile({
+			name: "Ada Lovelace",
+			username: "ada",
+			profile: {
+				bio: "Mathematician",
+				avatar: null,
+				is_contributer: true
+			},
+			badges: [1, 2],
+			post_count: 2,
+			like_count: 7
+		}, [], "42");
+
+		expect(profile).toMatchObject({
+			id: 42,
+			name: "Ada Lovelace",
+			badge: null,
+			joinDate: null,
+			badges: [],
+			isVerified: true,
+			stats: { posts: 2, likes: 7 }
 		});
 	});
 });

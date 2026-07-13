@@ -13,14 +13,9 @@
     import ScholarshipTimelineCard from "./ScholarshipTimelineCard.svelte";
     import { getDaysUntil } from "$lib/helper-funcs/funcs";
     import { ArrowLeft } from 'lucide-svelte';
-    import {
-        scholarship as fallbackScholarship,
-        similarScholarships as fallbackSimilarScholarships
-    } from "./testdata";
-
     let {
-        scholarship = fallbackScholarship,
-        similarScholarships = fallbackSimilarScholarships
+        scholarship,
+        similarScholarships = []
     } = $props();
 
     const daysLeft = $derived(getDaysUntil(scholarship.deadline));

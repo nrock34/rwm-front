@@ -1,27 +1,22 @@
-import { getPostcardsList } from '$lib/server/gatherers/postcards.js'
+import { error } from "@sveltejs/kit";
+import { loadPostcardDirectoryPage } from "$domains/postcards";
 
+/** @type {import("./$types").PageServerLoad} */
+export const load = async ({ url, fetch }) => {
+	const result = await loadPostcardDirectoryPage({
+		q: url.searchParams.get("q") ?? "",
+		category: url.searchParams.get("category") ?? "",
+		tag: url.searchParams.get("tag") ?? "",
+		sort_by: url.searchParams.get("sort_by") ?? "",
+		page: url.searchParams.get("page") ?? "1"
+	}, { fetch });
 
-export const load = async ({ event, url, fetch }) => {
+	if (!result.ok) {
+		throw error(result.error.status || 500, result.error.message);
+	}
 
-    const pageNum = Number(url.searchParams.get('page') ?? 1) ;
-    const search = url.searchParams.get('q') ?? ''
-
-    const postcards = await getPostcardsList({
-        ...Object.fromEntries(url.searchParams)
-    });
-
-    let data = {
-        pageCount: postcards.count,
-        results: postcards.postcards
-    }
-
-    if (postcards.next) data['next'] = postcards.next
-    if (postcards.prev) data['prev'] = postcards.prev
-
-    return {
-        ...data,
-        search,
-        pageNum
-    }
-
-}
+	return {
+		directory: result.data,
+		canonicalUrl: new URL(url.pathname, url.origin).toString()
+	};
+};

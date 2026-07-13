@@ -1,236 +1,127 @@
 <script>
-  import PostcardsViewAll from './PostcardsViewAll.svelte';
+	import { navigating } from "$app/state";
+	import { getContext } from "svelte";
+	import { Filter, LoaderCircle, Search } from "lucide-svelte";
+	import PostcardGrid from "$lib/components/postcards/PostcardGrid.svelte";
+	import PostcardPagination from "$lib/components/postcards/PostcardPagination.svelte";
+	import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
 
-    import { get } from "svelte/store";
-    import * as Card from "$lib/components/ui/card";
-    import * as Avatar from "$lib/components/ui/avatar";
-    import { AvatarImage } from "$lib/components/ui/avatar";
-    import { Eye, Filter, Heart, Search } from "lucide-svelte";
-    import { innerWidth, innerHeight } from 'svelte/reactivity/window';
-    import { Badge } from "$lib/components/ui/badge";
-    import { Input } from "$lib/components/ui/input";
-    import { Button } from "$lib/components/ui/button";
-    import { Separator } from "$lib/components/ui/separator";
-    import * as Pagination from "$lib/components/ui/pagination";
-    import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-svelte';
-    import { goto } from '$app/navigation';
-
-    import Stamp from '$lib/assets/stamp.svelte'
-
-    import { page } from '$app/state';
-    import { range } from '$lib/utils';
-    import { ScrollArea } from '$lib/components/ui/scroll-area';
-    import { getContext } from 'svelte';
-    import ResilientImage from '$lib/components/shared/ResilientImage.svelte';
- 
-    
-    let { data } = $props()
-
-    const perPage = 12
-    let { pageCount, pageNum = 1, results } = $derived(data)
-    const urlparams = $derived(page.url.searchParams)
-    let searchQuery = $state(data.search)
-    let selectedRegion = $state('');
-    $inspect(pageNum)
-    $effect(() => {
-        if (searchQuery) {
-            goto(`?q=${searchQuery}`, { keepFocus: true})
-        } else {
-            goto(`?`, { keepFocus: true})
-        }
-    })
-
-    const config = getContext('config')
-
-    let postcardsResults = $state('')
-
-    const regions = [
-        {id: 'europe', label: 'Europe'},
-        {id: 'lAmerica', label: 'Latin America'},
-        {id: 'africa', label: 'Africa'},
-        {id: 'asia', label: 'Asia'},
-        {id: 'sAmerica', label: 'South America'}
-    ]
-
-    const featPostcard = false
+	let { data } = $props();
+	const config = getContext("config");
+	let directory = $derived(data.directory);
+	let isLoading = $derived(Boolean(navigating.to?.url.pathname === "/postcards"));
 </script>
 
 <svelte:head>
-    <title>Browse Postcards - RomeWithMe</title>
+	<title>Travel Postcards & Study Abroad Stories | RomeWithMe</title>
+	<meta name="description" content="Explore first-hand travel and study abroad stories from the RomeWithMe community. Search postcards by topic, author, category, or tag." />
+	<link rel="canonical" href={data.canonicalUrl} />
+	<meta property="og:title" content="Travel Postcards & Study Abroad Stories | RomeWithMe" />
+	<meta property="og:description" content="Explore first-hand travel and study abroad stories from the RomeWithMe community." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={data.canonicalUrl} />
 </svelte:head>
 
-<div class="bg-muted/80">
-    <section class="relative overflow-hidden">
-        <ResilientImage
-            class="w-full h-80 sm:h-90 md:h-110 object-cover"
-            alt='Postcards Banner Image'
-            src={`${config?.postcardsHeroIMG ?? 'https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d'}`}
-            fallbackSrc="https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg"
-        />
-        <div class="absolute inset-0 bg-gradient-to-b from-background/92 via-background/68 to-background/44 backdrop-blur-[3px]"></div>
-        <div class="absolute inset-0 mx-4 sm:mx-8 md:mx-14">
-            
-            <div class="flex h-full w-full max-w-6xl flex-col justify-center justify-self-center px-6 py-6 text-foreground sm:px-8 md:px-6">
-                <h6 class="text-xs sm:text-sm tracking-widest mb-1">COLLECTION</h6>
-                <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Explore Postcards</h2>
-                <p class="pt-2 text-sm font-light leading-tight tracking-wide text-muted-foreground sm:text-base md:text-lg">
-                    Browse curated travel stories from our community. Filter by region or author and collect your favorites.
-                </p>
-                {#if featPostcard}
-                <div class="mt-12 m-2 grid min-h-60 max-w-140 grid-cols-2 rounded-sm bg-card/80 p-8 ring-2 ring-ring/60">
-                    <div class="flex flex-col text-foreground">
-                        <span class="text-xs tracking-wide font-light">
-                            TOP PICK
-                        </span>
-                        <div>
-                            <h3 class="text-lg font-medium">{featPostcard.title}</h3>
-                            <p class="text-sm t">{featPostcard.description}</p>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute right-0 w-full space-y-2">
-                            <Stamp class="w-16 h-16 fill-foreground/90 object-cover justify-self-end"/>
-                            <div class="flex flex-col pl-12">
-                                {#each [1, 2, 3, 4] as item, idx}
-                                    {#if (idx === 1)}
-                                        <p class="w-full inline-flex justify-center font-script text-foreground font-[600]  ">{featPostcard.location}</p>
-                                    {:else}
-                                        <p class="text-sm">‎</p>
-                                    {/if}
-                                    <div class="border border-foreground/70"></div>
-                                {/each}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/if}
-            </div>
-        </div>
-    </section>
+<div class="min-h-screen bg-muted/35">
+	<section class="relative isolate overflow-hidden border-b border-border bg-background">
+		<ResilientImage
+			class="absolute inset-0 -z-20 h-full w-full object-cover"
+			alt="A mountain road inspiring a travel story"
+			src={config?.postcardsHeroIMG ?? "https://c.pxhere.com/photos/25/57/fog_montes_sky_mountaineering_mountain_road_mountain_panoramic_slovenia-489210.jpg!d"}
+			fallbackSrc="https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg"
+		/>
+		<div class="absolute inset-0 -z-10 bg-gradient-to-r from-background/95 via-background/80 to-background/45 backdrop-blur-[2px]"></div>
+		<div class="mx-auto flex min-h-80 max-w-7xl items-center px-6 py-14 sm:px-10 lg:px-12">
+			<div class="max-w-3xl">
+				<p class="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-primary">Community collection</p>
+				<h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Postcards from abroad</h1>
+				<p class="mt-4 max-w-2xl text-base leading-relaxed text-foreground/75 sm:text-lg">
+					Real stories, practical discoveries, and memorable moments shared by students and travelers around the world.
+				</p>
+			</div>
+		</div>
+	</section>
 
-    <section class="w-full mx-auto max-w-7xl py-6 px-6 sm:px-8 md:px-6 justify-self-center ">
-        <div class="grid grid-cols-6 gap-0">
-            <div class="col-span-6 px-6 sm:px-8 md:px-10 lg:px-6">
-                <div class="sticky top-20 pb-4 w-full mt-2 sm:mt-6">
-                    <div class="w-full justify-self-center space-y-3 rounded-lg border border-border bg-card px-8 py-4 lg:flex lg:items-end lg:gap-x-4 lg:space-y-0">
-                        <!-- search section -->
-                        <div class="space-y-1.5 w-full">
-                            <h2 class="text-xs sm:text-sm font-semibold text-foreground/90 flex items-center gap-1">
-                                <Search class="h-3 w-3 sm:h-5 sm:w-5" />
-                                <span>Search</span>
-                            </h2>
-                            <div class="relative">
-                                <Input 
-                                    type='text'
-                                    placeholder='type here...'
-                                    value={searchQuery}
-                                    oninput={(e) => {searchQuery = e.target.value}}
-                                    class="!text-xs sm:!text-sm !h-fit w-full pr-4 py-0.75 sm:!py-1.25 border border-border/40 rounded-lg focus:ring-2 focus:ring-ring/70
-                                            focus:border-transparent transition-all"
-                                />
+	<main class="mx-auto max-w-7xl px-6 py-10 sm:px-10 lg:px-12">
+		<form method="GET" action="/postcards" class="rounded-xl border border-border bg-card p-5 shadow-sm" aria-label="Filter postcards">
+			<div class="mb-4 flex items-center gap-2">
+				<Filter class="size-5 text-primary" aria-hidden="true" />
+				<h2 class="font-semibold">Find a postcard</h2>
+			</div>
+			<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-[2fr_1fr_1fr_1fr_auto] xl:items-end">
+				<label class="grid gap-1.5 text-sm font-medium" for="postcard-search">
+					Search
+					<div class="relative">
+						<Search class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+						<Input id="postcard-search" name="q" type="search" value={directory.filters.q} placeholder="Title, author, or topic" maxlength="120" class="pl-9" />
+					</div>
+				</label>
 
-                            </div>
-                        </div>
+				<label class="grid gap-1.5 text-sm font-medium" for="postcard-category">
+					Category
+					<Input id="postcard-category" name="category" value={directory.filters.category} list="postcard-categories" placeholder="Any category" maxlength="48" />
+					<datalist id="postcard-categories">
+						{#each directory.availableCategories as category}<option value={category}></option>{/each}
+					</datalist>
+				</label>
 
-                        <!-- country category -->
+				<label class="grid gap-1.5 text-sm font-medium" for="postcard-tag">
+					Tag
+					<Input id="postcard-tag" name="tag" value={directory.filters.tag} list="postcard-tags" placeholder="Any tag" maxlength="48" />
+					<datalist id="postcard-tags">
+						{#each directory.availableTags as tag}<option value={tag}></option>{/each}
+					</datalist>
+				</label>
 
-                        <div class="space-y-1.5">
-                            <h2 class="text-xs sm:text-sm font-semibold text-foreground/90 flex items-center gap-1">
-                                <Filter class="h-3 w-3 sm:h-5 sm:w-5"/>
-                                <span>Regions</span>
-                            </h2>
-                            <ScrollArea orientation='horizontal'>
-                                <div class="space-y-1.5 space-x-1.5 flex sm:flex-row">
-                                    <Button
-                                        onclick={() => {selectedRegion = 'all'}}
-                                        class={`!h-fit px-2 py-1 sm:py-1.5 transition-colors border-1
-                                            ${selectedRegion === 'all' ? 
-                                            'bg-primary/90 hover:bg-primary/90 text-primary-foreground' :
-                                            'bg-transparent hover:bg-primary/25 shadow-none text-foreground/80'}`}>
-                                        <span class="w-full text-left text-xs">All Regions</span>
-                                    </Button>
-                                    {#each regions as region }
-                                        <Button
-                                            key={region.id}
-                                            class={`!h-fit px-2 py-1 sm:py-1.5 transition-colors border-1 cursor-pointer
-                                                ${selectedRegion === region.id ? 
-                                                'bg-primary/90 hover:bg-primary/90 text-primary-foreground' :
-                                                'bg-transparent hover:bg-primary/25 shadow-none text-foreground/80'}`}
-                                            onclick={() => {selectedRegion = region.id}}
-                                        >
-                                            <span class="w-full text-xs text-left">{region.label}</span>
-                                        </Button>
-                                    {/each}
-                                </div>
-                            </ScrollArea>
-                            
-                        </div>
+				<label class="grid gap-1.5 text-sm font-medium" for="postcard-sort">
+					Sort by
+					<select id="postcard-sort" name="sort_by" value={directory.filters.sortBy} class="h-9 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50">
+						<option value="">Newest</option>
+						<option value="-like_count">Most liked</option>
+						<option value="-views">Most viewed</option>
+						<option value="-comment_count">Most discussed</option>
+						<option value="-updated_at">Recently updated</option>
+					</select>
+				</label>
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-6 w-full">
+				<div class="flex gap-2">
+					<Button type="submit" disabled={isLoading} class="min-w-24">
+						{#if isLoading}<LoaderCircle class="size-4 animate-spin" aria-hidden="true" />{/if}
+						Apply
+					</Button>
+					{#if directory.filters.q || directory.filters.category || directory.filters.tag || directory.filters.sortBy}
+						<Button href="/postcards" variant="ghost">Clear</Button>
+					{/if}
+				</div>
+			</div>
+		</form>
 
-                <svelte:boundary>
-                    <div class="mt-6">
-                        {#if results.length}
-                            <PostcardsViewAll {results} {searchQuery} {selectedRegion} > </PostcardsViewAll>
-                        {:else}
-                            <div class="flex flex-col justify-center items-center w-full h-full py-40">
-                                <h1 class="text-2xl text-secondary-foreground font-semibold">No Postcards Found</h1>
-                                <p class="text-muted-foreground">Please adjust you filters or try again later.</p>
-                            </div>
-                        {/if}
-                    </div>
-                    
+		<div class="mt-8 flex flex-wrap items-end justify-between gap-3">
+			<div>
+				<p class="text-sm text-muted-foreground">{directory.count} {directory.count === 1 ? "story" : "stories"}</p>
+				<h2 class="text-2xl font-semibold">Community postcards</h2>
+			</div>
+			{#if directory.totalPages > 1}
+				<p class="text-sm text-muted-foreground">Page {directory.page} of {directory.totalPages}</p>
+			{/if}
+		</div>
 
-                    {#snippet pending()}
-                        <div class="mx-auto my-auto">
-                            <h1>Loading Postcards</h1>
-                        </div>
-                    {/snippet}
-
-                </svelte:boundary>
-
-                <Pagination.Root class="py-8" bind:page={pageNum} count={pageCount} perPage={perPage}
-                    onPageChange={(pageNum) => {
-                        const searchParams = page.url.searchParams
-                        searchParams.set('page', pageNum)
-                        goto(`?${searchParams.toString()}`, { replaceState: true, invalidateAll: true})
-                        
-                    }}>
-                    {#snippet children({ pages, currentPage})}
-                        <Pagination.Content>
-                            <Pagination.Item>
-                                <Pagination.PrevButton>
-                                    <ChevronLeftIcon class="size-4" />
-                                    <span class="hidden sm:block">Previous</span>
-                                </Pagination.PrevButton>
-                            </Pagination.Item>
-                            {#each pages as page (page.key)}
-                                {#if page.type === "ellipsis"}
-                                <Pagination.Item>
-                                    <Pagination.Ellipsis />
-                                </Pagination.Item>
-                                {:else}
-                                <Pagination.Item>
-                                    <Pagination.Link {page} isActive={currentPage === page.value}>
-                                        {page.value}
-                                    </Pagination.Link>
-                                </Pagination.Item>
-                                {/if}
-                            {/each}
-                            <Pagination.Item>
-                                <Pagination.NextButton>
-                                    <span class="hidden sm:block">Next</span>
-                                    <ChevronRightIcon class="size-4" />
-                                </Pagination.NextButton>
-                            </Pagination.Item>
-                        </Pagination.Content>
-                    {/snippet}
-                </Pagination.Root>
-
-            </div>
-        </div>
-    </section>
+		<div class="mt-6 transition-opacity" class:opacity-60={isLoading} aria-busy={isLoading}>
+			{#if isLoading}
+				<p class="sr-only" role="status" aria-live="polite">Loading postcards</p>
+			{/if}
+			{#if directory.results.length > 0}
+				<PostcardGrid postcards={directory.results} />
+				<PostcardPagination currentPage={directory.page} totalPages={directory.totalPages} filters={directory.filters} />
+			{:else}
+				<div class="rounded-xl border border-dashed border-border bg-card px-6 py-20 text-center">
+					<h2 class="text-xl font-semibold">No postcards matched those filters</h2>
+					<p class="mt-2 text-sm text-muted-foreground">Try a broader search, remove a filter, or browse the full collection.</p>
+					<Button href="/postcards" class="mt-5">View all postcards</Button>
+				</div>
+			{/if}
+		</div>
+	</main>
 </div>

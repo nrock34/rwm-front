@@ -1,9 +1,7 @@
 <script>
     import * as Card from "../ui/card";
-    import Button from "../ui/button/button.svelte";
-    import { scholarship as fallbackScholarship } from "./testdata";
-
-    let { scholarship = fallbackScholarship } = $props();
+    import { Button } from "../ui/button";
+    let { scholarship } = $props();
 
     const normalizeLink = (value) => {
         if (typeof value !== "string") return null;

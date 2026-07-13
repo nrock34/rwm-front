@@ -1,9 +1,8 @@
 <script>
 	import * as Card from "$lib/components/ui/card";
-	import { communityStats } from "$lib/mocks/community.js";
 	import { Users } from "lucide-svelte";
 
-	let { stats = communityStats } = $props();
+	let { stats = [] } = $props();
 </script>
 
 <Card.Root>
@@ -13,13 +12,17 @@
 	</Card.Header>
 
 	<Card.Content>
-		<div class="grid grid-cols-2 gap-4 text-center">
-			{#each stats as stat}
+		{#if stats.length === 0}
+			<p class="text-sm text-muted-foreground">Community totals are unavailable right now.</p>
+		{:else}
+			<div class="grid grid-cols-2 gap-4 text-center">
+			{#each stats as stat (stat.name)}
 				<div>
 					<p class="text-xl font-[900] text-primary">{stat.value}</p>
 					<p class="text-xs text-secondary-foreground">{stat.name}</p>
 				</div>
 			{/each}
-		</div>
+			</div>
+		{/if}
 	</Card.Content>
 </Card.Root>

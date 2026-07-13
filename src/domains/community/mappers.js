@@ -1,5 +1,6 @@
 import { getDaysUntil, getTimeAgo } from "../../lib/helper-funcs/funcs.js";
 import { toFiniteNumber, toTitleCase } from "../../core/domain/coerce.js";
+import { sanitizeLegacyHtml } from "../../core/security/html.js";
 
 /** @type {Readonly<Record<string, string>>} */
 const POST_CATEGORY_LABELS = Object.freeze({
@@ -179,7 +180,7 @@ export function mapCommunityUpdate(update) {
 export function mapCommunityUpdateDetail(update) {
 	return {
 		...mapCommunityUpdate(update),
-		content: typeof update.content === "string" ? update.content : ""
+		content: typeof update.content === "string" ? sanitizeLegacyHtml(update.content) : ""
 	};
 }
 
@@ -279,6 +280,73 @@ export function deriveUpcomingDeadlines(programs, scholarships) {
 	return deadlineItems
 		.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 		.slice(0, 4);
+}
+
+/**
+ * Builds honest, request-scoped community totals from the data returned by the
+ * summary endpoints. These are intentionally labelled as visible/featured
+ * counts rather than pretending to be platform-wide analytics.
+ *
+ * @param {import("./types.js").CommunitySummaryData} summary
+ * @returns {Array<{ name: string; value: number }>}
+ */
+export function deriveCommunityStats(summary) {
+	return [
+		{ name: "Posts in feed", value: summary.posts.length },
+		{ name: "Recent updates", value: summary.updates.length },
+		{ name: "Featured programs", value: summary.featuredPrograms.length },
+		{ name: "Featured scholarships", value: summary.featuredScholarships.length }
+	];
+}
+
+/**
+ * @param {import("./types.js").CommunityPostCard[]} posts
+ * @param {number} [limit]
+ * @returns {Array<{ tag: string; posts: number }>}
+ */
+export function deriveTrendingTags(posts, limit = 5) {
+	const counts = new Map();
+	for (const post of posts) {
+		for (const rawTag of new Set(post.tags)) {
+			const tag = rawTag.trim().replace(/^#/u, "").toLowerCase();
+			if (!tag) continue;
+			counts.set(tag, (counts.get(tag) ?? 0) + 1);
+		}
+	}
+
+	return Array.from(counts, ([tag, postCount]) => ({ tag, posts: postCount }))
+		.sort((a, b) => b.posts - a.posts || a.tag.localeCompare(b.tag))
+		.slice(0, Math.max(0, limit));
+}
+
+/**
+ * @param {import("./types.js").CommunitySummaryData} summary
+ * @param {number} [limit]
+ * @returns {Array<{ type: "community" | "update"; title: string; time: string; href: string; occurredAt: string }>}
+ */
+export function deriveHomeActivity(summary, limit = 4) {
+	return [
+		...summary.posts.map((post) => ({
+			type: /** @type {const} */ ("community"),
+			title: post.title,
+			time: post.timestampLabel,
+			href: post.href,
+			occurredAt: post.createdAt
+		})),
+		...summary.updates.map((update) => ({
+			type: /** @type {const} */ ("update"),
+			title: update.title,
+			time: update.timeAgo,
+			href: update.href,
+			occurredAt: update.updatedAt || update.createdAt
+		}))
+	]
+		.sort((a, b) => {
+			const aTime = new Date(a.occurredAt).getTime();
+			const bTime = new Date(b.occurredAt).getTime();
+			return (Number.isFinite(bTime) ? bTime : 0) - (Number.isFinite(aTime) ? aTime : 0);
+		})
+		.slice(0, Math.max(0, limit));
 }
 
 /**

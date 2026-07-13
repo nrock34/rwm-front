@@ -4,7 +4,7 @@
     import { getDaysUntil, getTimeAgo } from "$lib/helper-funcs/funcs";
     import { BadgeEuro, Bookmark, Calendar, CalendarClock, CalendarSync, CalendarX, Clock, DollarSign, Eye, Heart, Link, MapPin, Star } from "lucide-svelte";
     import { Button } from "../ui/button";
-    import Toggle from "../ui/toggle/toggle.svelte";
+    import { Toggle } from "../ui/toggle";
 
     let view = 'card-view';
     let { paginatedScholarships, categories, totalPage, userSavedScholarships } = $props();

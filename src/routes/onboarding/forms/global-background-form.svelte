@@ -46,6 +46,17 @@
                 ...$formData,
                 academicPayload
             });
+        },
+        onResult: ({ result }) => {
+            if (result.type === "redirect") {
+                removeStoredValue(ONBOARDING_STORAGE_KEYS.academicFields);
+                removeStoredValue(ONBOARDING_STORAGE_KEYS.academicStep);
+            } else if (result.type === "failure") {
+                const responseMessage = result.data?.form?.message?.msg;
+                if (typeof responseMessage === "string" && responseMessage.length > 0) {
+                    toast.error(responseMessage);
+                }
+            }
         }
     });
 

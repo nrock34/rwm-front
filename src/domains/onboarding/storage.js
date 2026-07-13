@@ -1,7 +1,6 @@
 export const ONBOARDING_STORAGE_KEYS = Object.freeze({
 	academicFields: "acd_bck_fields",
-	academicStep: "onboarding_academic_step",
-	testSuccessPayload: "onboarding_test_success_payload"
+	academicStep: "onboarding_academic_step"
 });
 
 /**

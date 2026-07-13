@@ -158,3 +158,34 @@ export function mapOnboardingDraftToPayload(draftValue) {
 		completed_steps: completedSteps
 	};
 }
+
+/**
+ * @param {import("./types.js").OnboardingAcademicBackgroundPayload} academic
+ * @returns {import("./types.js").OnboardingEducationUpdate}
+ */
+export function mapAcademicBackgroundToEducationUpdate(academic) {
+	const universityId = academic.university_id;
+	if (universityId === null || !Number.isInteger(universityId) || universityId <= 0) {
+		throw new TypeError("Choose a university from the available list.");
+	}
+
+	return {
+		university: universityId,
+		major: academic.major,
+		year: academic.graduation_year
+	};
+}
+
+/**
+ * The existing global-education API currently stores whether the user has
+ * studied abroad. The remaining discovery fields stay in the domain payload
+ * so the API can add support without changing the form contract.
+ *
+ * @param {import("./types.js").OnboardingGlobalBackgroundPayload} globalBackground
+ * @returns {import("./types.js").OnboardingGlobalEducationUpdate}
+ */
+export function mapGlobalBackgroundToEducationUpdate(globalBackground) {
+	return {
+		went_abroad: globalBackground.has_traveled_edu
+	};
+}

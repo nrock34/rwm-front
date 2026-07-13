@@ -1,14 +1,12 @@
 <script>
     import { AlertCircle, Bookmark, Calendar, DollarSign, MapPin, Share2, Star, Users } from "lucide-svelte";
-    import Badge from "../ui/badge/badge.svelte";
+    import { Badge } from "../ui/badge";
     import * as Card from "../ui/card";
-    import Button from "../ui/button/button.svelte";
-    import Toggle from "../ui/toggle/toggle.svelte";
+    import { Button } from "../ui/button";
+    import { Toggle } from "../ui/toggle";
     import { toast } from "svelte-sonner";
-    import { scholarship as fallbackScholarship } from "./testdata";
-
     let {
-        scholarship = fallbackScholarship,
+        scholarship,
         daysLeft = 0
     } = $props();
 

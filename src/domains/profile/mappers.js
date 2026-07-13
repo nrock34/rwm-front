@@ -5,7 +5,8 @@ import { isObject, objectOrEmpty, textOrEmpty } from "../../core/domain/coerce.j
  * @returns {number}
  */
 function numberOrZero(value) {
-	return typeof value === "number" && Number.isFinite(value) ? value : 0;
+	const number = typeof value === "number" ? value : Number(value);
+	return Number.isFinite(number) ? number : 0;
 }
 
 /**
@@ -13,7 +14,39 @@ function numberOrZero(value) {
  * @returns {number | null}
  */
 function numberOrNull(value) {
-	return typeof value === "number" && Number.isFinite(value) ? value : null;
+	const number = typeof value === "number" ? value : Number(value);
+	return Number.isFinite(number) ? number : null;
+}
+
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
+function stringOrEmpty(value) {
+	if (typeof value === "string") return value;
+	if (typeof value === "number" && Number.isFinite(value)) return String(value);
+	return "";
+}
+
+/**
+ * @param {unknown} value
+ * @returns {boolean}
+ */
+function booleanOrFalse(value) {
+	if (typeof value === "boolean") return value;
+	if (typeof value === "string") return value.trim().toLowerCase() === "true";
+	return false;
+}
+
+/**
+ * @param {unknown} value
+ * @returns {boolean | null}
+ */
+function booleanOrNull(value) {
+	if (typeof value === "boolean") return value;
+	if (typeof value === "string" && value.trim().toLowerCase() === "true") return true;
+	if (typeof value === "string" && value.trim().toLowerCase() === "false") return false;
+	return null;
 }
 
 /**
@@ -141,12 +174,100 @@ export function mapProfileAccountSettings(value) {
  */
 export function mapProfileEducationSettings(value) {
 	const education = objectOrEmpty(value);
-	const gradYear = numberOrZero(education.grad_year);
+	const gradYear = numberOrZero(education.grad_year ?? education.year);
 
 	return {
-		university: textOrEmpty(education.university),
+		university: stringOrEmpty(education.university),
 		major: textOrEmpty(education.major),
 		grad_year: gradYear >= 2010 ? gradYear : undefined
+	};
+}
+
+/**
+ * @param {unknown} value
+ * @returns {import("./types.js").PublicProfileBadge[]}
+ */
+function mapPublicBadges(value) {
+	if (!Array.isArray(value)) return [];
+
+	return value.flatMap((rawBadge) => {
+		const entry = objectOrEmpty(rawBadge);
+		const badge = isObject(entry.badge) ? entry.badge : entry;
+		const name = textOrEmpty(badge.name).trim();
+		if (!name) return [];
+
+		const rawTone = textOrEmpty(badge.tone) || textOrEmpty(badge.color);
+		const normalizedTone = rawTone.trim().toLowerCase();
+		/** @type {import("./types.js").PublicProfileBadge["tone"]} */
+		const tone = normalizedTone === "blue"
+			|| normalizedTone === "purple"
+			|| normalizedTone === "green"
+			? normalizedTone
+			: "neutral";
+
+		return [{ name, tone }];
+	});
+}
+
+/**
+ * @param {{ id: number; value: unknown }} post
+ * @returns {import("./types.js").PublicProfilePost}
+ */
+function mapPublicProfilePost(post) {
+	const value = objectOrEmpty(post.value);
+	return {
+		id: post.id,
+		data: {
+			title: textOrEmpty(value.title),
+			content: textOrEmpty(value.content),
+			updated_at: textOrEmpty(value.updated_at) || textOrEmpty(value.created_at)
+		},
+		image: textOrEmpty(value.media) || null
+	};
+}
+
+/**
+ * Maps only fields actually returned by the profile API. Missing values stay
+ * absent/empty instead of being replaced with invented badges or dates.
+ *
+ * @param {unknown} value
+ * @param {{ id: number; value: unknown }[]} recentPosts
+ * @param {string} profileUserId
+ * @returns {import("./types.js").PublicProfileState}
+ */
+export function mapPublicProfile(value, recentPosts, profileUserId) {
+	const profileData = objectOrEmpty(value);
+	const profile = objectOrEmpty(profileData.profile);
+	const education = objectOrEmpty(profileData.education);
+	const badges = mapPublicBadges(profileData.badges);
+	const year = numberOrNull(education.year ?? profileData.grad_year ?? profileData.year);
+	const postCount = numberOrNull(profileData.post_count);
+	const likeCount = numberOrNull(profileData.like_count);
+
+	return {
+		id: numberOrZero(profileData.id) || numberOrZero(profileUserId),
+		name: textOrEmpty(profileData.name).trim()
+			|| textOrEmpty(profileData.username).trim()
+			|| "Community Member",
+		username: textOrEmpty(profileData.username),
+		avatar: textOrEmpty(profile.avatar) || null,
+		badge: badges[0]?.name ?? null,
+		location: textOrEmpty(profileData.location),
+		university: textOrEmpty(profileData.university),
+		currentProgram: textOrEmpty(profileData.current_program_title),
+		major: textOrEmpty(profileData.major),
+		year: year && Number.isInteger(year) ? year : null,
+		wentAbroad: booleanOrNull(profileData.went_abroad),
+		joinDate: textOrEmpty(profileData.register_date) || null,
+		bio: textOrEmpty(profile.bio),
+		isVerified: booleanOrFalse(profile.is_contributer),
+		staff: booleanOrFalse(profile.is_staff),
+		stats: {
+			posts: postCount === null ? null : Math.max(0, postCount),
+			likes: likeCount === null ? null : Math.max(0, likeCount)
+		},
+		badges,
+		recentPosts: recentPosts.map(mapPublicProfilePost)
 	};
 }
 

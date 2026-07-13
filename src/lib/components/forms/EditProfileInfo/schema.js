@@ -1,7 +1,6 @@
 
-import { bool, mixed, boolean, date, object, string, number } from "yup";
-import { CalendarDate, ZonedDateTime } from "@internationalized/date"
-import { yup } from "sveltekit-superforms/adapters";
+import { mixed, object, string } from "yup";
+import { AVATAR_CONTENT_TYPES, AVATAR_MAX_BYTES } from "$domains/profile/avatar.js";
 
 export const profileInfoSchema = object({
     first_name: string().max(40).min(2),
@@ -10,13 +9,13 @@ export const profileInfoSchema = object({
     bio: string().max(250),
     avatar: mixed()
         .notRequired()
-        .test("fileSize", "file size to large", (value) => {
+        .test("fileSize", "Avatar images must be 5 MB or smaller.", (value) => {
             if (!value) return true
-            return value && value?.size <= 10 * 1024 * 1024
+            return value && value?.size <= AVATAR_MAX_BYTES
         })
-        .test("fileType", "unsupported file format", (value) => {
+        .test("fileType", "Avatar images must be JPEG or PNG files.", (value) => {
             if (!value) return true
-            return value && ["image/jpeg", "image/png"].includes(value?.type)
+            return value && AVATAR_CONTENT_TYPES.includes(value?.type)
         }),
     birthday: string().optional()
     // mixed().test(

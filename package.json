@@ -3,16 +3,24 @@
 	"private": true,
 	"version": "0.1.1",
 	"type": "module",
+	"engines": {
+		"node": ">=22.0.0"
+	},
+	"overrides": {
+		"cookie": "^0.7.2"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
+		"prepare": "svelte-kit sync",
 		"check:types": "tsc -p jsconfig.typecheck.json --noEmit",
 		"check:svelte": "svelte-check --tsconfig ./jsconfig.typecheck.json",
 		"check:imports": "node ./scripts/check-ui-imports.mjs",
+		"audit:prod": "npm audit --omit=dev --audit-level=moderate",
+		"check": "npm run check:types && npm run check:svelte && npm run check:imports && npm run test:unit && npm run build",
 		"test:unit": "vitest run",
-		"analyze": "ANALYZE=true vite build",
+		"analyze": "vite build --mode analyze",
 		"setup:git": "sh scripts/setup-git-hooks.sh"
 	},
 	"devDependencies": {

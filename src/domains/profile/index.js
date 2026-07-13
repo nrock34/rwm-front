@@ -6,5 +6,9 @@ export {
 	loadProfileEducationSettings,
 	loadProfileSavedItems,
 	loadProfileSummary,
-	updateProfileInfo
+	loadPublicProfile,
+	updateProfileEducationSettings,
+	updateProfileInfo,
+	validateAvatarUpload,
+	AVATAR_MAX_BYTES
 } from "./service.js";

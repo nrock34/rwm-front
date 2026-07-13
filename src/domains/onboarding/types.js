@@ -67,6 +67,63 @@
  */
 
 /**
+ * The current API stores academic and global education separately. These are
+ * the exact request shapes accepted by those endpoints.
+ *
+ * @typedef {{
+ *   university: number;
+ *   major: string;
+ *   year: number;
+ * }} OnboardingEducationUpdate
+ */
+
+/**
+ * @typedef {{
+ *   went_abroad: boolean;
+ * }} OnboardingGlobalEducationUpdate
+ */
+
+/**
+ * @typedef {"incomplete_draft" | "invalid_university" | "invalid_response" | "missing_env" | "upstream_error" | "network_error" | "partial_failure"} OnboardingErrorCode
+ */
+
+/**
+ * @typedef {{
+ *   code: OnboardingErrorCode;
+ *   status: number;
+ *   message: string;
+ *   details?: unknown;
+ * }} OnboardingDomainError
+ */
+
+/**
+ * @typedef {{
+ *   fetch: typeof fetch;
+ *   accessToken?: string | null;
+ * }} OnboardingSubmitDeps
+ */
+
+/**
+ * @typedef {{
+ *   ok: true;
+ *   data: {
+ *     completedSteps: OnboardingStepId[];
+ *   };
+ * }} OnboardingSubmitSuccess
+ */
+
+/**
+ * @typedef {{
+ *   ok: false;
+ *   error: OnboardingDomainError;
+ * }} OnboardingSubmitFailure
+ */
+
+/**
+ * @typedef {OnboardingSubmitSuccess | OnboardingSubmitFailure} OnboardingSubmitResult
+ */
+
+/**
  * @typedef {{
  *   id: OnboardingStepId;
  *   label: string;

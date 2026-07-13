@@ -36,21 +36,29 @@ export function getVideoEmbedUrl(value) {
 
 	try {
 		const url = new URL(value);
-		if (url.hostname.includes("youtube.com")) {
-			const videoId = url.searchParams.get("v");
-			return videoId ? `https://www.youtube.com/embed/${videoId}` : value;
+		if (!['http:', 'https:'].includes(url.protocol)) return null;
+		const hostname = url.hostname.toLowerCase();
+		/** @param {unknown} id @returns {id is string} */
+		const isSafeId = (id) => typeof id === "string" && /^[a-zA-Z0-9_-]{6,64}$/u.test(id);
+		if (["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"].includes(hostname)) {
+			const pathParts = url.pathname.split("/").filter(Boolean);
+			const videoId = pathParts[0] === "embed" ? pathParts[1] : url.searchParams.get("v");
+			return isSafeId(videoId) ? `https://www.youtube-nocookie.com/embed/${videoId}` : null;
 		}
-		if (url.hostname.includes("youtu.be")) {
-			const videoId = url.pathname.replace(/^\//, "");
-			return videoId ? `https://www.youtube.com/embed/${videoId}` : value;
+		if (hostname === "youtu.be") {
+			const videoId = url.pathname.split("/").filter(Boolean)[0];
+			return isSafeId(videoId) ? `https://www.youtube-nocookie.com/embed/${videoId}` : null;
 		}
-		if (url.hostname.includes("vimeo.com")) {
-			const videoId = url.pathname.replace(/^\//, "");
-			return videoId ? `https://player.vimeo.com/video/${videoId}` : value;
+		if (["vimeo.com", "www.vimeo.com", "player.vimeo.com"].includes(hostname)) {
+			const pathParts = url.pathname.split("/").filter(Boolean);
+			const videoId = pathParts[0] === "video" ? pathParts[1] : pathParts[0];
+			return typeof videoId === "string" && /^\d{5,16}$/u.test(videoId)
+				? `https://player.vimeo.com/video/${videoId}`
+				: null;
 		}
-		return value;
+		return null;
 	} catch {
-		return value;
+		return null;
 	}
 }
 
@@ -59,6 +67,5 @@ export function getVideoEmbedUrl(value) {
  * @returns {boolean}
  */
 export function isEmbeddableVideoUrl(value) {
-	if (!value || typeof value !== "string") return false;
-	return /youtube\.com|youtu\.be|vimeo\.com/i.test(value);
+	return getVideoEmbedUrl(value) !== null;
 }

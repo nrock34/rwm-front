@@ -1,8 +1,6 @@
 <script>
     import * as Card from "../ui/card";
-    import { scholarship as fallbackScholarship } from "./testdata";
-
-    let { scholarship = fallbackScholarship } = $props();
+    let { scholarship } = $props();
 
     const timeline = $derived(Array.isArray(scholarship.timeline) ? scholarship.timeline : []);
 

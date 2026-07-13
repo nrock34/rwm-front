@@ -1,4 +1,4 @@
-import { fail, superValidate } from "sveltekit-superforms";
+import { fail, message, superValidate } from "sveltekit-superforms";
 import { error, redirect } from "@sveltejs/kit";
 import { yup } from "sveltekit-superforms/adapters";
 import { parse as parseDevalue } from "devalue";
@@ -11,13 +11,13 @@ import {
 	listOnboardingSteps,
 	mapAcademicBackgroundStep,
 	mapGlobalBackgroundStep,
-	mapOnboardingDraftToPayload
+	mapOnboardingDraftToPayload,
+	asOnboardingFailure,
+	submitOnboarding
 } from "$domains/onboarding/index.js";
 import { sanitizeRelativeRedirectTarget } from "$lib/auth/redirect.js";
 import { resolveApiUrl } from "../../core/env/server.js";
 import { requestJson } from "../../core/http/client.js";
-
-const ONBOARDING_TEST_SUCCESS_COOKIE = "onboarding_test_success_payload";
 
 /**
  * @param {FormDataEntryValue | null} value
@@ -140,7 +140,7 @@ export const actions = {
 		};
 	},
 
-	globalBackground: async ({ request, cookies, url }) => {
+	globalBackground: async ({ request, fetch, locals, url }) => {
 		const formData = await request.formData();
 		const academicBackground = readAcademicPayloadFromFormData(formData);
 		const form = await superValidate(formData, yup(globalBackgroundSchema));
@@ -151,16 +151,31 @@ export const actions = {
 			academicBackground,
 			globalBackground: globalStep
 		});
-		const isHttps = url.protocol === "https:";
-
-		cookies.set(ONBOARDING_TEST_SUCCESS_COOKIE, JSON.stringify(payload), {
-			path: "/onboarding",
-			httpOnly: true,
-			sameSite: "lax",
-			secure: isHttps,
-			maxAge: 60 * 10
+		const result = await submitOnboarding(payload, {
+			fetch,
+			accessToken: locals.token
 		});
 
-		throw redirect(303, "/onboarding/test-success");
+		if (!result.ok) {
+			const failure = asOnboardingFailure(result);
+			return message(
+				form,
+				{
+					error: failure.error.code,
+					msg: failure.error.message
+				},
+				{ status: failure.error.status || 400 }
+			);
+		}
+
+		const requestedTarget = sanitizeRelativeRedirectTarget(
+			url.searchParams.get("redirectTo"),
+			"/profile/dashboard"
+		);
+		const redirectTo = requestedTarget.startsWith("/onboarding")
+			? "/profile/dashboard"
+			: requestedTarget;
+
+		throw redirect(303, redirectTo);
 	}
 };

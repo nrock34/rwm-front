@@ -1,11 +1,9 @@
 <script>
     import { Check } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import Toggle from "../ui/toggle/toggle.svelte";
+    import { Toggle } from "../ui/toggle";
     import { SvelteSet } from 'svelte/reactivity';
-    import { scholarship as fallbackScholarship } from "./testdata";
-
-    let { scholarship = fallbackScholarship } = $props();
+    let { scholarship } = $props();
 
     let completedAppReqs = $state(new SvelteSet());
     const updateCompletedAppReq = (id) => {

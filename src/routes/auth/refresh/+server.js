@@ -1,5 +1,11 @@
-import { redirect } from '@sveltejs/kit';
-import { passRefreshTokenCookie, refreshSession, setSignedAccessCookie } from '$domains/auth/index.js';
+import { json } from '@sveltejs/kit';
+import { clearAuthCookies, passRefreshTokenCookie, refreshSession, setSignedAccessCookie } from '$domains/auth/index.js';
+
+const NO_STORE_HEADERS = {
+    'Cache-Control': 'no-store, max-age=0',
+    Pragma: 'no-cache',
+    Vary: 'Cookie'
+};
 
 /**
  * @param {import("../../../domains/auth/types.js").AuthRefreshResult} result
@@ -15,18 +21,27 @@ export async function POST({ cookies, fetch, url }) {
     if (!result.ok) {
         const failure = asAuthFailure(result)
 
-        if (failure.error.code === "missing_refresh_token") {
-            throw redirect(303, '/auth/login')
+        if (
+            failure.error.code === "invalid_response" ||
+            (failure.error.status >= 400 && failure.error.status < 500)
+        ) {
+            clearAuthCookies(cookies, { secure: url.protocol === 'https:' });
         }
-        return new Response(JSON.stringify({
-            error: 'Failed to refresh',
-            more: failure.error.details ?? { message: failure.error.message }
-        }), { status: 401 })
+
+        const status = failure.error.status >= 400 && failure.error.status <= 599
+            ? failure.error.status
+            : 500;
+        return json({
+            error: {
+                code: failure.error.code,
+                message: failure.error.message
+            }
+        }, { status, headers: NO_STORE_HEADERS });
     }
 
     const isHttps = url?.protocol === 'https:';
     passRefreshTokenCookie(cookies, result.headers, { secureOverride: isHttps })
     setSignedAccessCookie(cookies, result.data.acs_tkn, { secure: isHttps })
 
-    return new Response(JSON.stringify(result.data), { status: 200 });
+    return json(result.data, { status: 200, headers: NO_STORE_HEADERS });
 }

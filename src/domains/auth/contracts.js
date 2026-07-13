@@ -8,8 +8,8 @@ import { coerceDomainError, createDomainError } from "../../core/domain/errors.j
 export function assertRequiredAuthEnv() {
 	try {
 			const apiUrl = getApiUrl();
-			const cookieSecret = getCookieSecret({ allowInsecureFallback: true });
-			const jwtSecret = getAuthJwtSecret({ allowInsecureFallback: true });
+			const cookieSecret = getCookieSecret();
+			const jwtSecret = getAuthJwtSecret();
 			return { apiUrl, cookieSecret, jwtSecret };
 		} catch (err) {
 			if (err instanceof MissingEnvError) {

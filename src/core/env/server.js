@@ -48,31 +48,23 @@ export function resolveApiUrl(path, apiUrl = getApiUrl()) {
 }
 
 /**
- * @param {{ allowInsecureFallback?: boolean }} [options]
  * @throws {MissingEnvError}
  * @returns {string}
  */
-export function getCookieSecret(options = {}) {
-	const allowInsecureFallback = options.allowInsecureFallback ?? false;
-	try {
-		return requireEnv("COOKIE_SECRET");
-	} catch (err) {
-		if (err instanceof MissingEnvError) {
-			if (allowInsecureFallback) return "12345";
-			throw new MissingEnvError("COOKIE_SECRET");
-		}
-		throw err;
-	}
+export function getCookieSecret() {
+	return requireEnv("COOKIE_SECRET");
 }
 
 /**
- * @param {{ allowInsecureFallback?: boolean }} [options]
+ * The backend historically exposed this secret under more than one name. Keep
+ * those configuration aliases, but never substitute a known default: starting
+ * without a configured verification key must fail closed.
+ *
+ * @throws {MissingEnvError}
  * @returns {string}
  */
-export function getAuthJwtSecret(options = {}) {
-	const allowInsecureFallback = options.allowInsecureFallback ?? false;
+export function getAuthJwtSecret() {
 	const value = env.ACS_JWT_SECRET ?? env.JWT_SECRET ?? env.COOKIE_SECRET;
 	if (value) return value;
-	if (allowInsecureFallback) return "12345";
 	throw new MissingEnvError("ACS_JWT_SECRET|JWT_SECRET|COOKIE_SECRET");
 }

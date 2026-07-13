@@ -9,6 +9,7 @@ import { requestJson } from "../../../core/http/client.js";
 import {
 	loadEditableProfileInfo,
 	loadProfileEducationSettings,
+	updateProfileEducationSettings,
 	updateProfileInfo
 } from "../../../domains/profile/index.js";
 import { asProfileFailure } from "../../../domains/profile/types.js";
@@ -112,13 +113,11 @@ export const actions = {
 			return fail(400, { profileInfoForm });
 		}
 
-		let host = url.hostname
-
 		const result = await updateProfileInfo(profileInfoForm.data, {
 			fetch,
 			accessToken: locals.token,
 			platform,
-			host
+			origin: url.origin
 		});
 
 		if (!result.ok) {
@@ -140,11 +139,30 @@ export const actions = {
 		});
 	},
 
-	profileEducation: async ({ request }) => {
+	profileEducation: async ({ request, fetch, locals }) => {
 		const profileEducationForm = await superValidate(request, yup(EditProfileEducationSchema.profileEducationSchema));
 
 		if (!profileEducationForm.valid) return fail(400, { profileEducationForm });
 
-		return message(profileEducationForm, "form submitted");
+		const result = await updateProfileEducationSettings(profileEducationForm.data, {
+			fetch,
+			accessToken: locals.token
+		});
+
+		if (!result.ok) {
+			const failure = asProfileFailure(result);
+			return message(
+				profileEducationForm,
+				{
+					error: "save_failed",
+					msg: getApiErrorMessage(failure.error.details, failure.error.message)
+				},
+				{ status: failure.error.status || 400 }
+			);
+		}
+
+		return message(profileEducationForm, {
+			msg: "Education information updated."
+		});
 	}
 };

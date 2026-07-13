@@ -1,6 +1,9 @@
-import { createHmac } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 import jwt from "jsonwebtoken";
 import { getAuthJwtSecret, getCookieSecret } from "../env/server.js";
+
+const SIGNATURE_SEPARATOR = "....";
+const JWT_ALGORITHMS = /** @type {const} */ (["HS256"]);
 
 /**
  * @param {string} value
@@ -17,9 +20,9 @@ function createSignature(value, secret) {
  * @returns {string}
  */
 export function signCookieValue(value, options = {}) {
-	const secret = options.secret ?? getCookieSecret({ allowInsecureFallback: true });
+	const secret = options.secret ?? getCookieSecret();
 	const hmac = createSignature(value, secret);
-	return `${value}....${hmac}`;
+	return `${value}${SIGNATURE_SEPARATOR}${hmac}`;
 }
 
 /**
@@ -28,12 +31,20 @@ export function signCookieValue(value, options = {}) {
  * @returns {string | undefined}
  */
 export function verifySignedCookieValue(signedValue, options = {}) {
-	const secret = options.secret ?? getCookieSecret({ allowInsecureFallback: true });
-	const [value, sig] = String(signedValue ?? "").split("....");
-	if (!value || !sig) return undefined;
+	const secret = options.secret ?? getCookieSecret();
+	const candidate = String(signedValue ?? "");
+	const separatorIndex = candidate.lastIndexOf(SIGNATURE_SEPARATOR);
+	if (separatorIndex <= 0) return undefined;
 
-	const expectedSig = createSignature(value, secret);
-	return sig === expectedSig ? value : undefined;
+	const value = candidate.slice(0, separatorIndex);
+	const signature = candidate.slice(separatorIndex + SIGNATURE_SEPARATOR.length);
+	if (!signature) return undefined;
+
+	const expectedSignature = Buffer.from(createSignature(value, secret), "utf8");
+	const suppliedSignature = Buffer.from(signature, "utf8");
+	if (suppliedSignature.length !== expectedSignature.length) return undefined;
+
+	return timingSafeEqual(suppliedSignature, expectedSignature) ? value : undefined;
 }
 
 /**
@@ -42,9 +53,9 @@ export function verifySignedCookieValue(signedValue, options = {}) {
  * @returns {boolean}
  */
 export function verifyJwtNotExpired(token, options = {}) {
-	const secret = options.secret ?? getAuthJwtSecret({ allowInsecureFallback: true });
+	const secret = options.secret ?? getAuthJwtSecret();
 	try {
-		jwt.verify(token, secret);
+		jwt.verify(token, secret, { algorithms: [...JWT_ALGORITHMS] });
 		return true;
 	} catch (err) {
 		if (err instanceof jwt.TokenExpiredError) return false;

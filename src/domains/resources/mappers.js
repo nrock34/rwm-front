@@ -1,4 +1,5 @@
 import { toFiniteNumber, toTitleCase } from "../../core/domain/coerce.js";
+import { sanitizeLegacyHtml, sanitizeUrl } from "../../core/security/html.js";
 
 /** @type {Readonly<Record<string, string>>} */
 const RESOURCE_TYPE_LABELS = Object.freeze({
@@ -16,8 +17,7 @@ const RESOURCE_TYPE_LABELS = Object.freeze({
  */
 function resolveApiAssetUrl(value, apiUrl) {
 	if (!value || typeof value !== "string") return null;
-	if (/^https?:\/\//i.test(value)) return value;
-	return new URL(value, apiUrl).toString();
+	return sanitizeUrl(value, { type: "src", baseUrl: apiUrl });
 }
 
 /**
@@ -81,7 +81,7 @@ function mapTypeLabel(value) {
 function extractContentUrl(value, apiUrl) {
 	if (!value || typeof value !== "string") return null;
 	if (/^https?:\/\//i.test(value) || value.startsWith("/")) {
-		return resolveApiAssetUrl(value, apiUrl);
+		return sanitizeUrl(value, { type: "src", baseUrl: apiUrl });
 	}
 	return null;
 }
@@ -133,13 +133,20 @@ export function mapResourceCard(resource, { apiUrl }) {
  */
 export function mapResourceDetail(resource, { apiUrl }) {
 	const card = mapResourceCard(resource, { apiUrl });
-	const content = typeof resource.content === "string" && resource.content.length > 0 ? resource.content : null;
-	const pageContent = typeof resource.page_content === "string" && resource.page_content.length > 0 ? resource.page_content : null;
+	const rawContent = typeof resource.content === "string" && resource.content.length > 0 ? resource.content : null;
+	const rawPageContent = typeof resource.page_content === "string" && resource.page_content.length > 0 ? resource.page_content : null;
+	const contentUrl = card.type === "page" ? null : extractContentUrl(rawContent, apiUrl);
+	const content = rawContent && !contentUrl
+		? sanitizeLegacyHtml(rawContent, { baseUrl: apiUrl }) || null
+		: rawContent;
+	const pageContent = rawPageContent
+		? sanitizeLegacyHtml(rawPageContent, { baseUrl: apiUrl }) || null
+		: null;
 
 	return {
 		...card,
 		content,
 		pageContent,
-		contentUrl: card.type === "page" ? null : extractContentUrl(content, apiUrl)
+		contentUrl
 	};
 }

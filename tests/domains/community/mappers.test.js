@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
 	deriveUpcomingDeadlines,
+	deriveCommunityStats,
+	deriveHomeActivity,
+	deriveTrendingTags,
 	mapCommunityPost,
 	mapCommunityProgram,
 	mapCommunityScholarship,
-	mapCommunityUpdate
+	mapCommunityUpdate,
+	mapCommunityUpdateDetail
 } from "../../../src/domains/community/mappers.js";
 
 describe("community mappers", () => {
@@ -121,5 +125,52 @@ describe("community mappers", () => {
 		expect(update.categoryLabel).toBe("Travel");
 		expect(update.href).toBe("/community/news-and-updates/77");
 		expect(update.urgent).toBe(true);
+	});
+
+	it("sanitizes update detail HTML", () => {
+		const update = mapCommunityUpdateDetail({
+			id: 1,
+			title: "Update",
+			content: '<p onclick="steal()">Read me</p><iframe src="https://evil.example"></iframe>'
+		});
+		expect(update.content).toContain("<p>Read me</p>");
+		expect(update.content).not.toMatch(/onclick|iframe/iu);
+	});
+
+	it("derives transparent summary stats and trending tags", () => {
+		const posts = /** @type {any} */ ([
+			{ tags: ["Rome", "housing", "rome"] },
+			{ tags: ["housing", "visa"] },
+			{ tags: ["visa"] }
+		]);
+		const summary = /** @type {any} */ ({
+			posts,
+			updates: [{ id: 1 }],
+			featuredPrograms: [{ id: 2 }, { id: 3 }],
+			featuredScholarships: []
+		});
+
+		expect(deriveCommunityStats(summary)).toEqual([
+			{ name: "Posts in feed", value: 3 },
+			{ name: "Recent updates", value: 1 },
+			{ name: "Featured programs", value: 2 },
+			{ name: "Featured scholarships", value: 0 }
+		]);
+		expect(deriveTrendingTags(posts)).toEqual([
+			{ tag: "housing", posts: 2 },
+			{ tag: "rome", posts: 2 },
+			{ tag: "visa", posts: 2 }
+		]);
+	});
+
+	it("builds home activity in newest-first order", () => {
+		const result = deriveHomeActivity(/** @type {any} */ ({
+			posts: [{ title: "Older post", timestampLabel: "2h", href: "/p/1", createdAt: "2030-01-01T10:00:00Z" }],
+			updates: [{ title: "New update", timeAgo: "1h", href: "/u/1", createdAt: "", updatedAt: "2030-01-01T11:00:00Z" }],
+			featuredPrograms: [],
+			featuredScholarships: [],
+			upcomingDeadlines: []
+		}));
+		expect(result.map((item) => item.title)).toEqual(["New update", "Older post"]);
 	});
 });

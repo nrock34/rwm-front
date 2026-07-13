@@ -1,7 +1,7 @@
 import { message, superValidate } from "sveltekit-superforms"
 import { yup } from "sveltekit-superforms/adapters"
 import { schema } from "$lib/components/forms/auth/signup-schema.js"
-import { error } from "@sveltejs/kit"
+import { error, redirect } from "@sveltejs/kit"
 import { mapSignupFormData, passRefreshTokenCookie, setSignedAccessCookie, signupUser } from "$domains/auth/index.js"
 
 /**
@@ -56,6 +56,6 @@ export const actions = {
         passRefreshTokenCookie(cookies, result.headers, { secureOverride: isHttps })
         setSignedAccessCookie(cookies, result.data.acs_tkn, { secure: isHttps })
 
-        return message(form, result.data.acs_tkn)
+        throw redirect(303, "/onboarding")
     }
 }

@@ -48,10 +48,11 @@
                         {/if}
                     </div>
                     <h1 class="text-xl font-semibold text-foreground mt-3">{userProfile.name}</h1>
-                    <!-- change to college -->
-                    <Badge class='text-xs mt-1'>
-                        {userProfile.badge}
-                    </Badge>
+                    {#if userProfile.badge}
+                        <Badge class='text-xs mt-1'>
+                            {userProfile.badge}
+                        </Badge>
+                    {/if}
                     {#if userProfile.staff}
                     <Badge class='text-xs mb-1'>
                         Team Member
@@ -60,46 +61,60 @@
                 </div>
 
                 <div class="space-y-3 mb-6">
-                    <div class="flex items-center space-x-2 text-sm">
-                        <MapPin class="h-4 w-4 text-secondary-foreground"/>
-                        <span class="text-secondary-foreground">{userProfile.location}</span>
-                    </div>
+                    {#if userProfile.location}
+                        <div class="flex items-center space-x-2 text-sm">
+                            <MapPin class="h-4 w-4 text-secondary-foreground"/>
+                            <span class="text-secondary-foreground">{userProfile.location}</span>
+                        </div>
+                    {/if}
                     {#if userProfile.currentProgram}
                     <div class="flex items-center space-x-2 text-sm">
                         <Award class="h-4 w-4 text-secondary-foreground"/>
                         <span class="text-secondary-foreground">{userProfile.currentProgram}</span>
                     </div>
                     {/if}
-                    <div class="flex items-center space-x-2 text-sm">
-                        <Calendar class="h-4 w-4 text-secondary-foreground"/>
-                        <span class="text-secondary-foreground">
-                            Joined {new Date(userProfile.joinDate).toLocaleDateString()}
-                        </span>
-                    </div>
+                    {#if userProfile.joinDate}
+                        <div class="flex items-center space-x-2 text-sm">
+                            <Calendar class="h-4 w-4 text-secondary-foreground"/>
+                            <span class="text-secondary-foreground">
+                                Joined {new Date(userProfile.joinDate).toLocaleDateString()}
+                            </span>
+                        </div>
+                    {/if}
                 </div>
 
-                <p class="text-sm text-secondary-foreground mb-6">
-                    {userProfile.bio}
-                </p>
+                {#if userProfile.bio}
+                    <p class="text-sm text-secondary-foreground mb-6">
+                        {userProfile.bio}
+                    </p>
+                {/if}
 
                 <!-- profile statistics -->
                 <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="text-center">
-                        <div class="text-lg font-bold text-foreground">{userProfile.stats.posts}</div>
-                        <div class="text-xs text-muted-foreground">Posts</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-lg font-bold text-foreground">{userProfile.stats.likes}</div>
-                        <div class="text-xs text-muted-foreground">Likes</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-lg font-bold text-foreground">{userProfile.year}</div>
-                        <div class="text-xs text-muted-foreground">Year</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-lg font-bold text-foreground">{userProfile.wentAbroad ? 'Yes' : 'No'}</div>
-                        <div class="text-xs text-muted-foreground">Went Abroad?</div>
-                    </div>
+                    {#if userProfile.stats.posts !== null}
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-foreground">{userProfile.stats.posts}</div>
+                            <div class="text-xs text-muted-foreground">Posts</div>
+                        </div>
+                    {/if}
+                    {#if userProfile.stats.likes !== null}
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-foreground">{userProfile.stats.likes}</div>
+                            <div class="text-xs text-muted-foreground">Likes</div>
+                        </div>
+                    {/if}
+                    {#if userProfile.year}
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-foreground">{userProfile.year}</div>
+                            <div class="text-xs text-muted-foreground">Year</div>
+                        </div>
+                    {/if}
+                    {#if userProfile.wentAbroad !== null}
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-foreground">{userProfile.wentAbroad ? 'Yes' : 'No'}</div>
+                            <div class="text-xs text-muted-foreground">Went Abroad?</div>
+                        </div>
+                    {/if}
                 </div>
 
                 <!-- actions -->
@@ -121,17 +136,18 @@
 
 
             <!-- badges -->
-            <Card.Root class="p-6 gap-0">
-
-                <h3 class="font-semibold text-foreground mb-4">Achievments</h3>
+            {#if userProfile.badges.length > 0}
+                <Card.Root class="p-6 gap-0">
+                    <h3 class="font-semibold text-foreground mb-4">Achievements</h3>
 	                <div class="space-y-2">
-	                    {#each userProfile.badges as badge, idx}
+	                    {#each userProfile.badges as badge (badge.name)}
 	                        <Badge class={`${getBadgeToneClass(badge.tone)} w-full justify-center`}>
 	                            {badge.name}
 	                        </Badge>
 	                    {/each}
-                </div>
-            </Card.Root>
+                    </div>
+                </Card.Root>
+            {/if}
 
 
             <!-- community reviews -->
@@ -142,7 +158,7 @@
 
         <!-- main content -->
         
-        <div class="lg: col-span-2 space-y-8">
+        <div class="lg:col-span-2 space-y-8">
             {#if userProfile.contributions}
             <Card.Root class="p-6 gap-1">
                 <h2 class="text-xl font-semibold text-foreground mb-4">
@@ -175,9 +191,10 @@
             <!-- recent posts -->
             <Card.Root class="gap-2 p-8">
                 <h2 class="text-xl font-semibold text-foreground mb-4">Recent Posts</h2>
-                <div class="space-y-6">
-                    {#each userProfile.recentPosts as post}
-                        <article key={post.id} class="border-b border-border pb-6 last:border-b-0">
+                {#if userProfile.recentPosts.length > 0}
+                    <div class="space-y-6">
+                    {#each userProfile.recentPosts as post (post.id)}
+                        <article class="border-b border-border pb-6 last:border-b-0">
                             <div class="flex items-start space-x-3">
                                 <ResilientImage
                                     src={userProfile.avatar}
@@ -190,13 +207,20 @@
                                 <div class="flex-1">
                                     <div class="flex items-center space-x-2 mb-2">
                                         <span class="font-medium text-foreground">{userProfile.name}</span>
-                                        <Badge class={``}>
-                                            {userProfile.badge}
-                                        </Badge>
-                                        <span class="text-sm text-muted-foreground">•</span>
-                                        <span class="text-sm text-muted-foreground">{post.data.updated_at}</span>
+                                        {#if userProfile.badge}
+                                            <Badge>{userProfile.badge}</Badge>
+                                        {/if}
+                                        {#if post.data.updated_at}
+                                            <span class="text-sm text-muted-foreground">&bull;</span>
+                                            <span class="text-sm text-muted-foreground">
+                                                {new Date(post.data.updated_at).toLocaleDateString()}
+                                            </span>
+                                        {/if}
                                     </div>
 
+                                    {#if post.data.title}
+                                        <h3 class="font-medium text-foreground mb-2">{post.data.title}</h3>
+                                    {/if}
                                     <p class="text-foreground mb-3">{post.data.content}</p>
 
                                     {#if post.image}
@@ -214,7 +238,7 @@
                                     <div class="flex items-center space-x-6 text-sm text-secondary-foreground/80">
                                         <span>
                                             <a 
-                                                href="#"
+                                                href={`/community/posts/${post.id}`}
                                                 class="hover:underline"
                                             >
                                                 See more
@@ -225,7 +249,10 @@
                             </div>
                         </article>
                     {/each}
-                </div>
+                    </div>
+                {:else}
+                    <p class="text-sm text-muted-foreground">No recent posts yet.</p>
+                {/if}
             </Card.Root>
         </div>
     </div>

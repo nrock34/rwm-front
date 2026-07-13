@@ -1,5 +1,5 @@
 /**
- * @typedef {"invalid_response" | "missing_env" | "upstream_error" | "network_error" | "upload_unavailable"} ProfileErrorCode
+ * @typedef {"invalid_response" | "missing_env" | "upstream_error" | "network_error" | "upload_unavailable" | "invalid_upload" | "invalid_profile_id"} ProfileErrorCode
  */
 
 /**
@@ -63,6 +63,59 @@
 
 /**
  * @typedef {{
+ *   university: string;
+ *   major: string;
+ *   grad_year?: number;
+ * }} ProfileEducationSettingsInput
+ */
+
+/**
+ * @typedef {{
+ *   name: string;
+ *   tone: "blue" | "purple" | "green" | "neutral";
+ * }} PublicProfileBadge
+ */
+
+/**
+ * @typedef {{
+ *   id: number;
+ *   data: {
+ *     title: string;
+ *     content: string;
+ *     updated_at: string;
+ *   };
+ *   image: string | null;
+ * }} PublicProfilePost
+ */
+
+/**
+ * @typedef {{
+ *   id: number;
+ *   name: string;
+ *   username: string;
+ *   avatar: string | null;
+ *   badge: string | null;
+ *   location: string;
+ *   university: string;
+ *   currentProgram: string;
+ *   major: string;
+ *   year: number | null;
+ *   wentAbroad: boolean | null;
+ *   joinDate: string | null;
+ *   bio: string;
+ *   isVerified: boolean;
+ *   staff: boolean;
+ *   stats: {
+ *     posts: number | null;
+ *     likes: number | null;
+ *   };
+ *   badges: PublicProfileBadge[];
+ *   recentPosts: PublicProfilePost[];
+ * }} PublicProfileState
+ */
+
+/**
+ * @typedef {{
  *   id: number;
  *   type: string;
  *   action: string;
@@ -115,15 +168,36 @@
 /**
  * @typedef {{
  *   fetch: typeof fetch;
- *   accessToken: string;
+ *   accessToken?: string | null;
  * }} ProfileFetchDeps
  */
 
 /**
  * @typedef {ProfileFetchDeps & {
+ *   profileUserId: string | number;
+ * }} PublicProfileFetchDeps
+ */
+
+/**
+ * @typedef {ProfileFetchDeps & {
  *   platform: import("@sveltejs/kit").RequestEvent["platform"];
- *   host: string;
+ *   origin: string;
  * }} ProfileUpdateDeps
+ */
+
+/**
+ * Minimal R2-compatible bucket contract used by the profile domain.
+ *
+ * @typedef {{
+ *   put: (key: string, value: ArrayBuffer, options?: {
+ *     httpMetadata?: {
+ *       contentType?: string;
+ *       cacheControl?: string;
+ *       contentDisposition?: string;
+ *     };
+ *   }) => Promise<unknown>;
+ *   delete?: (key: string) => Promise<unknown>;
+ * }} ProfileAvatarBucket
  */
 
 /**
@@ -220,6 +294,17 @@
  */
 
 /**
+ * @typedef {{
+ *   ok: true;
+ *   data: PublicProfileState;
+ * }} PublicProfileSuccess
+ */
+
+/**
+ * @typedef {PublicProfileSuccess | ProfileFailure} PublicProfileResult
+ */
+
+/**
  * @typedef {ProfileUpdateSuccess | ProfileFailure} ProfileUpdateResult
  */
 
@@ -235,7 +320,7 @@
 /**
  * `checkJs` does not always narrow discriminated unions in JS files.
  *
- * @param {ProfileLoadResult | ProfileUpdateResult} result
+ * @param {ProfileLoadResult | ProfileUpdateResult | ProfileEducationSettingsResult | PublicProfileResult} result
  * @returns {ProfileFailure}
  */
 export function asProfileFailure(result) {

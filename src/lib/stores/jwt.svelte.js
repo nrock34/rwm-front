@@ -14,6 +14,8 @@ class TokenStateClass {
     }
     
     refreshTimer = $state(null)
+    /** @type {Promise<void> | null} */
+    refreshPromise = null
 
     getPayload = () => {
         if (this.token) return jwtDecode(this.token);
@@ -57,20 +59,36 @@ class TokenStateClass {
     }
 
     refreshAccessToken = async () => {
-        if (!browser) {
+        if (!browser || !this.token) {
             return
         }
 
-        const res = await fetch('/auth/refresh', {method: 'POST'});
-        const body = await res.json().catch(() => null);
-
-        if (res.ok) {
-            const nextToken = typeof body?.acs_tkn === "string" ? body.acs_tkn : null
-            this.syncToken(nextToken)
-        } else {
-            this.clear()
+        if (this.refreshPromise) {
+            return this.refreshPromise
         }
-       
+
+        this.refreshPromise = (async () => {
+            try {
+                const res = await fetch('/auth/refresh', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { Accept: 'application/json' }
+                });
+                const body = await res.json().catch(() => null);
+
+                if (res.ok && typeof body?.acs_tkn === "string") {
+                    this.syncToken(body.acs_tkn)
+                } else {
+                    this.clear()
+                }
+            } catch {
+                this.clear()
+            } finally {
+                this.refreshPromise = null
+            }
+        })()
+
+        return this.refreshPromise
     }
 
     scheduleRefresh = () => {

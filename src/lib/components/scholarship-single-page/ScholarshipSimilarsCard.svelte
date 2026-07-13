@@ -1,9 +1,7 @@
 <script>
     import { Star } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { similarScholarships as fallbackSimilarScholarships } from "./testdata";
-
-    let { similarScholarships = fallbackSimilarScholarships } = $props();
+    let { similarScholarships = [] } = $props();
 </script>
 
 <Card.Root class="p-5 px-6 gap-0">

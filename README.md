@@ -46,10 +46,9 @@ Additional Systems: Custom Auth System, Custom API, Newsletter System, Error Mon
 
 ### Prerequisites
 
-- Node.js (v16+ recommended)  
-- npm (or yarn / pnpm)  
-- Wrangler CLI (for Cloudflare Workers deployment)  
-
+- Node.js 22 or newer (see `.nvmrc`)
+- npm (or yarn / pnpm)
+- Wrangler CLI (for Cloudflare Workers deployment)
 ### Installation
 
 ``` 
@@ -126,12 +125,12 @@ Frontend Engineer | Full Stack Developer | Creative Technologist
 
 ---
 
-## 🪪 License
+## ?? License
 
 ```
-© 2025 Naeem Hawkins.  
+� 2025 Naeem Hawkins.
 
-This code is provided for educational and portfolio review purposes only.  
-You may read, reference, or share this repository for demonstration purposes,  
-but you may not copy, modify, or use any part of it in your own projects or products.  
+This code is provided for educational and portfolio review purposes only.
+You may read, reference, or share this repository for demonstration purposes,
+but you may not copy, modify, or use any part of it in your own projects or products.
 ```

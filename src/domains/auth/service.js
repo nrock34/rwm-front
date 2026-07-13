@@ -4,7 +4,9 @@ import { asHttpFailure, buildApiUrl, createHttpFailureMapper } from "../../core/
 import { createDomainError } from "../../core/domain/errors.js";
 import { requestJson } from "../../core/http/client.js";
 import { asDomainError, assertLoginPayload, assertLoginResponse, assertLogoutResponse, assertRefreshResponse, assertRequiredAuthEnv, assertSignupPayload } from "./contracts.js";
-import { hasRefreshToken, readSignedAccessToken } from "./session-cookies.js";
+import { REFRESH_COOKIE_NAME, getRefreshTokenSetCookie, hasRefreshToken, isSafeRefreshTokenCookieValue, readSignedAccessToken } from "./session-cookies.js";
+
+const JWT_ALGORITHMS = /** @type {const} */ (["HS256"]);
 
 /**
  * Maps domain errors to their default HTTP status.
@@ -94,6 +96,12 @@ export async function loginUser(payload, deps) {
 		}
 
 		const data = assertLoginResponse(response.data);
+		if (!getRefreshTokenSetCookie(response.headers)) {
+			return {
+				ok: false,
+				error: makeError("invalid_response", "Login response is missing the refresh-token cookie.", { status: 502 })
+			};
+		}
 		return {
 			ok: true,
 			data,
@@ -127,10 +135,12 @@ function normalizeLogoutResponse(response) {
  */
 export async function logoutUser({ fetch: fetchFn, cookies, accessToken = null }) {
 	try {
-		const { apiUrl } = assertRequiredAuthEnv();
-		const refreshToken = cookies.get("rfh_tkn");
+		const refreshToken = cookies.get(REFRESH_COOKIE_NAME);
+		const validRefreshToken = isSafeRefreshTokenCookieValue(refreshToken)
+			? refreshToken
+			: null;
 
-		if (!refreshToken && !accessToken) {
+		if (!validRefreshToken) {
 			return {
 				ok: true,
 				data: { detail: "Logged out successfully." },
@@ -139,10 +149,10 @@ export async function logoutUser({ fetch: fetchFn, cookies, accessToken = null }
 			};
 		}
 
+		const { apiUrl } = assertRequiredAuthEnv();
+
 		const headers = new Headers();
-		if (refreshToken) {
-			headers.append("Cookie", `rfh_tkn=${refreshToken}`);
-		}
+		headers.set("Cookie", `${REFRESH_COOKIE_NAME}=${validRefreshToken}`);
 		if (accessToken) {
 			headers.set("Authorization", `Bearer ${accessToken}`);
 		}
@@ -220,6 +230,12 @@ export async function signupUser(payload, deps) {
 		}
 
 		const data = assertLoginResponse(response.data);
+		if (!getRefreshTokenSetCookie(response.headers)) {
+			return {
+				ok: false,
+				error: makeError("invalid_response", "Signup response is missing the refresh-token cookie.", { status: 502 })
+			};
+		}
 		return {
 			ok: true,
 			data,
@@ -240,17 +256,30 @@ export async function signupUser(payload, deps) {
  */
 export async function refreshSession({ fetch: fetchFn, cookies }) {
 	try {
-		const { apiUrl } = assertRequiredAuthEnv();
-		if (!hasRefreshToken(cookies)) {
+		const refreshToken = cookies.get(REFRESH_COOKIE_NAME);
+		if (!refreshToken) {
 			return {
 				ok: false,
 				error: makeError("missing_refresh_token", "Refresh token is missing.", { status: 401 })
 			};
 		}
+		if (!isSafeRefreshTokenCookieValue(refreshToken)) {
+			return {
+				ok: false,
+				error: makeError("invalid_token", "Refresh token cookie is malformed.", { status: 401 })
+			};
+		}
+
+		const { apiUrl } = assertRequiredAuthEnv();
+
+		const headers = new Headers({
+			Cookie: `${REFRESH_COOKIE_NAME}=${refreshToken}`
+		});
 
 			const response = await requestJson(buildApiUrl("auth/refresh", {}, apiUrl), {
 			method: "POST",
-			fetchFn
+			fetchFn,
+			headers
 		});
 
 		if (!response.ok) {
@@ -265,6 +294,12 @@ export async function refreshSession({ fetch: fetchFn, cookies }) {
 		}
 
 		const data = assertRefreshResponse(response.data);
+		if (!getRefreshTokenSetCookie(response.headers)) {
+			return {
+				ok: false,
+				error: makeError("invalid_response", "Refresh response is missing the rotated refresh-token cookie.", { status: 502 })
+			};
+		}
 		return {
 			ok: true,
 			data,
@@ -292,9 +327,10 @@ export function getSessionState(cookies) {
 
 /**
  * @param {string | null} accessToken
+ * @param {{ secret?: string }} [options]
  * @returns {import("./types.js").TokenValidationResult}
  */
-export function validateAccessToken(accessToken) {
+export function validateAccessToken(accessToken, options = {}) {
 	if (!accessToken) {
 		return {
 			ok: false,
@@ -302,9 +338,9 @@ export function validateAccessToken(accessToken) {
 		};
 	}
 
-	const secret = getAuthJwtSecret({ allowInsecureFallback: true });
+	const secret = options.secret ?? getAuthJwtSecret();
 	try {
-		jwt.verify(accessToken, secret);
+		jwt.verify(accessToken, secret, { algorithms: [...JWT_ALGORITHMS] });
 		return { ok: true };
 	} catch (err) {
 		if (err instanceof jwt.TokenExpiredError) {

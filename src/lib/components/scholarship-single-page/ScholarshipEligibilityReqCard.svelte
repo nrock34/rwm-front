@@ -1,9 +1,7 @@
 <script>
     import { BadgeAlert } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { scholarship as fallbackScholarship } from "./testdata";
-
-    let { scholarship = fallbackScholarship } = $props();
+    let { scholarship } = $props();
 
     const eligibility = $derived(Array.isArray(scholarship.eligibility) ? scholarship.eligibility : []);
 </script>

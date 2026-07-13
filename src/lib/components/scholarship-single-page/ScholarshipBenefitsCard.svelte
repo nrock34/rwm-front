@@ -1,9 +1,7 @@
 <script>
     import { CheckCircle } from "lucide-svelte";
     import * as Card from "../ui/card";
-    import { scholarship as fallbackScholarship } from "./testdata";
-
-    let { scholarship = fallbackScholarship } = $props();
+    let { scholarship } = $props();
 
     const benefits = $derived(Array.isArray(scholarship.benefits) ? scholarship.benefits : []);
 </script>

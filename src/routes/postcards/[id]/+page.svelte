@@ -1,244 +1,159 @@
 <script>
-	import * as Card from "$lib/components/ui/card";
-	import * as Avatar from "$lib/components/ui/avatar";
+	import { enhance } from "$app/forms";
+	import { ArrowRight, CalendarDays, Clock3, Heart, MapPin, MessageSquare, Share2 } from "lucide-svelte";
+	import ArticleRenderer from "$lib/components/postcards/ArticleRenderer.svelte";
+	import PostcardGrid from "$lib/components/postcards/PostcardGrid.svelte";
+	import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
-	import { Separator } from "$lib/components/ui/separator";
-	import { Calendar, Share2 } from "lucide-svelte";
-	import * as Dialog from "$lib/components/ui/dialog";
-	import { enhance } from "$app/forms";
-	import { fly } from "svelte/transition";
-	import ResilientImage from "$lib/components/shared/ResilientImage.svelte";
-	import PostcardContentPreview from "$lib/components/postcards/PostcardContentPreview.svelte";
-	import { openPostcardLayoutEditor } from "$domains/postcards/layout-editor.js";
-	import { getPostcardGalleryImages, resolvePostcardPreviewDocument } from "$domains/postcards/preview.js";
 
-	let galleryImageViewOpen = $state(false);
-	let galleryImageViewData = $state(
-		{
-			image: null,
-			id: null
-		}
-	);
-
+	const FALLBACK_IMAGE = "https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg";
 	let { data, form } = $props();
+	let postcard = $derived(data.postcard);
+	let shareStatus = $state("");
+	let location = $derived([postcard.location.city, postcard.location.country].filter(Boolean).join(", "));
 
-	const postcard = data.postcardData;
-	const initialPreview = resolvePostcardPreviewDocument(postcard);
-	let previewDocument = $state(initialPreview.document);
-	let previewSource = $state(initialPreview.source);
-	const galleryImages = $derived.by(() =>
-		getPostcardGalleryImages({
-			...postcard,
-			contentBlocks: previewDocument
-		})
-	);
+	function formatDate(value) {
+		if (!value) return "Date unavailable";
+		return new Intl.DateTimeFormat("en", { year: "numeric", month: "long", day: "numeric" }).format(new Date(value));
+	}
 
+	function initials(name) {
+		return name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
+	}
+
+	async function sharePostcard() {
+		shareStatus = "";
+		try {
+			if (navigator.share) {
+				await navigator.share({ title: postcard.title, text: postcard.seoDescription, url: data.canonicalUrl });
+				shareStatus = "Postcard shared.";
+			} else if (navigator.clipboard) {
+				await navigator.clipboard.writeText(data.canonicalUrl);
+				shareStatus = "Link copied to your clipboard.";
+			} else {
+				shareStatus = "Copy the link from your address bar to share this postcard.";
+			}
+		} catch (error) {
+			if (error?.name !== "AbortError") shareStatus = "Sharing was unavailable. Please copy the page URL.";
+		}
+	}
 </script>
 
-<div class="grid grid-cols-3 gap-8 pt-2 pb-24">
-	<div class="col-span-3 md:col-span-2 flex flex-col gap-y-4">
-		<Card.Root class="p-2 px-5">
-			<div>
-				<span class="flex gap-x-2 items-center">
-					<h3 class="font-semibold">Location:</h3>
-					<p class="capitalize tracking-wider text-xs">{postcard.location.city}, {postcard.location.country}</p>
-				</span>
+<svelte:head>
+	<title>{postcard.title} | RomeWithMe Postcards</title>
+	<meta name="description" content={postcard.seoDescription} />
+	<link rel="canonical" href={data.canonicalUrl} />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content={postcard.title} />
+	<meta property="og:description" content={postcard.seoDescription} />
+	<meta property="og:url" content={data.canonicalUrl} />
+	{#if postcard.image}<meta property="og:image" content={postcard.image} />{/if}
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={postcard.title} />
+	<meta name="twitter:description" content={postcard.seoDescription} />
+</svelte:head>
+
+<div class="min-h-screen bg-muted/35">
+	<header class="relative isolate overflow-hidden border-b border-border bg-background">
+		<ResilientImage src={postcard.image ?? FALLBACK_IMAGE} fallbackSrc={FALLBACK_IMAGE} alt="" class="absolute inset-0 -z-20 h-full w-full object-cover" />
+		<div class="absolute inset-0 -z-10 bg-gradient-to-r from-background/97 via-background/88 to-background/60 backdrop-blur-[3px]"></div>
+		<div class="mx-auto max-w-7xl px-6 py-10 sm:px-10 sm:py-14 lg:px-12">
+			<nav aria-label="Breadcrumb" class="mb-10 text-sm text-muted-foreground">
+				<ol class="flex flex-wrap items-center gap-2">
+					<li><a href="/" class="hover:text-foreground hover:underline">Home</a></li>
+					<li aria-hidden="true">/</li>
+					<li><a href="/postcards" class="hover:text-foreground hover:underline">Postcards</a></li>
+					<li aria-hidden="true">/</li>
+					<li class="max-w-64 truncate text-foreground" aria-current="page">{postcard.title}</li>
+				</ol>
+			</nav>
+
+			<div class="max-w-4xl">
+				<div class="flex flex-wrap gap-2">
+					{#if postcard.category}<a href={`/postcards?category=${encodeURIComponent(postcard.category.name)}`} class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">{postcard.category.name}</a>{/if}
+					{#each postcard.tags as tag}<a href={`/postcards?tag=${encodeURIComponent(tag.name)}`} class="rounded-full border border-border bg-background/70 px-3 py-1 text-xs font-medium hover:bg-muted">#{tag.name}</a>{/each}
+				</div>
+				<h1 class="mt-5 text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">{postcard.title}</h1>
+				<p class="mt-5 max-w-3xl text-lg leading-relaxed text-foreground/75">{postcard.description}</p>
+				<div class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+					{#if location}<span class="inline-flex items-center gap-1.5"><MapPin class="size-4" aria-hidden="true" />{location}</span>{/if}
+					<span class="inline-flex items-center gap-1.5"><CalendarDays class="size-4" aria-hidden="true" /><time datetime={postcard.datePublished ?? undefined}>{formatDate(postcard.datePublished)}</time></span>
+					<span class="inline-flex items-center gap-1.5"><Clock3 class="size-4" aria-hidden="true" />{postcard.readingMinutes} min read</span>
+				</div>
 			</div>
-		</Card.Root>
-
-		<div class="flex flex-wrap gap-3">
-			<Button
-				variant="outline"
-				type="button"
-				onclick={() => {
-					openPostcardLayoutEditor(previewDocument, {
-						title: `${postcard.title} layout playground`,
-						onSave: (nextDocument) => {
-							previewDocument = nextDocument;
-							previewSource = "edited";
-						}
-					});
-				}}
-			>
-				Open Layout Editor
-			</Button>
 		</div>
+	</header>
 
-		<PostcardContentPreview document={previewDocument} source={previewSource} />
+	<main class="mx-auto max-w-7xl px-6 py-10 sm:px-10 lg:px-12">
+		<div class="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+			<section class="rounded-xl border border-border bg-card p-6 shadow-sm sm:p-9" aria-label="Postcard article">
+				<div class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
+					<div class="flex min-w-0 items-center gap-3">
+						{#if postcard.author.avatar}
+							<ResilientImage src={postcard.author.avatar} fallbackSrc={null} hideOnError={true} alt="" class="size-11 rounded-full object-cover" />
+						{:else}
+							<span class="grid size-11 shrink-0 place-items-center rounded-full bg-muted text-sm font-semibold" aria-hidden="true">{initials(postcard.author.name)}</span>
+						{/if}
+						<div class="min-w-0">
+							<p class="text-xs text-muted-foreground">Written by</p>
+							{#if postcard.author.href}<a class="font-semibold hover:text-primary hover:underline" href={postcard.author.href}>{postcard.author.name}</a>{:else}<p class="font-semibold">{postcard.author.name}</p>{/if}
+						</div>
+					</div>
+					<div>
+						<Button type="button" variant="outline" onclick={sharePostcard}><Share2 class="size-4" aria-hidden="true" />Share</Button>
+						<p class="mt-1 max-w-52 text-right text-xs text-muted-foreground" role="status" aria-live="polite">{shareStatus}</p>
+					</div>
+				</div>
 
-		{#if postcard.content}
-			<Card.Root class="gap-0 pt-0">
-				<div class="flex justify-between items-center px-6 mx-3">
-					<div class="grid space-y-0 my-4">
-						<div class="space-x-1.5 flex items-center text-secondary-foreground font-light text-sm">
-							<Avatar.Root class="h-9 w-9">
-								<Avatar.Image src={postcard.author.avatar} />
-								<Avatar.Fallback class="text-xs">{postcard.author.name.split(" ").map((s) => s[0]).join(".")}</Avatar.Fallback>
-							</Avatar.Root>
-							<div class="flex flex-col items-start text-foreground font-medium text-sm sm:text-base">
-								<a href="" class="ml-0.5 leading-none">
-									{postcard.author.name}
+				<ArticleRenderer blocks={postcard.articleBlocks} />
+			</section>
+
+			<aside class="space-y-6 lg:sticky lg:top-24" aria-label="Postcard details">
+				<section class="rounded-xl border border-border bg-card p-5 shadow-sm">
+					<h2 class="font-semibold">Story details</h2>
+					<dl class="mt-4 grid gap-3 text-sm">
+						<div class="flex items-center justify-between gap-3"><dt class="inline-flex items-center gap-2 text-muted-foreground"><Heart class="size-4" aria-hidden="true" />Likes</dt><dd class="font-medium">{postcard.likes}</dd></div>
+						<div class="flex items-center justify-between gap-3"><dt class="inline-flex items-center gap-2 text-muted-foreground"><MessageSquare class="size-4" aria-hidden="true" />Comments</dt><dd class="font-medium">{postcard.comments}</dd></div>
+						{#if postcard.dateUpdated}<div class="flex items-center justify-between gap-3"><dt class="text-muted-foreground">Updated</dt><dd class="text-right font-medium">{formatDate(postcard.dateUpdated)}</dd></div>{/if}
+					</dl>
+				</section>
+
+				{#if postcard.gallery.length > 0}
+					<section class="rounded-xl border border-border bg-card p-5 shadow-sm">
+						<h2 class="font-semibold">From this story</h2>
+						<div class="mt-4 grid grid-cols-2 gap-3">
+							{#each postcard.gallery.slice(0, 6) as image, index (image.src)}
+								<a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`Open article image ${index + 1}`} class="aspect-square overflow-hidden rounded-lg bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+									<ResilientImage src={image.src} fallbackSrc={null} hideOnError={true} alt={image.alt} class="h-full w-full object-cover transition hover:scale-105" loading="lazy" />
 								</a>
-								<div class="flex items-center gap-x-1">
-									<Calendar class="h-3.5 w-3.5" />
-									<span class="text-xs font-light tracking-wide ml-0.5">
-										{new Date(postcard.datePublished).toDateString()}
-									</span>
-								</div>
-							</div>
+							{/each}
 						</div>
-					</div>
-
-					<Button href="/" class="items-center flex space-x-2 mr-1 h-fit">
-						<Share2 class="w-2 h-2" />
-						<span class="text-xs">Share</span>
-					</Button>
-				</div>
-
-				<Separator class="mb-3" />
-
-				<Card.Content class="mx-6 pb-6">
-					<div class="mb-3">
-						<h2 class="text-xl font-semibold">Legacy HTML Article</h2>
-						<p class="text-sm text-muted-foreground">
-							Current production content rendering remains active below for backward compatibility.
-						</p>
-					</div>
-					<article class="prose-sm sm:prose-base 3xl:prose-lg py-3">
-						{@html postcard.content}
-					</article>
-				</Card.Content>
-			</Card.Root>
-		{/if}
-
-		<Card.Root hidden class="gap-2 p-8 px-1 comment-section-container">
-			<Card.Header>
-				<Card.Title class="text-lg">
-					Comments
-				</Card.Title>
-			</Card.Header>
-			<Card.Content class="px-8 mt-2">
-				<div class="comments space-y-2">
-					<div class="flex items-center justify-between">
-						<div class="flex space-x-3.5 items-center">
-							<Avatar.Root class="w-8 h-8">
-								<Avatar.Fallback class="bg-secondary/55 text-xs font-semibold tracking-tight">
-									MR
-								</Avatar.Fallback>
-							</Avatar.Root>
-
-							<span class="font-medium">Maria Rossi</span>
-						</div>
-
-						<span class="text-sm text-secondary-foreground">3d ago</span>
-					</div>
-
-					<div class="text-foreground/90">
-						<p class="text-sm">Such a beautiful description of Trastevere—makes me want to visit again!</p>
-					</div>
-				</div>
-			</Card.Content>
-		</Card.Root>
-	</div>
-
-	<aside class="col-span-3 md:col-span-1">
-		<div class="sticky top-20 flex flex-col-reverse space-y-8">
-			<Card.Root class="gap-0 p-6 ring-ring/50 ring-2 bg-secondary m-2">
-				<Card.Header class="gap-0 px-0">
-					<Card.Title class="text-lg font-bold text-primary/85 leading-none mb-0.75">
-						Subscribe To Our Newsletter
-					</Card.Title>
-					<span class="leading-tight text-xs text-foreground/85">
-						Stay updated on the latest resources, programs, scholarships and postcards.
-					</span>
-				</Card.Header>
-				<Card.Content class="px-0 mt-2">
-					<form use:enhance method="POST" action={"?/newsletterSignup"}>
-						<div class="flex flex-col gap-4 mt-[0.35rem]">
-							<div>
-								<Input
-									name="email"
-									type="email"
-									value={form?.email}
-									placeholder="Enter your email."
-								/>
-								{#if form?.error}
-									<p in:fly={{ y: 10 }} class="pt-1 pl-1 capitalize tracking-normal text-destructive text-xs ">Error: {form.error} - {form.description} </p>
-								{/if}
-								{#if form?.status === "success"}
-									<p in:fly={{ y: 10 }} class="pt-1 pl-1 text-xs leading-none tracking-normal text-primary">Success, you're now subscribed to the newsletter. Stay tuned for updates sent to your email!</p>
-								{/if}
-							</div>
-							<Button type="submit" class="w-full mt-1.5">
-								Subscribe!
-							</Button>
-						</div>
-					</form>
-				</Card.Content>
-			</Card.Root>
-
-			<Card.Root class="gap-0 p-8 py-6">
-				<h2 class="font-semibold text-lg mb-0 py-0">
-					Gallery
-				</h2>
-				<Separator class="my-4 mt-2" />
-				{#if galleryImages.length > 0}
-					<div class="grid gap-4 sm:grid-cols-2 md:grid-cols-2 mb-4">
-						<Dialog.Root bind:open={galleryImageViewOpen}>
-							<Dialog.Content>
-								<Dialog.Header>
-									<Dialog.Title>
-										Image
-									</Dialog.Title>
-								</Dialog.Header>
-								<ResilientImage
-									class="h-full w-full object-cover rounded-md transition-transform"
-									src={galleryImageViewData.image}
-									fallbackSrc={null}
-									alt={galleryImageViewData.id}
-									hideOnError={true}
-								/>
-							</Dialog.Content>
-						</Dialog.Root>
-						{#each galleryImages as image, idx}
-							<div class="flex items-center justify-center rounded-xl">
-								<button
-									type="button"
-									onclick={() => {
-										galleryImageViewOpen = true;
-										galleryImageViewData.image = image;
-										galleryImageViewData.id = idx;
-									}}
-								>
-									<ResilientImage
-										class="cursor-pointer h-28 w-full object-cover rounded-md hover:scale-102 transition-transform"
-										src={image}
-										fallbackSrc={null}
-										alt={idx}
-										hideOnError={true}
-									/>
-								</button>
-							</div>
-						{/each}
-					</div>
-				{:else}
-					<p class="text-sm leading-6 text-muted-foreground">
-						No gallery images were found in the current API content yet. Legacy HTML images will continue to appear here automatically when present.
-					</p>
+					</section>
 				{/if}
-			</Card.Root>
 
-			<Card.Root hidden>
-				<Card.Header>
-					<Card.Title class="text-lg">
-						Featured Postcards
-					</Card.Title>
-				</Card.Header>
-				<Card.Content>
-
-				</Card.Content>
-			</Card.Root>
+				<section class="rounded-xl border-2 border-ring/45 bg-secondary p-5">
+					<h2 class="text-lg font-bold text-primary">More stories, less searching</h2>
+					<p class="mt-1 text-sm leading-relaxed text-foreground/75">Get new postcards, resources, programs, and scholarships in your inbox.</p>
+					<form use:enhance method="POST" action="?/newsletterSignup" class="mt-4 grid gap-3">
+						<label for="postcard-newsletter" class="sr-only">Email address</label>
+						<Input id="postcard-newsletter" name="email" type="email" value={form?.email ?? ""} placeholder="you@example.com" autocomplete="email" required />
+						{#if form?.error}<p class="text-xs text-destructive" role="alert">{form.error}: {form.description}</p>{/if}
+						{#if form?.status === "success"}<p class="text-xs text-primary" role="status">You’re subscribed. Watch your inbox for the next story.</p>{/if}
+						<Button type="submit" class="w-full">Subscribe</Button>
+					</form>
+				</section>
+			</aside>
 		</div>
-	</aside>
+
+		{#if data.relatedPostcards.length > 0}
+			<section class="mt-14 border-t border-border pt-10" aria-labelledby="related-postcards-heading">
+				<div class="mb-6 flex items-end justify-between gap-4">
+					<div><p class="text-sm font-medium text-primary">Keep exploring</p><h2 id="related-postcards-heading" class="text-2xl font-semibold">Related postcards</h2></div>
+					<a href="/postcards" class="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">Browse all <ArrowRight class="size-3.5" aria-hidden="true" /></a>
+				</div>
+				<PostcardGrid postcards={data.relatedPostcards} compact={true} />
+			</section>
+		{/if}
+	</main>
 </div>

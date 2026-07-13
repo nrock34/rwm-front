@@ -2,7 +2,6 @@
 	import '../app.css';
 	import { Toaster } from "$lib/components/ui/sonner"
     import { setTokenState } from '$lib/stores/jwt.svelte';
-    import { onMount } from 'svelte';
     import Footer from '$lib/components/layout/footer.svelte';
     import { setContext } from 'svelte';
     import { page } from "$app/state";
@@ -24,12 +23,6 @@
 
 	$effect(() => {
 		tokenState.syncToken(data.acs_tkn)
-	})
-
-	onMount(() => {
-		if (!data.acs_tkn) {
-			tokenState.refreshAccessToken()
-		}
 	})
 
 </script>
